@@ -2,43 +2,47 @@ language: php
 
 sudo: false
 
+services:
+  - mysql
+  - postgresql
+
+addons:
+  postgresql: "9.4"
+  
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.npm
 
 php:
-# For 3.1 forward, only test PHP7.
- - 7.2
- - 7.3
+  - 7.2
+  - 7.3
 
 env:
- global:
-  - MOODLE_BRANCH=MOODLE_37_STABLE
- matrix:
-  - DB=pgsql
-  - DB=mysqli
+  global:
+    - MOODLE_BRANCH=master
+    - MOODLE_BRANCH=MOODLE_37_STABLE
+    - MOODLE_BRANCH=MOODLE_38_STABLE
+  matrix:
+    - DB=pgsql
+    - DB=mysqli
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - cd ../..
-  - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
+  - nvm install 8.9
+  - nvm use 8.9
+  - cd ../../..
+  - composer create-project -n --no-dev --prefer-dist blackboard-open-source/moodle-plugin-ci ci ^2
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
-  # - moodle-plugin-ci add-plugin --clone https://github.com/jmblanquer/samieconfig.git
   - moodle-plugin-ci install
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
+  - moodle-plugin-ci phpcpd || true # Output warnings but do not fail the build because of duplicated but well working code
   - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
-  - moodle-plugin-ci codechecker --standard poet
-  - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
-  - moodle-plugin-ci jshint
   - moodle-plugin-ci validate
+  - moodle-plugin-ci grunt
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
-  - moodle-plugin-ci phpunit --coverage-text
