@@ -2277,8 +2277,8 @@ function get_dashboard_manager_data($category = null) {
         }
         $c = core_course_category::get($cat);
         // Get category.
-        $students = count(get_students_from_category($cat, true));
-        $teachers = count(get_teachers_from_category($cat, true));
+        $students = get_students_count_from_category($cat);
+        $teachers = get_teachers_count_from_category($cat);
         $courses = $c->get_courses_count();
 
         $processeddata[$cat] = new stdClass();
@@ -2307,32 +2307,32 @@ function get_dashboard_courselist_oncategory_data ($categoryid) {
     global $DB;
     $sql = "  SELECT courseid, category, course, totalstudents, average
                 FROM (
-                        SELECT  C.id courseid, C.category, C.fullname course,
-                                COALESCE(STU.totalstudents, 0) totalstudents,
-                                AVG(GRADES.average) average
-                          FROM {course} C
-                     LEFT JOIN (
-                                 SELECT GI.id, GI.courseid, (GG.finalgrade * 100 / GG.rawgrademax) average
-                                 FROM {grade_items} GI
-                                 LEFT JOIN {grade_grades} GG ON GG.itemid = GI.id
-                                 WHERE GI.itemtype = 'course'
-                      ) GRADES ON GRADES.courseid = C.id
-                     LEFT JOIN (
-                                SELECT CC.id as catid, COUNT(DISTINCT(UE.userid)) totalstudents
-                                 FROM {role_assignments} RA
-                                 JOIN {role} R ON R.id = RA.roleid
-                                 JOIN {context} CTX ON CTX.id = RA.contextid
-                                 JOIN {course} C ON C.id = CTX.instanceid
-                                 JOIN {course_categories} CC ON CC.id = C.category
-                                 JOIN {user_enrolments} UE ON UE.userid = RA.userid
-                                WHERE CTX.contextlevel = :context
-                                          AND R.shortname = :rolename
-                                          AND UE.enrolid IN (SELECT id FROM {enrol} WHERE courseid = C.id)
-                                GROUP BY CC.id
+                    SELECT  C.id courseid, C.category, C.fullname course,
+                            COALESCE(STU.totalstudents, 0) totalstudents,
+                            AVG(GRADES.average) average
+                      FROM {course} C
+                 LEFT JOIN (
+                        SELECT GI.id, GI.courseid, (GG.finalgrade * 100 / GG.rawgrademax) average
+                        FROM {grade_items} GI
+                        LEFT JOIN {grade_grades} GG ON GG.itemid = GI.id
+                        WHERE GI.itemtype = 'course'
+                 ) GRADES ON GRADES.courseid = C.id
+                 LEFT JOIN (
+                        SELECT CC.id as catid, COUNT(DISTINCT(UE.userid)) totalstudents
+                         FROM {role_assignments} RA
+                         JOIN {role} R ON R.id = RA.roleid
+                         JOIN {context} CTX ON CTX.id = RA.contextid
+                         JOIN {course} C ON C.id = CTX.instanceid
+                         JOIN {course_categories} CC ON CC.id = C.category
+                         JOIN {user_enrolments} UE ON UE.userid = RA.userid
+                        WHERE CTX.contextlevel = :context
+                                  AND R.shortname = :rolename
+                                  AND UE.enrolid IN (SELECT id FROM {enrol} WHERE courseid = C.id)
+                     GROUP BY CC.id
                 ) STU ON C.category = STU.catid
-                 WHERE C.category = :categoryid
-                 GROUP BY C.id
-         ) D ";
+                WHERE C.category = :categoryid
+                GROUP BY C.id, C.category, C.fullname,STU.totalstudents
+              ) D ";
 
     return $DB->get_records_sql($sql, array('categoryid' => $categoryid, 'rolename' => 'student', 'context' => CONTEXT_COURSE));
 }
@@ -2351,29 +2351,29 @@ function get_dashboard_courselist_oncategory_data ($categoryid) {
 function get_dashboard_courseinfo_oncategory_data ($categoryid, $courseid) {
     global $DB;
     $sql = "SELECT U.id userid, CONCAT(U.firstname, ' ', U.lastname) fullname,
-                (SELECT AVG(GG.finalgrade)
-                   FROM {grade_items} GI
-	      LEFT JOIN {grade_grades} GG ON GI.id = GG.itemid
-                  WHERE GG.userid = U.id
-                        AND GI.courseid = C.id
-                        AND GI.itemtype = 'course'
-                ) finalgrade,
-                    UL.timeaccess lasttimeaccess
-             FROM {role_assignments} RA
-             JOIN {role} R ON R.id = RA.roleid
-             JOIN {context} CTX ON CTX.id = RA.contextid
-             JOIN {course} C ON C.id = CTX.instanceid
-             JOIN {course_categories} CC ON CC.id = C.category
-             JOIN {user_enrolments} UE ON UE.userid = RA.userid
-             JOIN {user} U ON U.id = UE.userid
-        LEFT JOIN {user_lastaccess} UL ON UL.userid = U.id AND UL.courseid = C.id
-                WHERE CTX.contextlevel = :context
-                      AND R.shortname = :rolename
-                      AND UE.enrolid IN (select id from {enrol} where courseid = C.id)
-                      AND C.category = :categoryid
-                      AND C.id = :courseid
-        GROUP BY U.id
-        ORDER BY C.id, U.id ";
+               (SELECT AVG(GG.finalgrade)
+		  FROM {grade_items} GI
+	     LEFT JOIN {grade_grades} GG ON GI.id = GG.itemid
+		 WHERE GG.userid = U.id
+		       AND GI.courseid = C.id
+		       AND GI.itemtype = 'course'
+		) finalgrade,
+		UL.timeaccess lasttimeaccess
+              FROM {role_assignments} RA
+              JOIN {role} R ON R.id = RA.roleid
+              JOIN {context} CTX ON CTX.id = RA.contextid
+              JOIN {course} C ON C.id = CTX.instanceid
+              JOIN {course_categories} CC ON CC.id = C.category
+              JOIN {user_enrolments} UE ON UE.userid = RA.userid
+              JOIN {user} U ON U.id = UE.userid
+         LEFT JOIN {user_lastaccess} UL ON UL.userid = U.id AND UL.courseid = C.id
+	     WHERE CTX.contextlevel = :context
+		   AND R.shortname = :rolename
+		   AND UE.enrolid IN (select id from {enrol} where courseid = C.id)
+                   AND C.category = :categoryid
+                   AND C.id = :courseid
+          GROUP BY U.id, CONCAT(U.firstname, ' ', U.lastname), finalgrade, UL.timeaccess
+          ORDER BY U.id ";
 
     $params = array('categoryid' => $categoryid,
                     'rolename' => 'student',
@@ -2441,15 +2441,16 @@ function get_dashboard_studentlist_oncategory_data ($category, $role = 'student'
                         ) GRADES ON GRADES.userid = U.id AND GRADES.courseid = C.id
                         LEFT JOIN {grade_items} GI ON GI.courseid = C.id
                         LEFT JOIN {grade_grades} GG ON GG.userid = U.id AND GI.id = GG.itemid
-                                    WHERE CTX.contextlevel = :context
-                                          AND R.shortname = :role
-                                          AND UE.enrolid IN (select id from {enrol} where courseid = C.id)
-                                          AND C.category = :categoryid
-                         GROUP BY C.id, U.id
+                            WHERE CTX.contextlevel = :context
+                                  AND R.shortname = :role
+                                  AND UE.enrolid IN (select id from {enrol} where courseid = C.id)
+                                  AND C.category = :categoryid
+                         GROUP BY C.id, U.id, U.firstname, U.lastname, C.fullname,
+                                  GRADES.gradepass, GRADES.grademax, GRADES.finalgrade
                          ORDER BY U.id, C.id
                       ) D
               ) DA
-          GROUP BY userid";
+          GROUP BY userid, firstname, lastname";
     return $DB->get_records_sql ($sql, array('categoryid' => $category, 'role' => $role, 'context' => CONTEXT_COURSE));
 }
 
@@ -2489,7 +2490,7 @@ function get_dashboard_studentinfo_oncategory_data ($catid, $aluid) {
                       AND C.category = :categoryid
                       AND U.id = :userid
         GROUP BY C.id
-        ORDER BY C.id, U.id ";
+        ORDER BY C.id";
 
     $params = array('categoryid' => $catid,
                     'rolename' => 'student',
@@ -2800,7 +2801,8 @@ function get_data_coursestats_incourse($courseid) {
                 ) announcementsforum
              FROM {course_modules} CM
         LEFT JOIN {course_modules_completion} CMC ON CM.id = CMC.coursemoduleid
-            WHERE CM.course = :courseid";
+            WHERE CM.course = :courseid
+         GROUP BY CM.course";
 
     return $DB->get_record_sql($sql, array('courseid' => $courseid));
 }
@@ -2815,7 +2817,7 @@ function get_data_coursestats_bycourse($catid, $aluid) {
     global $DB;
     $sql = "SELECT CMC.userid,
 		   ( SELECT COUNT(id)
-                       FROM phpunit_course_modules
+                       FROM {course_modules}
                       WHERE course = C.id
                     ) activities,
 		   ( SELECT COUNT(COMP.userid)
@@ -2923,18 +2925,65 @@ function check_user_is_student($userid) {
 }
 
 /**
- * This function returns a list of course id's where the user has a specific rol.
- *
+ * Get count of students by category
  * @param int $category
- * @param bool $unique
+ * @return int
+ */
+function get_students_count_from_category($category) {
+    global $DB;
+    $sql = "SELECT COUNT(DISTINCT(RA.userid))
+              FROM {role_assignments} RA
+              JOIN {role} R ON R.id = RA.roleid
+              JOIN {context} CTX ON CTX.id = RA.contextid
+              JOIN {course} C ON C.id = CTX.instanceid
+              JOIN {course_categories} CC ON CC.id = C.category
+         LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
+             WHERE CTX.contextlevel = :context
+                   AND R.shortname = :role1
+                   AND C.category = :category
+          ORDER BY C.category, RA.userid, C.id";
+    $records = $DB->count_records_sql($sql, array(
+        'category' => $category,
+        'role1' => 'student',
+        'context' => CONTEXT_COURSE
+    ));
+    return $records;
+}
+
+/**
+ * Get count of teachers by category
+ * @param int $category
+ * @return int
+ */
+function get_teachers_count_from_category($category) {
+    global $DB;
+    $sql = "SELECT COUNT(DISTINCT(RA.userid))
+              FROM {role_assignments} RA
+              JOIN {role} R ON R.id = RA.roleid
+              JOIN {context} CTX ON CTX.id = RA.contextid
+              JOIN {course} C ON C.id = CTX.instanceid
+              JOIN {course_categories} CC ON CC.id = C.category
+         LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
+             WHERE CTX.contextlevel = :context
+                   AND (R.shortname = :role1 OR R.shortname = :role2 OR R.shortname = :role3)
+                   AND C.category = :category
+          ORDER BY C.category, RA.userid, C.id";
+    $records = $DB->count_records_sql($sql, array(
+        'category' => $category,
+        'role1' => 'editingteacher',
+        'role2' => 'manager',
+        'role3' => 'teacher',
+        'context' => CONTEXT_COURSE
+    ));
+    return $records;
+}
+/**
+ * This function returns a list of course id's where the user has a specific rol.
+ * @param int $category
  * @return array $rolcourses
  */
-function get_students_from_category($category, $unique = false) {
+function get_students_from_category($category) {
     global $DB;
-    $clauseunique = "";
-    if ( $unique ) {
-        $clauseunique = " GROUP BY RA.userid ";
-    }
     $sql = "SELECT RA.id, RA.userid studentid, UL.timeaccess lastaccess, C.id courseid, C.fullname coursename
                  FROM {role_assignments} RA
                  JOIN {role} R ON R.id = RA.roleid
@@ -2945,7 +2994,6 @@ function get_students_from_category($category, $unique = false) {
                 WHERE CTX.contextlevel = :context
                       AND R.shortname = :role1
                       AND C.category = :category
-             $clauseunique
              ORDER BY C.category, RA.userid, C.id";
 
     $records = $DB->get_records_sql($sql, array(

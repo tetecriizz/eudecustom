@@ -30,5 +30,6 @@ $plugin->component = 'local_eudecustom'; // Full name of the plugin (used for di
 $plugin->maturity = MATURITY_STABLE; // This is considered as ready for production sites.
 $plugin->release = 'v1.1.0'; // This is the current version.
 $plugin->dependencies = array(
+    'block_reports' => ANY_VERSION,   // The MoodleRoom block reports must be present (any version).
     'theme_snap' => ANY_VERSION // The theme SNAP must be present (any version).
 );

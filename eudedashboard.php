@@ -27,8 +27,7 @@ require_once(__DIR__ . '/../../config.php');
 if (is_callable('mr_off') && mr_off('eudecustom', '_MR_LOCAL')) {
     die("Plugin not enabled.");
 }
-rebuild_course_cache(2);
-rebuild_course_cache(11);die;
+
 require_once($CFG->libdir . '/pagelib.php');
 require_once(__DIR__ . '/utils.php');
 
@@ -83,7 +82,7 @@ if ( !$hassomerole && !$isteacher && !$isstudent ) {
 if ( $hassomerole ) {
     $confcategories = explode(",", $CFG->local_eudecustom_category);
     if ( $view == null && $catid == null ) {
-        // Pantalla 1/5.
+        // Pantalla 1/7.
         // Para cualquier otro caso devolver al dashboard
         // no se espera otro caso posible sin parametros.
         $title = get_string('headdashboardhome', 'local_eudecustom');
@@ -94,7 +93,7 @@ if ( $hassomerole ) {
         return;
     }
     if ( $view == null || $catid == null || ($catid != null && !in_array($catid, $confcategories)) ) {
-        // Pantalla 1/5.
+        // Pantalla 1/7.
         // Si no se recibe catid o view, carga el dashboard por defecto.
         $title = get_string('headdashboardhome', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -105,7 +104,7 @@ if ( $hassomerole ) {
 
     // Si se recibe catid y view tiene que cargar el detalle.
     if ( $view == 'students' && $aluid == null ) {
-        // Pantalla 4/5.
+        // Pantalla 4/7.
         // Carga la lista de estudiantes de una categoria.
         $title = get_string('headdashboardcate', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -115,7 +114,7 @@ if ( $hassomerole ) {
         $managerdata = get_dashboard_studentlist_oncategory_data($catid);
         echo $output->eude_dashboard_studentlist_oncategory_page($categorydata[$catid], $managerdata);
     } else if ( $view == 'students' && $aluid != null ) {
-        // Pantalla 5/5.
+        // Pantalla 5/7.
         // Cargar la informacion de un alumno en una categoria.
         $title = get_string('headdashboarduser', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -124,7 +123,7 @@ if ( $hassomerole ) {
         $managerdata = get_dashboard_studentinfo_oncategory_data($catid, $aluid);
         echo $output->eude_dashboard_studentinfo_oncategory_page($catid, $managerdata, $alu);
     } else if ( $view == 'teachers' && $teacherid == null ) {
-        // Pantalla 6/5.
+        // Pantalla 6/7.
         // Carga la lista de profesores de una categoria.
         $title = get_string('headdashboardcate', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -133,7 +132,7 @@ if ( $hassomerole ) {
         $managerdata = get_dashboard_teacherlist_oncategory_data($catid);
         echo $output->eude_dashboard_teacherlist_oncategory_page($categorydata[$catid], $managerdata);
     } else if ( $view == 'teachers' && $teacherid != null ) {
-        // Pantalla 7/5.
+        // Pantalla 7/7.
         // Cargar la informacion de un alumno en una categoria.
         $title = get_string('headdashboarduser', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -142,7 +141,7 @@ if ( $hassomerole ) {
         $managerdata = get_dashboard_teacherinfo_oncategory_data($catid, $teacherid);
         echo $output->eude_dashboard_teacherinfo_oncategory_page($catid, $managerdata, $tea);
     } else if ( $view == 'courses' && $courseid == null ) {
-        // Pantalla 2/5.
+        // Pantalla 2/7.
         // Cargar la lista de cursos de una categoria.
         $title = get_string('headdashboardcate', 'local_eudecustom');
         $PAGE->set_title($title);
@@ -151,7 +150,7 @@ if ( $hassomerole ) {
         $managerdata = get_dashboard_courselist_oncategory_data($catid);
         echo $output->eude_dashboard_courselist_oncategory_page($categorydata[$catid], $managerdata);
     } else if ( $view == 'courses' && $courseid != null ) {
-        // Pantalla 3/5
+        // Pantalla 3/7
         // Cargar la informacion del curso.
         $title = get_string('headdashboardcour', 'local_eudecustom');
         $PAGE->set_title($title);
