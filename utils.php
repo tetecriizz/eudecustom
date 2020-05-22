@@ -2815,7 +2815,7 @@ function get_data_coursestats_incourse($courseid) {
  */
 function get_data_coursestats_bycourse($catid, $aluid) {
     global $DB;
-    $sql = "SELECT CMC.userid,
+    $sql = "SELECT DISTINCT(CMC.userid),
 		   ( SELECT COUNT(id)
                        FROM {course_modules}
                       WHERE course = C.id
@@ -2846,7 +2846,7 @@ function get_data_coursestats_bycourse($catid, $aluid) {
          LEFT JOIN {course} C ON C.id = CM.course
              WHERE C.category = :categoryid
                    AND CMC.userid = :userid
-          GROUP BY CMC.userid, CM.course";
+          GROUP BY CMC.userid, CM.course, C.id";
 
     return $DB->get_record_sql($sql, array('categoryid' => $catid, 'userid' => $aluid));
 }
@@ -2965,8 +2965,7 @@ function get_teachers_count_from_category($category) {
          LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
              WHERE CTX.contextlevel = :context
                    AND (R.shortname = :role1 OR R.shortname = :role2 OR R.shortname = :role3)
-                   AND C.category = :category
-          ORDER BY C.category, RA.userid, C.id";
+                   AND C.category = :category";
     $records = $DB->count_records_sql($sql, array(
         'category' => $category,
         'role1' => 'editingteacher',
