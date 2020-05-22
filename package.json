@@ -1,0 +1,16 @@
+{
+  "name": "cristian",
+  "version": "1.0.0",
+  "description": "description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cristian",
+  "license": "ISC",
+  "devDependencies": {
+    "grund": "^1.0.7",
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^2.3.0"
+  }
+}

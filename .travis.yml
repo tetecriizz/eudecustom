@@ -54,13 +54,16 @@ install:
 script:
   - moodle-plugin-ci phplint
   - moodle-plugin-ci phpcpd
-  - moodle-plugin-ci phpmd || true
+  - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
+  - moodle-plugin-ci codechecker --standard poet
+  - moodle-plugin-ci csslint
+  - moodle-plugin-ci shifter
+  - moodle-plugin-ci jshint
   - moodle-plugin-ci validate
-  - moodle-plugin-ci savepoints
-  - moodle-plugin-ci mustache
-  - moodle-plugin-ci grunt
   - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat
+  - moodle-plugin-ci phpunit --coverage-text
 
   # The following line is a temporary work-around for https://tracker.moodle.org/browse/MDL-66378.
   # Once that is fixed, this line can go.
