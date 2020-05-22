@@ -2489,8 +2489,8 @@ function get_dashboard_studentinfo_oncategory_data ($catid, $aluid) {
                       AND UE.enrolid IN (select id from {enrol} where courseid = C.id)
                       AND C.category = :categoryid
                       AND U.id = :userid
-        GROUP BY C.id
-        ORDER BY C.id";
+        GROUP BY C.id, U.id
+        ORDER BY C.id, U.id";
 
     $params = array('categoryid' => $catid,
                     'rolename' => 'student',
@@ -2846,7 +2846,7 @@ function get_data_coursestats_bycourse($catid, $aluid) {
          LEFT JOIN {course} C ON C.id = CM.course
              WHERE C.category = :categoryid
                    AND CMC.userid = :userid
-          GROUP BY CMC.userid";
+          GROUP BY CMC.userid, CM.course";
 
     return $DB->get_record_sql($sql, array('categoryid' => $catid, 'userid' => $aluid));
 }
@@ -2940,8 +2940,7 @@ function get_students_count_from_category($category) {
          LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
              WHERE CTX.contextlevel = :context
                    AND R.shortname = :role1
-                   AND C.category = :category
-          ORDER BY C.category, RA.userid, C.id";
+                   AND C.category = :category";
     $records = $DB->count_records_sql($sql, array(
         'category' => $category,
         'role1' => 'student',
