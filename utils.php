@@ -2792,7 +2792,7 @@ function get_data_coursestats_incourse($courseid) {
                     JOIN {forum_posts} FP ON FP.discussion = FD.id
                     WHERE F.course = CM.course
                 ) messagesforum,
-                ( SELECT COUNT(fp.id) forumposts
+                ( SELECT COUNT(FP.id) forumposts
                     FROM {forum} F
                     JOIN {forum_discussions} FD ON FD.forum = F.id
                     JOIN {forum_posts} FP ON fp.discussion = fd.id
@@ -2833,7 +2833,7 @@ function get_data_coursestats_bycourse($catid, $aluid) {
                       WHERE F.course = CM.course
 			    AND (FP.userid = CMC.userid OR FD.userid = CMC.userid)
 		    ) messagesforum,
-                   ( SELECT COUNT(fp.id) forumposts
+                   ( SELECT COUNT(FP.id) forumposts
                        FROM {forum} F
                        JOIN {forum_discussions} FD ON FD.forum = F.id
                        JOIN {forum_posts} FP ON fp.discussion = fd.id
