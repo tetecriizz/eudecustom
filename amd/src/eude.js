@@ -494,14 +494,16 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                     }
                 });
                 $('div.hasevent').on( "mouseenter", function() {
-                $(this).append("<div class='uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup'>" +
-                                    "<div class='uep-header header modal-header'>" +
-                                        "<h3 class='modal-title' style='padding: 5px;'>Info</h3>" +
-                                    "</div>" +
-                                    "<div class='uep-content modal-body'>" +
-                                        $(this).attr('data-core_calendar-popupcontent') +
-                                     "</div>" +
-                                "</div>");
+                    var classes = "uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup";
+                    var html = "<div class='" + classes + "'>";
+                    html += "<div class='uep-header header modal-header'>";
+                    html += "<h3 class='modal-title' style='padding: 5px;'>Info</h3>";
+                    html += "</div>";
+                    html += "<div class='uep-content modal-body'>";
+                    html += $(this).attr('data-core_calendar-popupcontent');
+                    html += "</div>";
+                    html += "</div>";
+                    $(this).append(html);
                 });
                 $('div.hasevent').on( "mouseleave", function() {
                     $(this).find('.eudecalendarpopup').remove();
