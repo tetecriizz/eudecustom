@@ -2519,17 +2519,17 @@ function get_dashboard_teacherlist_oncategory_data ($category) {
     // Users are teachers in courses in category.
     $records = get_teachers_from_category($category);
 
-    foreach ($records as $record) {
+    foreach ($records as $rec) {
         // Reset when userid changed.
-        if ($record->teacherid != $lastteacherid) {
+        if ($rec->teacherid != $lastteacherid) {
             // Restart counters.
-            $lastteacherid = $record->teacherid;
+            $lastteacherid = $rec->teacherid;
             $totalactivitiesgradedcategory = 0;
             $totalactivitiescategory = 0;
             $totalpassed = 0;
             $totalsuspended = 0;
-            $maxlastaccess[$record->teacherid] = 0;
-            $data[$record->teacherid] = array(
+            $maxlastaccess[$rec->teacherid] = 0;
+            $data[$rec->teacherid] = array(
                 'totalactivities' => 0,
                 'totalactivitiesgradedcategory' => 0,
                 'lastaccess' => 0,
@@ -2538,13 +2538,13 @@ function get_dashboard_teacherlist_oncategory_data ($category) {
             );
         }
 
-        $course = get_course($record->courseid);
+        $course = get_course($rec->courseid);
         $cms = get_cmcompletion_course($course);
-        $data[$record->teacherid]['totalactivities'] += $cms['total'];
-        $data[$record->teacherid]['totalactivitiesgradedcategory'] += $cms['completed'];
+        $data[$rec->teacherid]['totalactivities'] += $cms['total'];
+        $data[$rec->teacherid]['totalactivitiesgradedcategory'] += $cms['completed'];
 
         // Get the items from teacher in course.
-        $coursegradeitems = grade_item::fetch_all(['courseid' => $record->courseid]);
+        $coursegradeitems = grade_item::fetch_all(['courseid' => $rec->courseid]);
 
         // Avoid false in foreach for "invalid argument supplied in foreach".
         if ( empty($coursegradeitems) ) {
@@ -2561,8 +2561,8 @@ function get_dashboard_teacherlist_oncategory_data ($category) {
                 $grades = array();
             }
 
-            if ( $record->lastaccess > $maxlastaccess[$record->teacherid] ) {
-                $maxlastaccess[$record->teacherid] = $record->lastaccess;
+            if ( $rec->lastaccess > $maxlastaccess[$rec->teacherid] ) {
+                $maxlastaccess[$rec->teacherid] = $rec->lastaccess;
             }
 
             foreach ($grades as $grade) {
@@ -2579,14 +2579,14 @@ function get_dashboard_teacherlist_oncategory_data ($category) {
             }
         }
 
-        $lastaccess = $maxlastaccess[$record->teacherid] == 0 ? '-' : date('d/m/Y', $maxlastaccess[$record->teacherid]);
-        $user = core_user::get_user($record->teacherid);
-        $data[$record->teacherid]['firstname'] = $user->firstname;
-        $data[$record->teacherid]['lastname'] = $user->lastname;
-        $data[$record->teacherid]['percent'] = $total == 0 ? 0 : $totalpassed * 100 / $total;
-        $data[$record->teacherid]['lastaccess'] = $lastaccess;
-        $data[$record->teacherid]['totalpassed'] = $totalpassed;
-        $data[$record->teacherid]['totalsuspended'] = $totalsuspended;
+        $lastaccess = $maxlastaccess[$rec->teacherid] == 0 ? '-' : date('d/m/Y', $maxlastaccess[$rec->teacherid]);
+        $user = core_user::get_user($rec->teacherid);
+        $data[$rec->teacherid]['firstname'] = $user->firstname;
+        $data[$rec->teacherid]['lastname'] = $user->lastname;
+        $data[$rec->teacherid]['percent'] = $total == 0 ? 0 : $totalpassed * 100 / $total;
+        $data[$rec->teacherid]['lastaccess'] = $lastaccess;
+        $data[$rec->teacherid]['totalpassed'] = $totalpassed;
+        $data[$rec->teacherid]['totalsuspended'] = $totalsuspended;
     }
     return $data;
 }
@@ -3757,31 +3757,31 @@ function local_eudecustom_investedtimes_teachers($catid, $out = true) {
         $start = time();
         $records = get_teachers_from_category($catid);
 
-        foreach ($records as $record) {
+        foreach ($records as $rec) {
             // Flag to check if record must update or insert.
             $exist = false;
 
             // Invested time record.
             $ivrec = $DB->get_record('local_eudecustom_invtimes',
-                array('userid' => $record->teacherid, 'courseid' => $record->courseid));
+                array('userid' => $rec->teacherid, 'courseid' => $rec->courseid));
 
             if (!$ivrec) {
                 // Initialize data.
                 $ivrec = new stdClass();
-                $ivrec->userid = $record->teacherid;
-                $ivrec->courseid = $record->courseid;
+                $ivrec->userid = $rec->teacherid;
+                $ivrec->courseid = $rec->courseid;
                 $ivrec->totaltime = 0;
 
                 // Get all records since start.
-                $total = get_usertime_incourse ($record->teacherid, $record->courseid);
+                $total = get_usertime_incourse ($rec->teacherid, $rec->courseid);
             } else {
                 // Get all records since last update.
                 $exist = true;
-                $total = get_usertime_incourse ($record->teacherid, $record->courseid, true, $ivrec->timemodified);
+                $total = get_usertime_incourse ($rec->teacherid, $rec->courseid, true, $ivrec->timemodified);
             }
 
             // Time in last seven days.
-            $data = get_usertime_incourse ($record->teacherid, $record->courseid, true);
+            $data = get_usertime_incourse ($rec->teacherid, $rec->courseid, true);
 
             if (count($total) == 0) {
                 // There are no data to update.
