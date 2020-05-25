@@ -38,6 +38,7 @@ before_install:
 
 install:
   # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
+  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
   - moodle-plugin-ci install
 
 script:
