@@ -61,7 +61,7 @@ class provider implements metadataprovider, pluginprovider {
             ],
             'privacy:metadata:local_eudecustom_mat_int');
 
-        $collection->add_database_table(
+            $collection->add_database_table(
             'local_eudecustom_user',
             [
                 'id' => 'privacy:metadata:local_eudecustom_user:id',
@@ -71,7 +71,7 @@ class provider implements metadataprovider, pluginprovider {
             ],
             'privacy:metadata:local_eudecustom_user');
 
-        $collection->add_database_table(
+            $collection->add_database_table(
             'local_eudecustom_invtimes',
             [
                 'id' => 'privacy:metadata:local_eudecustom_invtimes:id',
@@ -89,7 +89,7 @@ class provider implements metadataprovider, pluginprovider {
                 'timemodified' => 'privacy:metadata:local_eudecustom_invtimes:timemodified'
             ],
             'privacy:metadata:local_eudecustom_invtimes');
-        return $collection;
+            return $collection;
     }
 
     /**

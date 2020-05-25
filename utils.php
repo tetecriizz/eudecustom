@@ -1765,13 +1765,13 @@ function get_dashboard_teacher_data($userid) {
         $processeddata->courses[$dashboardentry->courseid]->coursename = $dashboardentry->coursename;
         $processeddata->courses[$dashboardentry->courseid]->timestart = $dashboardentry->timestart;
         $processeddata->courses[$dashboardentry->courseid]->courseid = $dashboardentry->courseid;
-        $processeddata->courses[$dashboardentry->courseid]->activestudents =
+        $processeddata->courses[$dashboardentry->courseid]->activestudents = 
                 check_dashboard_active_users_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->pendingactivities =
+        $processeddata->courses[$dashboardentry->courseid]->pendingactivities = 
                 check_dashboard_pending_activities_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->pendingmessages =
+        $processeddata->courses[$dashboardentry->courseid]->pendingmessages = 
                 check_dashboard_pending_messages_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->courseimagepath =
+        $processeddata->courses[$dashboardentry->courseid]->courseimagepath = 
                 get_dashboard_course_imagepath($dashboardentry->courseid);
         $processeddata->courses[$dashboardentry->courseid]->coursecatname = $dashboardentry->catname;
 
@@ -2628,7 +2628,7 @@ function get_dashboard_teacherinfo_oncategory_data ($category, $teacherid = null
             'totalsuspended' => 0
         );
 
-        if ( $record ->teacherid != $teacherid ) {
+        if ($record ->teacherid != $teacherid) {
             continue;
         }
 
@@ -3426,7 +3426,7 @@ function get_times_from_course($courseid = null) {
             $data ['students']['thu'] += $record->day5;
             $data ['students']['fri'] += $record->day6;
             $data ['students']['sat'] += $record->day7;
-            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 +
+            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
                     $record->day5 + $record->day6 + $record->day7;
         }
         if ( in_array($record->userid, array_keys($teachers)) ) {
@@ -3438,7 +3438,7 @@ function get_times_from_course($courseid = null) {
             $data ['teachers']['thu'] += $record->day5;
             $data ['teachers']['fri'] += $record->day6;
             $data ['teachers']['sat'] += $record->day7;
-            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 +
+            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
                     $record->day5 + $record->day6 + $record->day7;
         }
     }
@@ -3514,7 +3514,7 @@ function get_times_from_user($userid, $catid, $role) {
             $data ['students']['thu'] += $record->day5;
             $data ['students']['fri'] += $record->day6;
             $data ['students']['sat'] += $record->day7;
-            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 +
+            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
                     $record->day5 + $record->day6 + $record->day7;
         }
         if ( $role == 'teachers' && in_array($record->courseid, array_column($coursesgivencategory, 'id')) ) {
@@ -3529,14 +3529,14 @@ function get_times_from_user($userid, $catid, $role) {
             $data ['teachers']['thu'] += $record->day5;
             $data ['teachers']['fri'] += $record->day6;
             $data ['teachers']['sat'] += $record->day7;
-            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 +
+            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
                     $record->day5 + $record->day6 + $record->day7;
         }
     }
 
-    $timeaveragestudent = $data ['students']['accesses'] == 0 ?
+    $timeaveragestudent = $data ['students']['accesses'] == 0 ? 
         0 : intval(($totalspenttimestudents / $data['students']['accesses']));
-    $timeaverageteacher = $data ['teachers']['accesses'] == 0 ?
+    $timeaverageteacher = $data ['teachers']['accesses'] == 0 ? 
         0 : intval(($totalspenttimeteachers / $data['teachers']['accesses']));
 
     $data ['students']['totaltime'] = $totalspenttimestudents;

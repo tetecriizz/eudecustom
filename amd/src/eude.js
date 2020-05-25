@@ -44,8 +44,8 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
             var d = new Date();
             var month = d.getMonth() + 1;
             var day = d.getDate();
-            var outputdate = (('' + day).length < 2 ? '0' : '') + day + '/' +
-                (('' + month).length < 2 ? '0' : '') + month + '/' +
+            var outputdate = (('' + day).length < 2 ? '0' : '') + day + '/' + 
+                (('' + month).length < 2 ? '0' : '') + month + '/' + 
                 d.getFullYear();
             $('#eudecustom-spenttime').text(outputdate);
             $('#eudecustom-updateresult').css('display', 'none');
@@ -492,13 +492,13 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                     }
                 });
                 $('div.hasevent').on( "mouseenter", function() {
-                    $(this).append("<div class='uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup'>" +
-                                        "<div class='uep-header header modal-header'>" +
-                                            "<h3 class='modal-title' style='padding: 5px;'>Info</h3>" +
-                                        "</div>" +
-                                        "<div class='uep-content modal-body'>" +
-                                            $(this).attr('data-core_calendar-popupcontent') +
-                                         "</div>" +
+                    $(this).append("<div class='uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup'>" + 
+                                        "<div class='uep-header header modal-header'>" + 
+                                            "<h3 class='modal-title' style='padding: 5px;'>Info</h3>" + 
+                                        "</div>" + 
+                                        "<div class='uep-content modal-body'>" + 
+                                            $(this).attr('data-core_calendar-popupcontent') + 
+                                         "</div>" + 
                                     "</div>");
                 });
                 $('div.hasevent').on( "mouseleave", function() {
