@@ -2965,6 +2965,21 @@ class local_eudecustom_testcase extends advanced_testcase {
     }
 
     /**
+     * 
+     */
+    public function create_sample_enrols($user1, $user2, $user3, $course1, $course2, $studentrole, $teacherrole) {
+        // Course 1 enrols: user1 as teacher user2 and user3 as students.
+        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $teacherrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user2->id, $course1->id, $studentrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user3->id, $course1->id, $studentrole->id, 'manual');
+
+        // Course 2 enrols: user1, user3 as teachers and user2 and student.
+        $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $teacherrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user2->id, $course2->id, $studentrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user3->id, $course2->id, $teacherrole->id, 'manual');
+    }
+
+    /**
      * Tests for phpunit.
      */
     public function test_check_user_is_teacher() {
@@ -2988,15 +3003,8 @@ class local_eudecustom_testcase extends advanced_testcase {
         $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
 
-        // Course 1 enrols: user1 as teacher user2 and user3 as students.
-        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $teacherrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user2->id, $course1->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user3->id, $course1->id, $studentrole->id, 'manual');
-
-        // Course 2 enrols: user1, user3 as teachers and user2 and student.
-        $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $teacherrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user2->id, $course2->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user3->id, $course2->id, $teacherrole->id, 'manual');
+        // Creation of enrols.
+        $this->create_sample_enrols($user1, $user2, $user3, $course1, $course2, $studentrole, $teacherrole);
 
         // Test user1 (Expected results = true).
         $result1 = check_user_is_teacher($user1->id);
@@ -3144,23 +3152,22 @@ class local_eudecustom_testcase extends advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
+        $today = time();
         $manualplugin = self::enable_enrol_plugin();
         $this->assertNotEmpty($manualplugin);
         $studentrole = self::get_student_role();
-        $today = time();
         $year = 31557600;
 
         $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
-
-        // Creating a category.
         $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
 
         // Creating courses.
-        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
+        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
 
         $manualinstance = self::create_manual_instance($course1->id);
         $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
+
         $manualinstance2 = self::create_manual_instance($course2->id);
         $manualplugin->enrol_user($manualinstance2, $student1->id, $studentrole->id, $today + 10000, $today + $year);
 
@@ -3210,19 +3217,18 @@ class local_eudecustom_testcase extends advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
-        $manualplugin = self::enable_enrol_plugin();
         $this->assertNotEmpty($manualplugin);
-        $studentrole = self::get_student_role();
+        $manualplugin = self::enable_enrol_plugin();
         $today = time();
         $year = 31557600;
+        $studentrole = self::get_student_role();
 
         // Creating a category.
         $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
 
-        // Creating courses.
+        // Creating courses and student.
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
         $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
-
         $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
 
         $manualinstance = self::create_manual_instance($course1->id);
@@ -3233,21 +3239,21 @@ class local_eudecustom_testcase extends advanced_testcase {
         // Creating grades for each course.
         $grade = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course1->id));
         $this->assertNotEmpty($grade);
-        $grade->gradepass = 50;
         $grade->needsupdate = 0;
+        $grade->gradepass = 50;
         $DB->update_record('grade_items', $grade);
         $grades = new stdClass();
-        $grades->userid = $student1->id;
-        $grades->feedback = 'Texto de informacion';
         $grades->finalgrade = 92;
+        $grades->userid = $student1->id;
         $grades->itemid = $grade->id;
-
+        $grades->feedback = 'Texto de informacion';
         $DB->insert_record('grade_grades', $grades, false);
 
         // Grade course 2.
         $grade2 = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course2->id));
         $grade2->gradepass = 50;
         $grade2->needsupdate = 0;
+
         $DB->update_record('grade_items', $grade2);
         $this->assertNotEmpty($grade2);
         $grades2 = new stdClass();
@@ -3610,15 +3616,8 @@ class local_eudecustom_testcase extends advanced_testcase {
         $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $teacherrole = $DB->get_record('role', array('shortname' => 'teacher'));
 
-        // Course 1 enrols: user1 as teacher user2 and user3 as students with active enrols.
-        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $teacherrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user2->id, $course1->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user3->id, $course1->id, $studentrole->id, 'manual');
-
-        // Course 2 enrols: user1 as teacher user2 as active student and user3 as inactive student.
-        $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $teacherrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user2->id, $course2->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user3->id, $course2->id, $studentrole->id, 'manual');
+        // Creation of enrols.
+        $this->create_sample_enrols($user1, $user2, $user3, $course1, $course2, $studentrole, $teacherrole);
 
         // Course 3 enrols: user1 as teacher and user2 as an inactive student.
         $this->getDataGenerator()->enrol_user($user1->id, $course3->id, $teacherrole->id, 'manual');
