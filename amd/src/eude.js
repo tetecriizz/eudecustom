@@ -44,8 +44,11 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
             var d = new Date();
             var month = d.getMonth() + 1;
             var day = d.getDate();
-            var outputdate = (('' + day).length < 2 ? '0' : '') + day + '/'
-                 + (('' + month).length < 2 ? '0' : '') + month + '/' + d.getFullYear();
+
+            var outputdateday = (('' + day).length < 2 ? '0' : '') + day;
+            var outputdatemonth = (('' + month).length < 2 ? '0' : '') + month;
+            var outputdateyear = d.getFullYear();
+            var outputdate = outputdateday + '/' + outputdatemonth + '/' + outputdateyear;
             $('#eudecustom-spenttime').text(outputdate);
             $('#eudecustom-updateresult').css('display', 'none');
         }
@@ -491,14 +494,14 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                     }
                 });
                 $('div.hasevent').on( "mouseenter", function() {
-                    var classesdiv = 'uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup';
-                    var html0 = "<div class='" + classesdiv + "'>";
-                    var html1 = "<div class='uep-header header modal-header'>";
-                    var html2 = "<h3 class='modal-title' style='padding: 5px;'>Info</h3></div>";
-                    var html3 = "<div class='uep-content modal-body'>";
-                    var html4 = "</div></div>";
-                    var selec = $(this).attr('data-core_calendar-popupcontent');
-                    $(this).append(html0 + html1 + html2 + html3 + selec + html4);
+                $(this).append("<div class='uep-wrap modal-dialog modal show modal-dialog modal-content eudecalendarpopup'>" +
+                                    "<div class='uep-header header modal-header'>" +
+                                        "<h3 class='modal-title' style='padding: 5px;'>Info</h3>" +
+                                    "</div>" +
+                                    "<div class='uep-content modal-body'>" +
+                                        $(this).attr('data-core_calendar-popupcontent') +
+                                     "</div>" +
+                                "</div>");
                 });
                 $('div.hasevent').on( "mouseleave", function() {
                     $(this).find('.eudecalendarpopup').remove();
