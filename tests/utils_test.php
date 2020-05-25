@@ -3167,7 +3167,6 @@ class local_eudecustom_testcase extends advanced_testcase {
 
         $manualinstance = self::create_manual_instance($course1->id);
         $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
-
         $manualinstance2 = self::create_manual_instance($course2->id);
         $manualplugin->enrol_user($manualinstance2, $student1->id, $studentrole->id, $today + 10000, $today + $year);
 
@@ -3217,23 +3216,25 @@ class local_eudecustom_testcase extends advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
-        $this->assertNotEmpty($manualplugin);
+        // Creating a category.
+        $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
+
+        // Manual plugin creation.
         $manualplugin = self::enable_enrol_plugin();
+        $this->assertNotEmpty($manualplugin);
         $today = time();
         $year = 31557600;
         $studentrole = self::get_student_role();
-
-        // Creating a category.
-        $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
 
         // Creating courses and student.
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
         $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
         $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
 
+        // Enrol instances.
         $manualinstance = self::create_manual_instance($course1->id);
-        $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
         $manualinstance2 = self::create_manual_instance($course2->id);
+        $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
         $manualplugin->enrol_user($manualinstance2, $student1->id, $studentrole->id, $today + 10000, $today + $year);
 
         // Creating grades for each course.
@@ -3295,9 +3296,11 @@ class local_eudecustom_testcase extends advanced_testcase {
         $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
 
+        // Create manual instances.
         $manualinstance = self::create_manual_instance($course1->id);
-        $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
         $manualinstance2 = self::create_manual_instance($course2->id);
+        // Use manual instances.
+        $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
         $manualplugin->enrol_user($manualinstance2, $student1->id, $studentrole->id, $today + 10000, $today + $year);
 
         // Creating grades for each course.
