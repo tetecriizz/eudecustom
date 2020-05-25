@@ -62,8 +62,8 @@ script:
   - moodle-plugin-ci jshint
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
-  - moodle-plugin-ci phpunit --coverage-text
+  # - moodle-plugin-ci behat
+  # - moodle-plugin-ci phpunit --coverage-text
 
   # The following line is a temporary work-around for https://tracker.moodle.org/browse/MDL-66378.
   # Once that is fixed, this line can go.
