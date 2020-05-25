@@ -45,13 +45,13 @@ install:
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
+  # - moodle-plugin-ci phpcpd
   - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci codechecker --standard poet
   - moodle-plugin-ci csslint
   - moodle-plugin-ci shifter
-  # - moodle-plugin-ci jshint
+  # - moodle-plugin-ci jshint # da error 
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
   # - moodle-plugin-ci behat
