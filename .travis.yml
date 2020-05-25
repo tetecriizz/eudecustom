@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+sudo: true
 
 services:
   mysql
@@ -55,5 +55,5 @@ script:
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
   # - moodle-plugin-ci behat
-  - moodle-plugin-ci behat --profile chrome --dump
+  # - moodle-plugin-ci behat --tags=@local_eudecustom
   - moodle-plugin-ci phpunit --coverage-text
