@@ -35,13 +35,13 @@ Scenario: Check access capability by configuration
     
     # coursecreator has not an authorized access to 
     # manager dashboard and will be redirected to home page
-    Given I log in as "user3"
+    And I log in as "user3"
     And I go to eudedashboard
     And I wait to be redirected
     Then I log out
 
     # Access as admin to enable cat1 and cat2 and add role for coursecreator to manager dashboard
-    Given I log in as "admin"
+    And I log in as "admin"
     And I go to eudecustom configuration
     # Option 1 is selected by default, must enable Cat1 and Cat2
     And I click on "//select[@id='id_s__local_eudecustom_category']/option[2]" "xpath_element"
@@ -56,7 +56,7 @@ Scenario: Check access capability by configuration
     Then I log out
 
     # Now has an authorized role to see manager dashboard
-    Given I log in as "user3"
+    And I log in as "user3"
     And I go to eudedashboard
     And I should see "Miscellaneous" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[1]/td[1]" "xpath_element"
     And I should see "Cat1" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[2]/td[1]" "xpath_element"
