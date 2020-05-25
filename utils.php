@@ -3485,8 +3485,8 @@ function get_times_from_user($userid, $catid, $role) {
     $data['teachers'] += $days;
     $timeaveragelastdaysstudent = 0;
     $timeaveragelastdaysteacher = 0;
-    $totalspenttimestudents = 0;
-    $totalspenttimeteachers = 0;
+    $totaltimestudents = 0;
+    $totaltimeteachers = 0;
     $counter = 0;
 
     if ( $role != 'students' && $role != 'teachers' ) {
@@ -3503,8 +3503,9 @@ function get_times_from_user($userid, $catid, $role) {
     foreach ($records as $record) {
         // Add to totaltime if userid is student or teacher.
         if ( $role == 'students' && in_array($record->courseid, array_column($coursesgivencategory, 'id')) ) {
+            $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $counter++;
-            $totalspenttimestudents += $record->totaltime;
+            $totaltimestudents += $record->totaltime;
             $data ['students']['accesses'] += get_accesses_from_course($record->courseid, 'student', false, $userid);
             $data ['students']['accesseslastdays'] += get_accesses_from_course($record->courseid, 'student', true, $userid);
             $data ['students']['sun'] += $record->day1;
@@ -3514,12 +3515,12 @@ function get_times_from_user($userid, $catid, $role) {
             $data ['students']['thu'] += $record->day5;
             $data ['students']['fri'] += $record->day6;
             $data ['students']['sat'] += $record->day7;
-            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
-                    $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysstudent += $agdays;
         }
         if ( $role == 'teachers' && in_array($record->courseid, array_column($coursesgivencategory, 'id')) ) {
+            $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $counter++;
-            $totalspenttimeteachers += $record->totaltime;
+            $totaltimeteachers += $record->totaltime;
             $data ['teachers']['accesses'] += get_accesses_from_course($record->courseid, 'teacher', false, $userid);
             $data ['teachers']['accesseslastdays'] += get_accesses_from_course($record->courseid, 'teacher', true, $userid);
             $data ['teachers']['sun'] += $record->day1;
@@ -3529,21 +3530,18 @@ function get_times_from_user($userid, $catid, $role) {
             $data ['teachers']['thu'] += $record->day5;
             $data ['teachers']['fri'] += $record->day6;
             $data ['teachers']['sat'] += $record->day7;
-            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
-                    $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysteacher += $agdays;
         }
     }
 
-    $timeaveragestudent = $data ['students']['accesses'] == 0 ? 
-        0 : intval(($totalspenttimestudents / $data['students']['accesses']));
-    $timeaverageteacher = $data ['teachers']['accesses'] == 0 ? 
-        0 : intval(($totalspenttimeteachers / $data['teachers']['accesses']));
+    $timeaveragestudent = $data ['students']['accesses'] == 0 ? 0 : intval(($totaltimestudents / $data['students']['accesses']));
+    $timeaverageteacher = $data ['teachers']['accesses'] == 0 ? 0 : intval(($totaltimeteachers / $data['teachers']['accesses']));
 
-    $data ['students']['totaltime'] = $totalspenttimestudents;
+    $data ['students']['totaltime'] = $totaltimestudents;
     $data ['students']['averagetime'] = $timeaveragestudent;
     $data ['students']['averagetimelastdays'] = $timeaveragelastdaysstudent / LOCAL_EUDE_DASHBOARD_DAYS_BEFORE;
     $data ['students'] += get_percent_of_days($data['students']);
-    $data ['teachers']['totaltime'] = $totalspenttimeteachers;
+    $data ['teachers']['totaltime'] = $totaltimeteachers;
     $data ['teachers']['averagetime'] = $timeaverageteacher;
     $data ['teachers']['averagetimelastdays'] = $timeaveragelastdaysteacher / LOCAL_EUDE_DASHBOARD_DAYS_BEFORE;
     $data ['teachers'] += get_percent_of_days($data['teachers']);
