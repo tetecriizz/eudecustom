@@ -22,7 +22,12 @@ php:
     - 7.1.30 # Make this sticky because current default version (7.1.11) has a bug with redis-extension output (MDL-66062)
 
 addons:
-  postgresql: "9.6"
+    postgresql: "9.6"
+    chrome: stable
+    apt:
+    packages:
+        - openjdk-8-jre-headless
+        - chromium-chromedriver
 
 env:
     # Although we want to run these jobs and see failures as quickly as possible, we also want to get the slowest job to
@@ -61,8 +66,13 @@ cache:
       - $HOME/.npm
 
 before_install:
-    # Avoid IPv6 default binding as service (causes redis not to start).
-    sudo service redis-server start --bind 127.0.0.1
+  - phpenv config-rm xdebug.ini
+  - nvm install 14.0.0
+  - nvm use 14.0.0
+  - cd ../..
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
     - >
