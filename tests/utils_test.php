@@ -3309,10 +3309,11 @@ class local_eudecustom_testcase extends advanced_testcase {
         $grade->needsupdate = 0;
         $grade->gradepass = 50;
         $DB->update_record('grade_items', $grade);
+        // Put grade to student1.
         $grades = new stdClass();
-        $grades->userid = $student1->id;
-        $grades->itemid = $grade->id;
         $grades->finalgrade = 92;
+        $grades->itemid = $grade->id;
+        $grades->userid = $student1->id;
         $grades->feedback = 'Texto de informacion';
 
         $DB->insert_record('grade_grades', $grades, false);
