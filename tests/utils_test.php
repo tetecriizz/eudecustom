@@ -2878,41 +2878,41 @@ class local_eudecustom_testcase extends advanced_testcase {
         $user1 = $this->getDataGenerator()->create_user(array('username' => 'user1', 'email' => 'user1@php.com'));
 
         // Creating several categories for future use.
-        $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category 1'));
-        $category2 = $this->getDataGenerator()->create_category(array('name' => 'Category 2'));
         $category3 = $this->getDataGenerator()->create_category(array('name' => 'Category 3'));
+        $category2 = $this->getDataGenerator()->create_category(array('name' => 'Category 2'));
+        $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category 1'));
 
         // Creating courses related to the categories above.
-        $course1 = $this->getDataGenerator()->create_course(array('shortname' => 'C1.M.Course 1',
-                                                                  'fullname' => 'C1.M.Course 1', 'category' => $category1->id));
-        $course2 = $this->getDataGenerator()->create_course(array('shortname' => 'C1.M.Course 2',
-                                                                  'fullname' => 'C1.M.Course 2', 'category' => $category1->id));
-        $course3 = $this->getDataGenerator()->create_course(array('shortname' => 'C2.M.Course 3',
-                                                                  'fullname' => 'C1.M.Course 3', 'category' => $category2->id));
-        $course4 = $this->getDataGenerator()->create_course(array('shortname' => 'C2.M.Course 4',
-                                                                  'fullname' => 'C1.M.Course 4', 'category' => $category2->id));
         $course5 = $this->getDataGenerator()->create_course(array('shortname' => 'C3.M.Course 5',
                                                                   'fullname' => 'C1.M.Course 5', 'category' => $category3->id));
+        $course4 = $this->getDataGenerator()->create_course(array('shortname' => 'C2.M.Course 4',
+                                                                  'fullname' => 'C1.M.Course 4', 'category' => $category2->id));
+        $course3 = $this->getDataGenerator()->create_course(array('shortname' => 'C2.M.Course 3',
+                                                                  'fullname' => 'C1.M.Course 3', 'category' => $category2->id));
+        $course2 = $this->getDataGenerator()->create_course(array('shortname' => 'C1.M.Course 2',
+                                                                  'fullname' => 'C1.M.Course 2', 'category' => $category1->id));
+        $course1 = $this->getDataGenerator()->create_course(array('shortname' => 'C1.M.Course 1',
+                                                                  'fullname' => 'C1.M.Course 1', 'category' => $category1->id));
 
         // Getting the id of the roles.
-        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
 
         // Enrol user 1 as a student in all the courses.
-        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user1->id, $course3->id, $studentrole->id, 'manual');
-        $this->getDataGenerator()->enrol_user($user1->id, $course4->id, $teacherrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($user1->id, $course5->id, $studentrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user1->id, $course4->id, $teacherrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user1->id, $course3->id, $studentrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $studentrole->id, 'manual');
+        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $studentrole->id, 'manual');
 
-        // Test user1 (Expected results = true).
-        $result1 = get_dashboard_student_data($user1->id);
         // Array with 3 categories.
         $this->assertCount(3, $result1);
+        // Test user1 (Expected results = true).
+        $result1 = get_dashboard_student_data($user1->id);
         // Cat 1 has 2 courseinfo objects, cat 2 has 1 courseinfo objects (he is enroled only in c3 as student) and cat 3 has 1.
-        $this->assertCount(2, $result1[$category1->id]->courses);
-        $this->assertCount(1, $result1[$category2->id]->courses);
         $this->assertCount(1, $result1[$category3->id]->courses);
+        $this->assertCount(1, $result1[$category2->id]->courses);
+        $this->assertCount(2, $result1[$category1->id]->courses);
     }
 
     /**
@@ -3216,14 +3216,14 @@ class local_eudecustom_testcase extends advanced_testcase {
         $today = time();
         $year = 31557600;
 
-        $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
-
         // Creating a category.
         $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
 
         // Creating courses.
-        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
+        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
+
+        $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
 
         $manualinstance = self::create_manual_instance($course1->id);
         $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
@@ -3233,28 +3233,28 @@ class local_eudecustom_testcase extends advanced_testcase {
         // Creating grades for each course.
         $grade = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course1->id));
         $this->assertNotEmpty($grade);
-        $grade->needsupdate = 0;
         $grade->gradepass = 50;
+        $grade->needsupdate = 0;
         $DB->update_record('grade_items', $grade);
         $grades = new stdClass();
-        $grades->itemid = $grade->id;
-        $grades->finalgrade = 92;
-        $grades->feedback = 'Texto de informacion';
         $grades->userid = $student1->id;
+        $grades->feedback = 'Texto de informacion';
+        $grades->finalgrade = 92;
+        $grades->itemid = $grade->id;
 
         $DB->insert_record('grade_grades', $grades, false);
 
         // Grade course 2.
         $grade2 = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course2->id));
-        $grade2->needsupdate = 0;
         $grade2->gradepass = 50;
+        $grade2->needsupdate = 0;
         $DB->update_record('grade_items', $grade2);
         $this->assertNotEmpty($grade2);
         $grades2 = new stdClass();
-        $grades2->itemid = $grade2->id;
-        $grades2->finalgrade = 39;
-        $grades2->feedback = 'Texto de informacion';
         $grades2->userid = $student1->id;
+        $grades2->feedback = 'Texto de informacion';
+        $grades2->finalgrade = 39;
+        $grades2->itemid = $grade2->id;
 
         $DB->insert_record('grade_grades', $grades2, false);
 
@@ -3301,24 +3301,24 @@ class local_eudecustom_testcase extends advanced_testcase {
         $grade->gradepass = 50;
         $DB->update_record('grade_items', $grade);
         $grades = new stdClass();
+        $grades->userid = $student1->id;
         $grades->itemid = $grade->id;
         $grades->finalgrade = 92;
         $grades->feedback = 'Texto de informacion';
-        $grades->userid = $student1->id;
 
         $DB->insert_record('grade_grades', $grades, false);
 
         // Grade course 2.
         $grade2 = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course2->id));
-        $grade2->needsupdate = 0;
         $grade2->gradepass = 50;
+        $grade2->needsupdate = 0;
         $DB->update_record('grade_items', $grade2);
         $this->assertNotEmpty($grade2);
         $grades2 = new stdClass();
+        $grades2->userid = $student1->id;
         $grades2->itemid = $grade2->id;
         $grades2->finalgrade = 69;
         $grades2->feedback = 'convalidated';
-        $grades2->userid = $student1->id;
 
         $DB->insert_record('grade_grades', $grades2, false);
 
@@ -3344,14 +3344,14 @@ class local_eudecustom_testcase extends advanced_testcase {
         $today = time();
         $year = 31557600;
 
-        $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
-
         // Creating a category.
         $category1 = $this->getDataGenerator()->create_category(array('name' => 'Category One'));
 
         // Creating courses.
-        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
         $course2 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO2", 'category' => $category1->id));
+        $course1 = $this->getDataGenerator()->create_course(array('shortname' => "CAT.M.CURSO1", 'category' => $category1->id));
+
+        $student1 = $this->getDataGenerator()->create_user(array('firstname' => "USUARIO 1"));
 
         $manualinstance = self::create_manual_instance($course1->id);
         $manualplugin->enrol_user($manualinstance, $student1->id, $studentrole->id, $today, $today + $year);
@@ -3365,9 +3365,9 @@ class local_eudecustom_testcase extends advanced_testcase {
         $DB->update_record('grade_items', $grade);
         $grades = new stdClass();
         $grades->itemid = $grade->id;
-        $grades->finalgrade = 92;
         $grades->feedback = 'Texto de informacion';
         $grades->userid = $student1->id;
+        $grades->finalgrade = 92;
 
         $DB->insert_record('grade_grades', $grades, false);
 

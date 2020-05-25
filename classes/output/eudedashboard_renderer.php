@@ -520,6 +520,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
+        return $html;
     }
 
     /**
@@ -1259,120 +1260,12 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $coursestats->announcementsforum = 0;
         }
 
-        $html .= html_writer::start_div('dashboard-container studenttime col-12 col-lg-4 eude-data-info',
-            array('id' => 'teachertime'));
-        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::div(get_string('timeteachers', 'local_eudecustom'), 'dashboard-investedtimes-title');
-        $html .= html_writer::start_div('dashboard_singlemodule_wrapper');
-        $html .= html_writer::start_div('dashboard-investedtimes-wrapper');
-        $html .= html_writer::start_div('investedtimestotalhourswrapper');
-        $html .= html_writer::start_div('investedtimestotalhours');
-        $html .= html_writer::span(gmdate("H", $dataconn['teachers']['totaltime']), 'eude-bignumber');
-        $html .= html_writer::span(get_string('totalhours', 'local_eudecustom'), 'eude-smalltext');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('investedtimeshourschart');
-        $html .= html_writer::start_div('eude-row eude-col-6 chart-container investedtimeschart');
-        $html .= html_writer::start_tag('ul', array('class' => 'chart'));
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percmon'].'% / 1); background-color: #7963bb;'));
-        $html .= html_writer::span('M', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['mon']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['perctue'].'% / 1); background-color: #a695da;'));
-        $html .= html_writer::span('T', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['tue']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percwed'].'% / 1); background-color: #7963bb;'));
-        $html .= html_writer::span('W', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['wed']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percthu'].'% / 1); background-color: #a695da;'));
-        $html .= html_writer::span('T', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['thu']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percfri'].'% / 1); background-color: #7963bb;'));
-        $html .= html_writer::span('F', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['fri']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percsat'].'% / 1); background-color: #a695da;'));
-        $html .= html_writer::span('S', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['sat']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
-            $dataconn['teachers']['percsun'].'% / 1); background-color: #7963bb;'));
-        $html .= html_writer::span('S', 'eude-bar-daytext');
-        $html .= html_writer::span(gmdate("H:i:s", $dataconn['teachers']['sun']), 'eude-tooltiptext');
-        $html .= html_writer::end_tag('li');
-        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip eude-hiddenli',
-            'style' => 'height:calc(100% / 1); background-color: white;'));
-        $html .= html_writer::end_tag('ul');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('investedtimesaccesswrapper');
-        $html .= html_writer::start_div('investedtimesaccesses');
-        $html .= html_writer::start_div('investedtimestotalaccesses');
-        $html .= html_writer::span($dataconn['teachers']['accesses'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('investedtimesaverageaccesses');
-        $html .= html_writer::span(gmdate("H:i", $dataconn['teachers']['averagetime']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('investedtimeslastdaysaccesses');
-        $html .= html_writer::div(get_string('lastdays', 'local_eudecustom'), 'investedtimeslastdaysaccessestitle');
-        $html .= html_writer::start_div('investedtimeslastdaysaccessesinfo');
-        $html .= html_writer::span($dataconn['teachers']['accesseslastdays'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
-        $html .= html_writer::span(gmdate("H:i", $dataconn['teachers']['averagetimelastdays']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
+        $html .= $this->local_eudecustom_print_card($dataconn, 'teacher');
 
         // Student data.
-        $html .= html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
-            array('id' => 'studentdata'));
-        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block');
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('accesses', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div('borderright');
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($totalactivitiescompleted, 'big-text').\html_writer::start_tag('sub').
-            get_string('activitiesfinished', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($totalactivitiescourse, 'big-text').\html_writer::start_tag('sub').
-            get_string('activitiestotal', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('performance', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div();
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats->messagesforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('forummessages', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats->announcementsforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('newsforum', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
+        $cms['completed'] = $totalactivitiescompleted;
+        $cms['total'] = $totalactivitiescourse;
+        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;
