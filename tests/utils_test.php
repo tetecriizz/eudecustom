@@ -3304,15 +3304,15 @@ class local_eudecustom_testcase extends advanced_testcase {
         $manualplugin->enrol_user($manualinstance2, $student1->id, $studentrole->id, $today + 10000, $today + $year);
 
         // Creating grades for each course.
-        $grade = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course1->id));
-        $this->assertNotEmpty($grade);
-        $grade->needsupdate = 0;
-        $grade->gradepass = 50;
-        $DB->update_record('grade_items', $grade);
+        $grd = $this->getDataGenerator()->create_grade_item(array('itemtype' => 'course', 'courseid' => $course1->id));
+        $this->assertNotEmpty($grd);
+        $grd->needsupdate = 0;
+        $grd->gradepass = 50;
+        $DB->update_record('grade_items', $grd);
         // Put grade to student1.
         $grades = new stdClass();
         $grades->finalgrade = 92;
-        $grades->itemid = $grade->id;
+        $grades->itemid = $grd->id;
         $grades->userid = $student1->id;
         $grades->feedback = 'Texto de informacion';
 
