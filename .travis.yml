@@ -1,54 +1,30 @@
-
 language: php
 
-dist: bionic
-sudo: required
-
-services:
-  mysql
-
-addons:
-  # firefox: "47.0.1"
-  postgresql: "9.6"
-  chrome: stable
-  apt:
-    packages:
-      - openjdk-8-jre-headless
-      - chromium-chromedriver
+sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
-    - $HOME/.npm
 
-matrix:
-  include:
-    - php: 7.3
-      env:
-      - MOODLE_BRANCH=master
-      - DB=pgsql
+php:
+# For 3.1 forward, only test PHP7.
+ - 7.2
 
-    - php: 7.2
-      env:
-        - MOODLE_BRANCH=MOODLE_37_STABLE
-        - DB=mysqli
-
-    - php: 7.3
-      env:
-        - MOODLE_BRANCH=MOODLE_36_STABLE
-        - DB=pgsql
+env:
+ global:
+  - MOODLE_BRANCH=MOODLE_37_STABLE
+ matrix:
+  - DB=pgsql
+  - DB=mysqli
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - nvm install 14.0.0
-  - nvm use 14.0.0
   - cd ../..
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2
+  - composer selfupdate
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
-  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap.git
   - moodle-plugin-ci install
 
 script:
@@ -62,10 +38,5 @@ script:
   - moodle-plugin-ci jshint
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  # - moodle-plugin-ci behat
-  # - moodle-plugin-ci phpunit --coverage-text
-
-  # The following line is a temporary work-around for https://tracker.moodle.org/browse/MDL-66378.
-  # Once that is fixed, this line can go.
-  # - curl https://github.com/timhunt/php-webdriver/commit/7a0aa38f591b7395939df25d8cb6677bf99a481f.patch | git apply --directory moodle/vendor/instaclick/php-webdriver
-  # - moodle-plugin-ci behat --profile chrome
+  - moodle-plugin-ci behat
+  - moodle-plugin-ci phpunit --coverage-text
