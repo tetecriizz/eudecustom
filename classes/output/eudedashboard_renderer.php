@@ -481,6 +481,47 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         return $html;
     }
+
+    /**
+     * Print course stats
+     * @param type $cms
+     * @param type $coursestats
+     */
+    public function local_eudecustom_print_data($cms, $coursestats) {
+        $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
+            array('id' => 'studentdata'));
+        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('accesses', 'local_eudecustom'), 'subtitle');
+        $html .= html_writer::start_div('borderright');
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($cms['completed'], 'big-text').\html_writer::start_tag('sub'). get_string('activitiescompleted',
+                        'local_eudecustom').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($cms['total'], 'big-text').\html_writer::start_tag('sub').get_string('activitiestotal',
+                        'local_eudecustom').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('performance', 'local_eudecustom'), 'subtitle');
+        $html .= html_writer::start_div();
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($coursestats->messagesforum, 'big-text').\html_writer::start_tag('sub').
+            get_string('forummessages', 'local_eudecustom').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($coursestats->announcementsforum, 'big-text').\html_writer::start_tag('sub').
+            get_string('newsforum', 'local_eudecustom').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+    }
+
     /**
      * Render custom for eude new dashboard.
      * Pantalla 1/7 del mockup
@@ -795,38 +836,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= $this->local_eudecustom_print_card($dataconn, 'teacher');
 
         // Student data.
-        $html .= html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
-            array('id' => 'studentdata'));
-        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('accesses', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div('borderright');
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($cms['completed'], 'big-text').\html_writer::start_tag('sub'). get_string('activitiescompleted',
-                        'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($cms['total'], 'big-text').\html_writer::start_tag('sub').get_string('activitiestotal',
-                        'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('performance', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div();
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats->messagesforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('forummessages', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats->announcementsforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('newsforum', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
+        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
 
         $response .= $html.$html2.$this->footer();
         return $response;
@@ -1086,38 +1096,9 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         // Student data.
-        $html .= html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
-            array('id' => 'studentdata'));
-        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('accesses', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div('borderright');
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($totalactivitiescompleted, 'big-text').\html_writer::start_tag('sub').
-            get_string('activitiescompleted', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($totalactivitiescourse, 'big-text').\html_writer::start_tag('sub').
-            get_string('activitiesfinished', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('performance', 'local_eudecustom'), 'subtitle');
-        $html .= html_writer::start_div();
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats->messagesforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('forummessages', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats->announcementsforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('newsforum', 'local_eudecustom').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
+        $cms['completed'] = $totalactivitiescompleted;
+        $cms['total'] = $totalactivitiescourse;
+        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;

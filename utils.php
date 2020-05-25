@@ -3762,22 +3762,22 @@ function local_eudecustom_investedtimes_teachers($catid, $out = true) {
             $exist = false;
 
             // Invested time record.
-            $ivrec = $DB->get_record('local_eudecustom_invtimes',
+            $invrectea = $DB->get_record('local_eudecustom_invtimes',
                 array('userid' => $rec->teacherid, 'courseid' => $rec->courseid));
 
-            if (!$ivrec) {
+            if (!$invrectea) {
                 // Initialize data.
-                $ivrec = new stdClass();
-                $ivrec->userid = $rec->teacherid;
-                $ivrec->courseid = $rec->courseid;
-                $ivrec->totaltime = 0;
+                $invrectea = new stdClass();
+                $invrectea->userid = $rec->teacherid;
+                $invrectea->courseid = $rec->courseid;
+                $invrectea->totaltime = 0;
 
                 // Get all records since start.
                 $total = get_usertime_incourse ($rec->teacherid, $rec->courseid);
             } else {
                 // Get all records since last update.
                 $exist = true;
-                $total = get_usertime_incourse ($rec->teacherid, $rec->courseid, true, $ivrec->timemodified);
+                $total = get_usertime_incourse ($rec->teacherid, $rec->courseid, true, $invrectea->timemodified);
             }
 
             // Time in last seven days.
@@ -3791,36 +3791,36 @@ function local_eudecustom_investedtimes_teachers($catid, $out = true) {
             for ($i = 1; $i <= 7; $i++) {
                 // Initialize all days to zero.
                 $prop = 'day'.$i;
-                $ivrec->$prop = 0;
+                $invrectea->$prop = 0;
             }
 
             // Data from the last seven days.
             foreach ($data as $day => $detail) {
                 $prop = 'day'.$day;
-                $ivrec->$prop = $detail->secondtime;
+                $invrectea->$prop = $detail->secondtime;
             }
 
             // Total data.
             foreach ($total as $totalday => $totaldetail) {
                 $prop = 'day'.$totalday;
-                $ivrec->totaltime += $totaldetail->secondtime;
+                $invrectea->totaltime += $totaldetail->secondtime;
             }
 
-            $ivrec->timemodified = time();
+            $invrectea->timemodified = time();
 
             if ($exist) {
-                $DB->update_record('local_eudecustom_invtimes', $ivrec);
+                $DB->update_record('local_eudecustom_invtimes', $invrectea);
                 flush();
                 ob_flush();
-                local_eudecustom_print_output("Userid $ivrec->userid have invested $ivrec->totaltime "
-                        . "seconds in course $ivrec->courseid".PHP_EOL, $out);
+                local_eudecustom_print_output("Userid $invrectea->userid have invested $invrectea->totaltime "
+                        . "seconds in course $invrectea->courseid".PHP_EOL, $out);
             } else {
-                $ivrec->timecreated = time();
-                $DB->insert_record('local_eudecustom_invtimes', $ivrec);
+                $invrectea->timecreated = time();
+                $DB->insert_record('local_eudecustom_invtimes', $invrectea);
                 flush();
                 ob_flush();
-                local_eudecustom_print_output("Userid $ivrec->userid have invested $ivrec->totaltime "
-                        . "seconds in course $ivrec->courseid".PHP_EOL, $out);
+                local_eudecustom_print_output("Userid $invrectea->userid have invested $invrectea->totaltime "
+                        . "seconds in course $invrectea->courseid".PHP_EOL, $out);
             }
 
             $cod = 1;
@@ -3865,22 +3865,22 @@ function local_eudecustom_investedtimes_students($catid, $out = true) {
 
             // In order to check if user exists, then do insert or update.
             $exist = false;
-            $ivrec = $DB->get_record('local_eudecustom_invtimes',
+            $invrecstu = $DB->get_record('local_eudecustom_invtimes',
                 array('userid' => $record->studentid, 'courseid' => $record->courseid)); // Invested time record!
 
-            if (!$ivrec) {
+            if (!$invrecstu) {
                 // Initialize data.
-                $ivrec = new stdClass();
-                $ivrec->userid = $record->studentid;
-                $ivrec->courseid = $record->courseid;
-                $ivrec->totaltime = 0;
+                $invrecstu = new stdClass();
+                $invrecstu->userid = $record->studentid;
+                $invrecstu->courseid = $record->courseid;
+                $invrecstu->totaltime = 0;
 
                 // Get all records since start.
                 $total = get_usertime_incourse ($record->studentid, $record->courseid);
             } else {
                 // Get all records since last update.
                 $exist = true;
-                $total = get_usertime_incourse ($record->studentid, $record->courseid, true, $ivrec->timemodified);
+                $total = get_usertime_incourse ($record->studentid, $record->courseid, true, $invrecstu->timemodified);
             }
 
             // Time in last seven days.
@@ -3894,35 +3894,35 @@ function local_eudecustom_investedtimes_students($catid, $out = true) {
             for ($i = 1; $i <= 7; $i++) {
                 // Initialize all days to zero.
                 $prop = 'day'.$i;
-                $ivrec->$prop = 0;
+                $invrecstu->$prop = 0;
             }
 
             // Data from the last seven days.
             foreach ($data as $day => $detail) {
                 $prop = 'day'.$day;
-                $ivrec->$prop = $detail->secondtime;
+                $invrecstu->$prop = $detail->secondtime;
             }
 
             // Total data.
             foreach ($total as $totalday => $totaldetail) {
                 $prop = 'day'.$totalday;
-                $ivrec->totaltime += $totaldetail->secondtime;
+                $invrecstu->totaltime += $totaldetail->secondtime;
             }
 
-            $ivrec->timemodified = time();
+            $invrecstu->timemodified = time();
             if ($exist) {
-                $DB->update_record('local_eudecustom_invtimes', $ivrec);
+                $DB->update_record('local_eudecustom_invtimes', $invrecstu);
                 flush();
                 ob_flush();
-                local_eudecustom_print_output("Userid $ivrec->userid have invested $ivrec->totaltime "
-                        . "seconds in course $ivrec->courseid".PHP_EOL, $out);
+                local_eudecustom_print_output("Userid $invrecstu->userid have invested $invrecstu->totaltime "
+                        . "seconds in course $invrecstu->courseid".PHP_EOL, $out);
             } else {
-                $ivrec->timecreated = time();
-                $DB->insert_record('local_eudecustom_invtimes', $ivrec);
+                $invrecstu->timecreated = time();
+                $DB->insert_record('local_eudecustom_invtimes', $invrecstu);
                 flush();
                 ob_flush();
-                local_eudecustom_print_output("Userid $ivrec->userid have invested $ivrec->totaltime "
-                        . "seconds in course $ivrec->courseid".PHP_EOL, $out);
+                local_eudecustom_print_output("Userid $invrecstu->userid have invested $invrecstu->totaltime "
+                        . "seconds in course $invrecstu->courseid".PHP_EOL, $out);
             }
             $cod = 1;
         }
