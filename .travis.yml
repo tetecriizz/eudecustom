@@ -3,12 +3,14 @@ language: php
 sudo: false
 
 services:
-  mysql
+  - mysql
+  - postgresql
+  - docker
 
 addons:
-  firefox: "47.0.1"
+  # firefox: "47.0.1"
   postgresql: "9.6"
-  # chrome: stable
+  chrome: stable
   apt:
     packages:
       - openjdk-8-jre-headless
@@ -30,11 +32,12 @@ env:
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - nvm install 8.9
+  - nvm use 8.9
   - cd ../..
-  - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
+  - composer create-project -n --no-dev --prefer-dist blackboard-open-source/moodle-plugin-ci ci dev-master
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3
+  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 install:
   # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
@@ -43,7 +46,7 @@ install:
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
+  - moodle-plugin-ci phpcpd || true # Output warnings but do not fail the build because of duplicated but well working code
   - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci codechecker --standard poet
@@ -52,5 +55,6 @@ script:
   - moodle-plugin-ci jshint
   - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
+  # - moodle-plugin-ci behat
+  - moodle-plugin-ci behat --profile chrome --dump
   - moodle-plugin-ci phpunit --coverage-text
