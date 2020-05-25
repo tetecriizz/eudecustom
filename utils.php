@@ -2628,7 +2628,7 @@ function get_dashboard_teacherinfo_oncategory_data ($category, $teacherid = null
             'totalsuspended' => 0
         );
 
-        if ($record ->teacherid != $teacherid) {
+        if ($record->teacherid != $teacherid) {
             continue;
         }
 
@@ -3418,6 +3418,7 @@ function get_times_from_course($courseid = null) {
     foreach ($records as $record) {
         // Add to totaltime if userid is student or teacher.
         if ( in_array($record->userid, array_keys($students)) ) {
+            $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $totalspenttimestudents += $record->totaltime;
             $data ['students']['sun'] += $record->day1;
             $data ['students']['mon'] += $record->day2;
@@ -3426,10 +3427,10 @@ function get_times_from_course($courseid = null) {
             $data ['students']['thu'] += $record->day5;
             $data ['students']['fri'] += $record->day6;
             $data ['students']['sat'] += $record->day7;
-            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4
-                    + $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysstudent += $agdays;
         }
-        if ( in_array($record->userid, array_keys($teachers)) ) {
+        if (in_array($record->userid, array_keys($teachers))) {
+            $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $totalspenttimeteachers += $record->totaltime;
             $data ['teachers']['sun'] += $record->day1;
             $data ['teachers']['mon'] += $record->day2;
@@ -3438,8 +3439,7 @@ function get_times_from_course($courseid = null) {
             $data ['teachers']['thu'] += $record->day5;
             $data ['teachers']['fri'] += $record->day6;
             $data ['teachers']['sat'] += $record->day7;
-            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4
-                    + $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysteacher += $agdays;
         }
     }
 
