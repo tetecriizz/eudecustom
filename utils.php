@@ -1760,19 +1760,19 @@ function get_dashboard_teacher_data($userid) {
     $processeddata->totalpendingmessages = 0;
 
     foreach ($data as $dashboardentry) {
+        $activeusers = check_dashboard_active_users_in_course($dashboardentry->courseid);
+        $pendingactivities = check_dashboard_pending_activities_in_course($dashboardentry->courseid);
+        $pendingmessages = check_dashboard_pending_messages_in_course($dashboardentry->courseid);
+        $courseimagepath = get_dashboard_course_imagepath($dashboardentry->courseid);
 
         $processeddata->courses[$dashboardentry->courseid] = new stdClass();
         $processeddata->courses[$dashboardentry->courseid]->coursename = $dashboardentry->coursename;
         $processeddata->courses[$dashboardentry->courseid]->timestart = $dashboardentry->timestart;
         $processeddata->courses[$dashboardentry->courseid]->courseid = $dashboardentry->courseid;
-        $processeddata->courses[$dashboardentry->courseid]->activestudents = 
-                check_dashboard_active_users_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->pendingactivities = 
-                check_dashboard_pending_activities_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->pendingmessages = 
-                check_dashboard_pending_messages_in_course($dashboardentry->courseid);
-        $processeddata->courses[$dashboardentry->courseid]->courseimagepath = 
-                get_dashboard_course_imagepath($dashboardentry->courseid);
+        $processeddata->courses[$dashboardentry->courseid]->activestudents = $activeusers;
+        $processeddata->courses[$dashboardentry->courseid]->pendingactivities = $pendingactivities;
+        $processeddata->courses[$dashboardentry->courseid]->pendingmessages = $pendingmessages;
+        $processeddata->courses[$dashboardentry->courseid]->courseimagepath = $courseimagepath;
         $processeddata->courses[$dashboardentry->courseid]->coursecatname = $dashboardentry->catname;
 
         if ($processeddata->courses[$dashboardentry->courseid]->activestudents == "activestudents") {
@@ -2579,12 +2579,12 @@ function get_dashboard_teacherlist_oncategory_data ($category) {
             }
         }
 
+        $lastaccess = $maxlastaccess[$record->teacherid] == 0 ? '-' : date('d/m/Y', $maxlastaccess[$record->teacherid]);
         $user = core_user::get_user($record->teacherid);
         $data[$record->teacherid]['firstname'] = $user->firstname;
         $data[$record->teacherid]['lastname'] = $user->lastname;
         $data[$record->teacherid]['percent'] = $total == 0 ? 0 : $totalpassed * 100 / $total;
-        $data[$record->teacherid]['lastaccess'] =
-            $maxlastaccess[$record->teacherid] == 0 ? '-' : date('d/m/Y', $maxlastaccess[$record->teacherid]);
+        $data[$record->teacherid]['lastaccess'] = $lastaccess;
         $data[$record->teacherid]['totalpassed'] = $totalpassed;
         $data[$record->teacherid]['totalsuspended'] = $totalsuspended;
     }
@@ -2680,10 +2680,10 @@ function get_dashboard_teacherinfo_oncategory_data ($category, $teacherid = null
             }
         }
 
+        $lastaccess = $maxlastaccess[$record->teacherid] == 0 ? '-' : date('d/m/Y', $maxlastaccess[$record->teacherid]);
         $data[$record->teacherid][$record->courseid]['coursename'] = $record->coursename;
         $data[$record->teacherid][$record->courseid]['percent'] = $total == 0 ? 0 : $totalpassed * 100 / $total;
-        $data[$record->teacherid][$record->courseid]['lastaccess'] = $maxlastaccess[$record->teacherid] == 0 ? '-' : date('d/m/Y',
-                $maxlastaccess[$record->teacherid]);
+        $data[$record->teacherid][$record->courseid]['lastaccess'] = $lastaccess;
         $data[$record->teacherid][$record->courseid]['totalpassed'] = $totalpassed;
         $data[$record->teacherid][$record->courseid]['totalsuspended'] = $totalsuspended;
     }
@@ -3426,8 +3426,8 @@ function get_times_from_course($courseid = null) {
             $data ['students']['thu'] += $record->day5;
             $data ['students']['fri'] += $record->day6;
             $data ['students']['sat'] += $record->day7;
-            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
-                    $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysstudent += $record->day1 + $record->day2 + $record->day3 + $record->day4
+                    + $record->day5 + $record->day6 + $record->day7;
         }
         if ( in_array($record->userid, array_keys($teachers)) ) {
             $totalspenttimeteachers += $record->totaltime;
@@ -3438,8 +3438,8 @@ function get_times_from_course($courseid = null) {
             $data ['teachers']['thu'] += $record->day5;
             $data ['teachers']['fri'] += $record->day6;
             $data ['teachers']['sat'] += $record->day7;
-            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4 + 
-                    $record->day5 + $record->day6 + $record->day7;
+            $timeaveragelastdaysteacher += $record->day1 + $record->day2 + $record->day3 + $record->day4
+                    + $record->day5 + $record->day6 + $record->day7;
         }
     }
 
