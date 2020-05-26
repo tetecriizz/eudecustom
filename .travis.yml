@@ -1,3 +1,6 @@
+notifications:
+  email: false
+
 language: php
 
 sudo: true
@@ -40,12 +43,15 @@ install:
   # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
   - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
   - moodle-plugin-ci install
-  - curl -L -s -o /home/travis/build/moodle/selenium34.jar http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar
-  - curl -L -s -o /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz
-  - sudo tar -C /usr/local/bin/ -xzf /tmp/geckodriver.tar.gz
-  - xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dwebdriver.firefox.bin=/usr/bin/firefox -Dwebdriver.firefox.marionette=1 -jar /home/travis/build/moodle/selenium34.jar -log /tmp/selenium.log &
-  - php -t /home/travis/build/moodle -S 127.0.0.1:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
-  - sleep 5s
+  - nvm install 14.3.0
+  - nvm use 14.3.0
+  - make init
+  # Start Selenium Standalone with Chrome/Firefox installed.
+  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
+  # Mimic how a Moodle plugin would be run.
+  - cp -R tests/Fixture/moodle-local_travis ../moodle-local_travis
+  - export PATH="$(cd bin; pwd):$(cd vendor/bin; pwd):$PATH"
+  - export TRAVIS_BUILD_DIR=$(cd ../moodle-local_travis; pwd)
 
 script:
   # - moodle-plugin-ci phplint
