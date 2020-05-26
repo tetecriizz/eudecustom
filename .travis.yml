@@ -6,13 +6,13 @@ services:
   mysql
 
 addons:
-  firefox: "47.0.1"
+  # firefox: "47.0.1"
   postgresql: "9.6"
-  # chrome: stable
+  chrome: stable
   apt:
     packages:
-      - openjdk-8-jre-headless
       - chromium-chromedriver
+      - openjdk-8-jre-headless
 
 cache:
   directories:
