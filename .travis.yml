@@ -45,7 +45,6 @@ install:
   - moodle-plugin-ci install
   - nvm install 14.3.0
   - nvm use 14.3.0
-  - make init
   # Start Selenium Standalone with Chrome/Firefox installed.
   - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
   # Mimic how a Moodle plugin would be run.
