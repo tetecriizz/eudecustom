@@ -1,28 +1,22 @@
-notifications:
-  email: false
-
 language: php
 
-sudo: true
+addons:
+  postgresql: "9.4"
 
 services:
-  mysql
-
-addons:
-  # firefox: "47.0.1"
-  postgresql: "9.6"
-  chrome: stable
-  apt:
-    packages:
-      - openjdk-8-jre-headless
-      - chromium-chromedriver
+  - mysql
+  - postgresql
+  - docker
 
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.npm
 
 php:
  - 7.1
+ - 7.2
+ - 7.3
 
 env:
  global:
@@ -33,34 +27,26 @@ env:
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - cd ../..
-  - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
-  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1 &
-  # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
-
-install:
-  # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
-  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
-  - moodle-plugin-ci install
   - nvm install 14.3.0
   - nvm use 14.3.0
-  # Start Selenium Standalone with Chrome/Firefox installed.
-  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
+  - cd ../..
+  - composer create-project -n --no-dev --prefer-dist blackboard-open-source/moodle-plugin-ci ci ^2
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3
+
+install:
+  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
+  - moodle-plugin-ci install
 
 script:
-  # - moodle-plugin-ci phplint
-  # - moodle-plugin-ci phpcpd
-  # - moodle-plugin-ci phpmd
-  # - moodle-plugin-ci codechecker
-  # - moodle-plugin-ci codechecker --standard poet
-  # - moodle-plugin-ci csslint
-  # - moodle-plugin-ci shifter
-  # - moodle-plugin-ci jshint # da error 
-  # - moodle-plugin-ci validate
-  # - moodle-plugin-ci phpunit
-  # - moodle-plugin-ci behat # da error de selenium 
-  - moodle-plugin-ci behat --profile chrome
-  # - moodle-plugin-ci behat --tags=@local_eudecustom
-  # - moodle-plugin-ci phpunit --coverage-text
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci phpcpd
+  - moodle-plugin-ci phpmd
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci validate
+  - moodle-plugin-ci savepoints
+  - moodle-plugin-ci mustache
+  - moodle-plugin-ci grunt
+  - moodle-plugin-ci phpdoc
+  - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat
