@@ -37,6 +37,7 @@ before_install:
   - composer selfupdate
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1 &
   # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 install:
@@ -59,6 +60,7 @@ script:
   # - moodle-plugin-ci jshint # da error 
   # - moodle-plugin-ci validate
   # - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat # da error de selenium 
+  # - moodle-plugin-ci behat # da error de selenium 
+  - moodle-plugin-ci behat --profile chrome
   # - moodle-plugin-ci behat --tags=@local_eudecustom
   # - moodle-plugin-ci phpunit --coverage-text
