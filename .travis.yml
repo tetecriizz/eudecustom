@@ -38,7 +38,7 @@ before_install:
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1 &
-  - docker run -d -p 4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
+  # - docker run -d -p 4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 install:
   # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
@@ -47,7 +47,7 @@ install:
   - nvm install 14.3.0
   - nvm use 14.3.0
   # Start Selenium Standalone with Chrome/Firefox installed.
-  # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
+  - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 script:
   # - moodle-plugin-ci phplint
@@ -61,6 +61,6 @@ script:
   # - moodle-plugin-ci validate
   # - moodle-plugin-ci phpunit
   # - moodle-plugin-ci behat # da error de selenium 
-  - moodle-plugin-ci behat
+  - moodle-plugin-ci behat --moodle=/home/travis/build/moodle
   # - moodle-plugin-ci behat --tags=@local_eudecustom
   # - moodle-plugin-ci phpunit --coverage-text
