@@ -2,36 +2,29 @@ language: php
 
 sudo: true
 
-services:
-  mysql
-
-addons:
-  postgresql: "9.6"
-  chrome: stable
-  apt:
-    packages:
-      - openjdk-8-jre-headless
-      - chromium-chromedriver
-
 cache:
   directories:
     - $HOME/.composer/cache
 
-php:
- - 7.1
- env: MOODLE_CI_VER=2
+services:
+  - mysql
 
+addons:
+  apt:
+    packages:
+     - chromium-chromedriver
 env:
- global:
-  - MOODLE_BRANCH=MOODLE_37_STABLE
-  - MOODLE_START_BEHAT_SERVERS=NO
-  - MOODLE_CI_VER=1
-  - MOODLE_DIR=/home/travis/build/moodle
-  - MOODLE_SELENIUM_JAR=/home/travis/build/moodle/selenium.jar
+  global:
+    - MOODLE_START_BEHAT_SERVERS=NO
+    - DB=mysqli
+    - MOODLE_CI_VER=1
+    - MOODLE_DIR=/home/travis/build/moodle
+    - MOODLE_SELENIUM_JAR=/home/travis/build/moodle/selenium.jar
 
- matrix:
-  - DB=pgsql
-  - DB=mysqli
+matrix:
+ include:
+  - php: 7.1
+    env: MOODLE_BRANCH=MOODLE_37_STABLE MOODLE_CI_VER=2
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -42,7 +35,6 @@ before_install:
   - sleep 10
 
 install:
-  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
   - moodle-plugin-ci install
   - xvfb-run -a --server-args="-screen 0 1024x768x24" java -Dwebdriver.chrome.driver=/usr/lib/chromium-browser/chromedriver -jar ${MOODLE_SELENIUM_JAR} -log /tmp/selenium.log &
   - php -t ${MOODLE_DIR} -S localhost:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
@@ -50,15 +42,6 @@ install:
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
-  - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
-  - moodle-plugin-ci codechecker --standard poet
-  - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
-  # - moodle-plugin-ci jshint # da error 
-  - moodle-plugin-ci validate
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat --moodle=${MOODLE_DIR} --auto-rerun=0 # da error de selenium 
-  # - moodle-plugin-ci behat --tags=@local_eudecustom
-  - moodle-plugin-ci phpunit --coverage-text
+  - moodle-plugin-ci behat --moodle=${MOODLE_DIR} --auto-rerun=0
