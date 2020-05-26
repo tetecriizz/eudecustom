@@ -2905,10 +2905,10 @@ class local_eudecustom_testcase extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($user1->id, $course2->id, $studentrole->id, 'manual');
         $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $studentrole->id, 'manual');
 
-        // Array with 3 categories.
-        $this->assertCount(3, $result1);
         // Test user1 (Expected results = true).
         $result1 = get_dashboard_student_data($user1->id);
+        // Array with 3 categories.
+        $this->assertCount(3, $result1);
         // Cat 1 has 2 courseinfo objects, cat 2 has 1 courseinfo objects (he is enroled only in c3 as student) and cat 3 has 1.
         $this->assertCount(1, $result1[$category3->id]->courses);
         $this->assertCount(1, $result1[$category2->id]->courses);
@@ -3665,10 +3665,10 @@ class local_eudecustom_testcase extends advanced_testcase {
         $cat1 = $DB->get_record('course_categories', array('idnumber' => 'IDNUMBCATEGORY1'));
         $cat2 = $DB->get_record('course_categories', array('idnumber' => 'IDNUMBCATEGORY2'));
 
-        // Cat1 must have three courses two students and one teacher.
+        // Cat1 must have three courses two students and two teachers.
         $this->assertEquals($data[$cat1->id]->totalstudents, 2);
         $this->assertEquals($data[$cat1->id]->totalcourses, 3);
-        $this->assertEquals($data[$cat1->id]->totalteachers, 1);
+        $this->assertEquals($data[$cat1->id]->totalteachers, 2);
 
         // Cat2 must have three courses two students and one teacher.
         $this->assertEquals($data[$cat2->id]->totalstudents, 2);
@@ -3737,12 +3737,11 @@ class local_eudecustom_testcase extends advanced_testcase {
         $user2 = $DB->get_record('user', array('username' => 'user2'));
         $user3 = $DB->get_record('user', array('username' => 'user3'));
 
-        // The user has completed 2 of those but there are two courses, so
-        // in course1 has 50% but in course2 has 0%, average percent is 25.
+        // The user has completed 2 of those but there are two courses.
         $data1 = get_dashboard_studentlist_oncategory_data($cat1->id);
         $this->assertEquals(2, $data1[$user3->id]->totalfinished);
         $this->assertEquals(4, $data1[$user3->id]->totalactivities);
-        $this->assertEquals(25, $data1[$user3->id]->percent);
+        $this->assertEquals(50, $data1[$user3->id]->percent);
         $this->assertEquals(0, $data1[$user2->id]->totalfinished);
         $this->assertEquals(4, $data1[$user2->id]->totalactivities);
         $this->assertEquals(0, $data1[$user2->id]->percent);
@@ -3884,7 +3883,8 @@ class local_eudecustom_testcase extends advanced_testcase {
         $courses = $DB->get_records('course', array('category' => $cat1->id));
 
         $data = get_teachers_from_category($cat1->id);
-        $this->assertEquals(count($courses), count($data));
+        $this->assertEquals(3, count($courses));
+        $this->assertEquals(4, count($data));
     }
 
     /**
@@ -3902,7 +3902,7 @@ class local_eudecustom_testcase extends advanced_testcase {
         $data = get_students_from_category($cat1->id);
 
         // Two students in course 1 and course 2 and only one student in course 3.
-        $this->assertEquals(5, count($data));
+        $this->assertEquals(4, count($data));
     }
 
     /**
