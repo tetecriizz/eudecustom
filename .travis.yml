@@ -47,16 +47,16 @@ install:
   - php -t /home/travis/build/moodle -S 127.0.0.1:8000 > /tmp/php-access.log 2> /tmp/php-error.log &
 
 script:
-  - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
-  - moodle-plugin-ci phpmd
-  - moodle-plugin-ci codechecker
-  - moodle-plugin-ci codechecker --standard poet
-  - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
-  - moodle-plugin-ci jshint # da error 
-  - moodle-plugin-ci validate
-  - moodle-plugin-ci phpunit
+  # - moodle-plugin-ci phplint
+  # - moodle-plugin-ci phpcpd
+  # - moodle-plugin-ci phpmd
+  # - moodle-plugin-ci codechecker
+  # - moodle-plugin-ci codechecker --standard poet
+  # - moodle-plugin-ci csslint
+  # - moodle-plugin-ci shifter
+  # - moodle-plugin-ci jshint # da error 
+  # - moodle-plugin-ci validate
+  # - moodle-plugin-ci phpunit
   - moodle-plugin-ci behat # da error de selenium 
   # - moodle-plugin-ci behat --tags=@local_eudecustom
-  - moodle-plugin-ci phpunit --coverage-text
+  # - moodle-plugin-ci phpunit --coverage-text
