@@ -2965,7 +2965,7 @@ class local_eudecustom_testcase extends advanced_testcase {
     }
 
     /**
-     * Create multiple enrols for course1 and course2.
+     * Create multiple enrols for course 1 and course 2.
      */
     public function create_sample_enrols($user1, $user2, $user3, $course1, $course2, $studentrole, $teacherrole) {
         // Course 1 enrols: user1 as teacher user2 and user3 as students.
