@@ -3,7 +3,7 @@ language: php
 sudo: true
 
 services:
-  - mysql
+  mysql
 
 addons:
   postgresql: "9.6"
