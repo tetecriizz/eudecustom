@@ -52,7 +52,7 @@ $PAGE->requires->jquery_plugin('ui');
 $PAGE->requires->jquery_plugin('ui-css');
 $PAGE->requires->js_call_amd("local_eudecustom/eude", "dashboard");
 
-$PAGE->requires->css('/local/eudecustom/js/datatables/datatables.css', true);
+$PAGE->requires->css('/local/eudecustom/style/datatables.css', true);
 $PAGE->requires->css("/local/eudecustom/style/eudecustom_style.css");
 
 $output = $PAGE->get_renderer('local_eudecustom', 'eudedashboard');

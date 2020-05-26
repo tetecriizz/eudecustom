@@ -23,8 +23,8 @@ define([], function () {
     window.requirejs.config({
         paths: {
             // Enter the paths to your required java-script files.
-            'datatables': M.cfg.wwwroot + '/local/eudecustom/js/datatables/datatables',
-            'datatables_buttons': M.cfg.wwwroot + '/local/eudecustom/js/datatables/dataTables.buttons.min'
+            'datatables': M.cfg.wwwroot + '/local/eudecustom/amd/build/datatables_lib',
+            'datatables_buttons': M.cfg.wwwroot + '/local/eudecustom/amd/build/datatables_lib.buttons.min'
         },
         shim: {
             // Enter the "names" that will be used to refer to your libraries.
