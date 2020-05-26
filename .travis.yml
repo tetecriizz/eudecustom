@@ -37,7 +37,7 @@ before_install:
   # - docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:3.141.59-20200525
   # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
   # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3
-  - docker run -d -p 4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3.141.59
+  # - docker run -d -p 4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:3.141.59
 
 install:
   # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
