@@ -1229,6 +1229,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $urlback = 'eudedashboard.php?view=teachers&catid='.$categoryid;
         $html = print_return_generate_report($urlback);
+        $perc = intval( $totalcourses == 0 ? 0 : $totalfinalgradeperc / $totalcourses);
 
         $html .= html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
@@ -1247,7 +1248,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= print_divcard_eude_header('col-4', $totalactivitiescompleted.'/'.$totalactivitiescourse,
                     get_string('activitiesgraded', 'local_eudecustom'));
         $html .= print_divcard_eude_header('col-4', $totalcourses, get_string('courses', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-4', intval( $totalcourses == 0 ? 0 : $totalfinalgradeperc / $totalcourses).'%',
+        $html .= print_divcard_eude_header('col-4', $perc.'%',
                     get_string('passedstudents', 'local_eudecustom'));
         $html .= html_writer::end_div();
         $html .= html_writer::tag('div', '', array('class' => 'eude-progress-bar',
