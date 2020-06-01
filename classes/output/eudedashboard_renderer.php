@@ -394,7 +394,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     /**
      * Print card of eudedashboard.
      * @param array $dataconn
-     * @return string
+     * @param string $role
+     * @return string html to output.
      */
     public function local_eudecustom_print_card($dataconn, $role) {
         $html = '';
@@ -484,8 +485,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Print course stats
-     * @param type $cms
-     * @param type $coursestats
+     * @param array $cms
+     * @param stdClass $coursestats
      */
     public function local_eudecustom_print_data($cms, $coursestats) {
         $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',

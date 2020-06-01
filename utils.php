@@ -4077,7 +4077,7 @@ function local_eudecustom_check_user_passed_program($categoryid, $userid) {
 
 /**
  * Check if must send email and store data in database
- * @param type $category
+ * @param int $category
  */
 function local_eudecustom_check_completion_program($category) {
     global $DB;
