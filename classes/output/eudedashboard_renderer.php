@@ -393,6 +393,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Return style for row
+     * @param string $classname
      * @param int $perc
      * @return array
      */
