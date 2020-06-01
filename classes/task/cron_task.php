@@ -47,13 +47,16 @@ class cron_task extends \core\task\scheduled_task {
      *
      */
     public function execute() {
-        global $CFG;
+        global $CFG, $DB;
         require_once($CFG->dirroot . '/local/eudecustom/utils.php');
         if ( isset($CFG->local_eudecustom_category) && !empty($CFG->local_eudecustom_category) ) {
             $categories = explode(',', $CFG->local_eudecustom_category);
+            // Iterate each category to refresh time of users.
             foreach ($categories as $category) {
                 echo refresh_time_invested($category);
             }
+            // Call function to check if has to send emails when program is completed.
+            local_eudecustom_check_completion_program($category);
         } else {
             echo 'The "local_eudecustom_category" configuration is not set!';
         }

@@ -3200,26 +3200,28 @@ function print_header_category($category, $active) {
     }
 
     $html = html_writer::start_div('table-responsive-sm eude-table-header');
-    $html .= html_writer::start_tag('table', array('class' => 'table'));
-    $html .= html_writer::start_tag('tr');
-    $html .= html_writer::start_tag('td');
+    $html .= html_writer::start_tag('div', array('class' => 'box-header-title'));
     $html .= $category->catname;
-    $html .= html_writer::end_tag('td');
+    $html .= html_writer::end_tag('div');
+
+    $html .= html_writer::start_tag('div', array('class' => 'box-header-values'));
     $html .= print_header_interactive_button($classteachers, "eudedashboard.php?catid=".$category->catid."&view=teachers",
                 $category->totalteachers, get_string('teachers', 'local_eudecustom'));
     $html .= print_header_interactive_button($classstudents, "eudedashboard.php?catid=".$category->catid."&view=students",
                 $category->totalstudents, get_string('students', 'local_eudecustom'));
     $html .= print_header_interactive_button($classcourses, "eudedashboard.php?catid=".$category->catid."&view=courses",
                 $category->totalcourses, get_string('courses', 'local_eudecustom'));
-    $html .= html_writer::end_tag('tr');
-    $html .= html_writer::end_tag('table');
+    $html .= html_writer::end_tag('div');
+
     $html .= html_writer::end_div();
-    $html .= html_writer::start_tag('span', array('class' => 'eude-spanrefreshtimes'));
-    $html .= get_string('updatedon', 'local_eudecustom');
+
+    $html .= html_writer::start_tag('div', array('class' => 'eude-spanrefreshtimes'));
+    $html .= html_writer::tag('span', get_string('updatedon', 'local_eudecustom') );
     $html .= html_writer::tag('span', check_last_update_invtimes($category->catid), array('id' => 'eudecustom-spenttime'));
     $html .= html_writer::tag('a', get_string('updatenow', 'local_eudecustom'), array('id' => 'updatespenttime',
                 'data-toggle' => 'modal', 'data-target' => '#eudecustom-timeinvmodal'));
-    $html .= html_writer::end_tag('span');
+    $html .= html_writer::end_div();
+
     $html .= print_modal();
     return $html;
 }
@@ -3256,23 +3258,25 @@ function print_modal () {
 }
 /**
  * This function is gonna be called twice times.
- *
  * @param string $unactive
  * @param string $url
  * @param string $value
  * @param string $string
+ * @param string $tag
  * @param array $style
  * @return string
  */
-function print_header_interactive_button($unactive, $url, $value, $string, $style = array('style' => 'width:250px')) {
-    $html = html_writer::start_tag('td', $style);
+function print_header_interactive_button($unactive, $url, $value, $string, $tag = 'div', $style = array('class' => 'col-4')) {
+    $html = html_writer::start_tag($tag, $style);
     $html .= html_writer::start_tag('a', array('class' => "interactive-btn $unactive", 'href' => $url));
     $html .= $value.' ';
     $html .= html_writer::start_tag('label');
     $html .= $string;
     $html .= html_writer::end_tag('label');
     $html .= html_writer::tag('i', '', array( 'class' => 'fa fa-arrow-right'));
-    $html .= html_writer::end_tag('td');
+    $html .= html_writer::end_tag('a');
+    $html .= html_writer::end_tag($tag);
+
     return $html;
 }
 
@@ -3284,7 +3288,7 @@ function print_header_interactive_button($unactive, $url, $value, $string, $styl
  * @return string
  */
 function print_record_eude_dashboard_manager_page($url, $value, $string) {
-    return print_header_interactive_button("", $url, $value, $string, array());
+    return print_header_interactive_button("", $url, $value, $string, 'td', array());
 }
 
 /**
@@ -4048,5 +4052,48 @@ function local_eudecustom_delete_data_usercourse($userid, $courseid) {
     } catch (Exception $e) {
         echo $e->getMessage();
         return false;
+    }
+}
+
+/**
+ * Return if user has passed a programm
+ * @param int $categoryid
+ * @param int $userid
+ * @return bool
+ */
+function local_eudecustom_check_user_passed_program($categoryid, $userid) {
+    global $DB;
+    $sql = "SELECT COUNT(CO.id)
+              FROM {course_completions} CO
+              JOIN {course} C ON C.id = CO.course
+             WHERE CO.timecompleted IS NOT NULL
+                   AND C.category = :categoryid
+                   AND CO.userid = :userid";
+    $passedmodules = $DB->count_records_sql($sql, array('categoryid' => $categoryid, 'userid' => $userid));
+    $coursecat = \core_course_category::get($categoryid);
+    $totalmodules = count($coursecat->get_courses());
+    return $passedmodules == $totalmodules;
+}
+
+/**
+ * Check if must send email and store data in database
+ * @param type $category
+ */
+function local_eudecustom_check_completion_program($category) {
+    global $DB;
+    // Check if user has completed programm.
+    $records = get_dashboard_studentlist_oncategory_data($category);
+    foreach ($records as $record) {
+        $haspassed = local_eudecustom_check_user_passed_program($category, $record->userid);
+        $exists = $DB->count_records('local_eudecustom_notifs', array('categoryid' => $category, 'userid' => $record->userid));
+        // If record with an userid and courseid exists in local_eudecustom_notifs must not send notification.
+        if ($haspassed && $exists == 0) {
+            local_eudecustom_add_user_to_cohort($record->userid);
+            $newrecord = new stdClass();
+            $newrecord->userid = $record->userid;
+            $newrecord->categoryid = $category;
+            $newrecord->timenotification = time();
+            $DB->insert_record('local_eudecustom_notifs', $newrecord);
+        }
     }
 }

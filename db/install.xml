@@ -59,7 +59,7 @@
                 <INDEX NAME="idx_call_date_mat_dates" UNIQUE="false" FIELDS="courseid, fecha1, fecha2, fecha3, fecha4"/>
             </INDEXES>
         </TABLE>
-		<TABLE NAME="local_eudecustom_invtimes" COMMENT="Invested time for each user on course.">
+        <TABLE NAME="local_eudecustom_invtimes" COMMENT="Invested time for each user on course.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Id of user"/>
@@ -80,6 +80,20 @@
             </KEYS>
             <INDEXES>
                 <INDEX NAME="idx_user_course" UNIQUE="true" FIELDS="userid, courseid"/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="local_eudecustom_notifs" COMMENT="Contains information that indicates whether a user has been sent an email when they completed their program.">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Id of user"/>
+                <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="Id of category"/>
+                <FIELD NAME="timenotification" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" UNSIGNED="false" SEQUENCE="false" COMMENT="Time when user been notified."/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="idx_user_course" UNIQUE="true" FIELDS="userid, categoryid"/>
             </INDEXES>
         </TABLE>
     </TABLES>

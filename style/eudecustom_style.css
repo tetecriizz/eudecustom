@@ -176,7 +176,13 @@
     font-size: 16px;
     text-transform: uppercase;
 }
-#page-local-eudecustom-eudedashboard thead th:first-child{
+
+table.dataTable thead .sorting_disabled:before,
+table.dataTable thead .sorting_disabled:after {
+    display: none;
+}
+
+#page-local-eudecustom-eudedashboard table:not(.eude-table-categories) thead th:first-child{
     padding: 0 !important;
     width: 0.1px !important;
 }
@@ -257,29 +263,8 @@
 #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm td{
     vertical-align: middle;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td,
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header td {
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td {
     min-width: 220px;
-}
-@media screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td,
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header td {
-        min-width: unset;
-        width: auto !important;
-        font-size: 95%;
-        padding: 10px 5px;
-    }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header td:first-child {
-        min-width: 200px;
-        font-size: 95%;
-        padding-left: 15px;
-    }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm a.interactive-btn {
-        width: auto !important;
-    }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm label {
-        font-size: 12px !important;
-    }
 }
 #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-generic-list tr {
     transform: scale(1);
@@ -300,14 +285,69 @@
     border: none;
     bottom: 0;
 }
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header {
+    text-transform: uppercase;
+}
 
-
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header td {
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em ;
+}
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values div {
+    padding: 0 5px;
+}
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header div {
     font-weight: 600;
     font-size: 18px;
     color:  rgba(68, 68, 68, .8);
 }
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
+    padding: 1em 1em 0 1em;
+    width: 50%;
+    float: left;
+}
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+     width: 50%;
+     float: left;
+     padding-left: 0;
+ }
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header label {
+    font-family: 'Bai Jamjuree', sans-serif;
+}
+#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values a {
+    overflow: hidden;
+}
 
+@media screen and (max-width: 980px) {
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title,
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+        width: 100%;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
+        padding-bottom: 0;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+        padding: 1em;
+    }
+}
+@media screen and (max-width: 768px) {
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div {
+        padding: 0px 2px;
+        text-align: center;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div > a{
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div:first-child {
+        padding-bottom: 10px;
+
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div .fa{
+        display: none;
+    }
+}
 
 #page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn {
     color:  #691A32;
@@ -316,10 +356,12 @@
     border-radius: 80px;
     font-weight: bold;
     padding: .25em 2em .25em 1em;
-    width: 200px;
+    max-width: 240px;
     display: block;
     position: relative;
     font-size: 18px;
+    white-space: nowrap;
+    height: 38px;
 }
 #page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn.unactive {
     color:  rgba(68, 68, 68, .8);
@@ -341,8 +383,46 @@
 }
 #page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn .fa {
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td {
+        min-width: unset;
+        width: auto !important;
+        font-size: 95%;
+        padding: .5em 2em .5em 1em;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm a.interactive-btn {
+        width: auto !important;
+    }
+    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm label {
+        font-size: 12px !important;
+    }
+}
+
+.eude-spanrefreshtimes {
+    float: left;
+    width: 100%;
+    font-size: 14px;
+}
+.eude-spanrefreshtimes * {
+    opacity: .6;
+}
+.eude-spanrefreshtimes a {
+    opacity: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0 5px;
+}
+.eude-spanrefreshtimes a:hover{
+    color: #691A32;
+    text-decoration: none;
+    background: rgba(0,0,0, .05);
+}
+.eude-spanrefreshtimes #eudecustom-spenttime {
+    margin-left: 5px;
 }
 
 /* COURSES VIEW */
@@ -474,6 +554,7 @@ div.chart-container.investedtimeschart > ul.chart {
     width: 11%;
     margin: 1px;
     border-radius: 2px;
+    cursor: default;
 }
 
 .eude-row {
@@ -1936,7 +2017,6 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     background-color: #F6F6F6;
     border-radius: 4px;
     padding: 15px;
-    overflow: hidden;
 }
 /* invested times && data-info */
 #page-local-eudecustom-eudedashboard .eude-invested-times,

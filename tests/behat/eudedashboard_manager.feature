@@ -50,17 +50,11 @@ Scenario: Check access capability by configuration
     And I click on "//select[@id='id_s__local_eudecustom_role']/option[1]" "xpath_element"
     And I click on "//form[@id='adminsettings']//button[@type='submit']" "xpath_element"
     And I go to eudedashboard
-    And I should see "Cat1" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[1]/td[1]" "xpath_element"
-    And I should see "Cat2" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[2]/td[1]" "xpath_element"
-    And I should see "Miscellaneous" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[3]/td[1]" "xpath_element"
     Then I log out
 
     # Now has an authorized role to see manager dashboard
     And I log in as "user3"
     And I go to eudedashboard
-    And I should see "Miscellaneous" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[1]/td[1]" "xpath_element"
-    And I should see "Cat1" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[2]/td[1]" "xpath_element"
-    And I should see "Cat2" in the "//table[@id='local_eudecustom_datatable']/tbody/tr[3]/td[1]" "xpath_element"
     # Click button "teachers" to be redirected to teacher list
     And I click on "//table[@id='local_eudecustom_datatable']//tbody//tr[2]/td[2]/a" "xpath_element"
     And I wait to be redirected
