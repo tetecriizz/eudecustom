@@ -392,6 +392,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     }
 
     /**
+     * 
+     * @param int $perc
+     * @return array
+     */
+    function local_eudecustom_get_row_style($classname, $perc) {
+        $padding = "";
+        if ($perc > 0) {
+            $padding = 'padding: 1px;';
+        }
+        return array('class' => $classname, 'colspan' => 5,
+                        'style' => $padding.'width:'.$perc.'%;background-color:'. get_color($perc));
+    }
+    /**
      * Print card of eudedashboard.
      * @param array $dataconn
      * @param string $role
@@ -693,9 +706,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             }
 
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$percentage.'%;background-color:'. get_color($percentage)));
+            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $percentage));
             $html .= html_writer::tag('td', $record->course);
             $html .= html_writer::tag('td', count($students));
             $html .= html_writer::tag('td', number_format($percentage, 1) .'%');
@@ -827,8 +838,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             number_format( ($countstudents == 0 ? 0 : $countaveragegrade / $countstudents), 1),
             get_string('averagegrade', 'local_eudecustom'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', array('class' => 'eude-progress-bar',
-            'style' => "width:".$percentage."%;background-color:".get_color($percentage)));
+        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $percentage));
         $html .= html_writer::end_div();
 
         // Cards.
@@ -878,9 +888,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         foreach ($users as $data) {
             $perc = intval($data->percent);
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$perc.'%;background-color:'. get_color($perc)));
+            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html .= html_writer::tag('td', $data->firstname. ' '. $data->lastname);
             $html .= html_writer::tag('td', get_risk_level($data->lastimeaccess, $data->suspended));
             $html .= html_writer::tag('td', $data->totalfinished . '/' . $data->totalactivities);
@@ -962,9 +970,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
             $countaveragegrade += $record->finalgrade;
             $html2 .= html_writer::start_tag('tr');
-            $html2 .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$perc.'%;background-color:'. get_color($perc)));
+            $html2 .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html2 .= html_writer::tag('td', $record->fullname);
             $html2 .= html_writer::tag('td', $activitiesinfo['completed'] . '/' . $activitiesinfo['total']);
             $html2 .= html_writer::tag('td', $perc .'%');
@@ -1013,8 +1019,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 : $countaveragegrade / count($data), 1),
                     get_string('averagegrade', 'local_eudecustom'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', array('class' => 'eude-progress-bar',
-            'style' => "width:".$perc."%;background-color:".get_color($perc)));
+        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $perc));
         $html .= html_writer::end_div();
 
         // Cards.
@@ -1142,9 +1147,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $perc = intval($data['percent']);
 
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$perc.'%;background-color:'. get_color($perc)));
+            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html .= html_writer::tag('td', $data['firstname']. ' '. $data['lastname']);
             $html .= html_writer::tag('td',  $data['totalactivitiesgradedcategory'] . '/' . $data['totalactivities']);
             $html .= html_writer::tag('td', $perc .'%');
@@ -1208,9 +1211,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $totalfinalgradeperc += $perc;
 
             $html2 .= html_writer::start_tag('tr');
-            $html2 .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$perc.'%;background-color:'. get_color($perc)));
+            $html2 .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html2 .= html_writer::tag('td', $data['coursename']);
             $html2 .= html_writer::tag('td', $data['totalactivitiesgradedcategory'] . '/' . $data['totalactivities']);
             $html2 .= html_writer::tag('td', $perc .'%');
@@ -1252,8 +1253,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= print_divcard_eude_header('col-4', $perc.'%',
                     get_string('passedstudents', 'local_eudecustom'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', array('class' => 'eude-progress-bar',
-            'style' => "width:".$perc."%;background-color:".get_color($perc)));
+        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $perc));
         $html .= html_writer::end_div();
 
         if ( $coursestats == null ) {
