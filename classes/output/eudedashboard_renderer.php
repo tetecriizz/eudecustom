@@ -392,11 +392,11 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     }
 
     /**
-     * 
+     * Return style for row
      * @param int $perc
      * @return array
      */
-    function local_eudecustom_get_row_style($classname, $perc) {
+    public function local_eudecustom_get_row_style($classname, $perc) {
         $padding = "";
         if ($perc > 0) {
             $padding = 'padding: 1px;';
