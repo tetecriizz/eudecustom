@@ -539,6 +539,28 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     }
 
     /**
+     * Generate tfoot or thead to avoid duplicate of code.
+     * @param string $table
+     * @param array $data
+     * @return string
+     */
+    public function local_eudedashboard_print_thead_and_tfoot($table, $data) {
+        $html = "";
+        $html .= html_writer::start_tag($table);
+        $html .= html_writer::start_tag('tr');
+        foreach ($data as $params) {
+            // Example: 'th', 'string', array of params.
+            if (!isset($params[2]) || $params[2] == null) {
+                $html .= html_writer::tag($params[0], $params[1]);
+            } else {
+                $html .= html_writer::tag($params[0], $params[1], $params[2]);
+            }
+        }
+        $html .= html_writer::end_tag('tr');
+        $html .= html_writer::end_tag($table);
+        return $html;
+    }
+    /**
      * Render custom for eude new dashboard.
      * Pantalla 1/7 del mockup
      *
@@ -558,22 +580,13 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 = html_writer::start_div('table-responsive-sm eude-table-home');
         $html2 .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-dashboard eude-table-categories'));
-        $html2 .= html_writer::start_tag('thead');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::start_tag('th');
-        $html2 .= get_string('categories', 'local_eudecustom');
-        $html2 .= html_writer::end_tag('th');
-        $html2 .= html_writer::start_tag('th');
-        $html2 .= get_string('teachers', 'local_eudecustom');
-        $html2 .= html_writer::end_tag('th');
-        $html2 .= html_writer::start_tag('th');
-        $html2 .= get_string('students', 'local_eudecustom');
-        $html2 .= html_writer::end_tag('th');
-        $html2 .= html_writer::start_tag('th');
-        $html2 .= get_string('courses', 'local_eudecustom');
-        $html2 .= html_writer::end_tag('th');
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('thead');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', get_string('categories', 'local_eudecustom')),
+            array('th', get_string('teachers', 'local_eudecustom')),
+            array('th', get_string('students', 'local_eudecustom')),
+            array('th', get_string('courses', 'local_eudecustom')),
+        ));
+
         $html2 .= html_writer::start_tag('tbody');
 
         foreach ($data as $category) {
@@ -675,16 +688,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-courselist'));
-        $html .= html_writer::start_tag('thead');
-        $html .= html_writer::start_tag('tr');
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('averagegrade', 'local_eudecustom'));
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('thead');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom')),
+            array('th', get_string('averagegrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::start_tag('tbody');
 
         foreach ($data as $record) {
@@ -722,19 +733,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html .= html_writer::end_tag('tbody');
-        // Generate tfoots for this table.
-        $html .= html_writer::start_tag('tfoot');
-        $html .= html_writer::start_tag('tr');
-        // Each tfoot has th header.
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('averagegrade', 'local_eudecustom'));
-        // Don't want the link is sortable.
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('tfoot');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom')),
+            array('th', get_string('averagegrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_div();
 
@@ -778,17 +784,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html2 .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-coursedetail'));
-        $html2 .= html_writer::start_tag('thead');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html2 .= html_writer::tag('th', get_string('activities', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('thead');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('activities', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::start_tag('tbody');
 
         foreach ($data as $student) {
@@ -831,17 +835,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html2 .= html_writer::end_tag('tbody');
-        $html2 .= html_writer::start_tag('tfoot');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('risklevel', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('activities', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('tfoot');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('risklevel', 'local_eudecustom')),
+            array('th', get_string('activities', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::end_tag('table');
         $html2 .= html_writer::end_div();
         $percentage = $countstudents == 0 ? 0 : ($countfinished / $countstudents);
@@ -905,17 +907,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-studentlist'));
-        $html .= html_writer::start_tag('thead');
-        $html .= html_writer::start_tag('tr');
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html .= html_writer::tag('th', get_string('activities', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('finished', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('thead');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('activities', 'local_eudecustom')),
+            array('th', get_string('finished', 'local_eudecustom')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::start_tag('tbody');
 
         foreach ($users as $data) {
@@ -937,17 +937,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html .= html_writer::end_tag('tbody');
-        $html .= html_writer::start_tag('tfoot');
-        $html .= html_writer::start_tag('tr');
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('risklevel', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('activities', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('finished', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('tfoot');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularstudent', 'local_eudecustom')),
+            array('th', get_string('risklevel', 'local_eudecustom')),
+            array('th', get_string('activities', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');
 
@@ -981,16 +979,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html2 .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-studentdetail'));
-        $html2 .= html_writer::start_tag('thead');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('activitiesfinished', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('completed', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html2 .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('thead');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('activitiesfinished', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::start_tag('tbody');
         foreach ($data as $record) {
             $course = get_course($record->courseid);
@@ -1030,17 +1026,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $html2 .= html_writer::end_tag('tbody');
         // Generating tfoot for this table.
-        $html2 .= html_writer::start_tag('tfoot');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('activitiesfinished', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
-        // Must not be sortable.
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('tfoot');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('activitiesfinished', 'local_eudecustom')),
+            array('th', get_string('completed', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::end_tag('table');
         $html2 .= html_writer::end_tag('div');
 
@@ -1187,16 +1180,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-teacherlist'));
-        $html .= html_writer::start_tag('thead');
-        $html .= html_writer::start_tag('tr');
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularteacher', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('activitiesgraded', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html .= html_writer::tag('th', get_string('lastaccess', 'local_eudecustom'));
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('thead');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularteacher', 'local_eudecustom')),
+            array('th', get_string('activitiesgraded', 'local_eudecustom')),
+            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::start_tag('tbody');
 
         foreach ($users as $id => $data) {
@@ -1218,16 +1209,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html .= html_writer::end_tag('tbody');
-        $html .= html_writer::start_tag('tfoot');
-        $html .= html_writer::start_tag('tr');
-        $html .= html_writer::tag('th', '');
-        $html .= html_writer::tag('th', get_string('singularteacher', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('activitiesgraded', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('passedstudents', 'local_eudecustom'));
-        $html .= html_writer::tag('th', get_string('lastaccess', 'local_eudecustom'));
-        $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html .= html_writer::end_tag('tr');
-        $html .= html_writer::end_tag('tfoot');
+        $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularteacher', 'local_eudecustom')),
+            array('th', get_string('activitiesgraded', 'local_eudecustom')),
+            array('th', get_string('passedstudents', 'local_eudecustom')),
+            array('th', get_string('lastaccess', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');
         $response .= $html;
@@ -1257,16 +1246,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html2 .= html_writer::start_tag('table',
             array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-teacherdetail'));
-        $html2 .= html_writer::start_tag('thead');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('activitiesgraded', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter'));
-        $html2 .= html_writer::tag('th', get_string('lastaccess', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('thead');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('activitiesgraded', 'local_eudecustom')),
+            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::start_tag('tbody');
 
         foreach ($users as $id => $data) {
@@ -1292,16 +1279,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html2 .= html_writer::end_tag('tbody');
-        $html2 .= html_writer::start_tag('tfoot');
-        $html2 .= html_writer::start_tag('tr');
-        $html2 .= html_writer::tag('th', '');
-        $html2 .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('activitiesgraded', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('passedstudents', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', get_string('lastaccess', 'local_eudecustom'));
-        $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
-        $html2 .= html_writer::end_tag('tr');
-        $html2 .= html_writer::end_tag('tfoot');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularcourse', 'local_eudecustom')),
+            array('th', get_string('activitiesgraded', 'local_eudecustom')),
+            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
         $html2 .= html_writer::end_tag('table');
         $html2 .= html_writer::end_tag('div');
 

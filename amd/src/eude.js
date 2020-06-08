@@ -997,9 +997,7 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                         data: {catid: catid},
                         dataType: "text",
                         success: function(response, status, thrownError) {
-                            console.log("aa");
                             local_eudecustom_modal_invtimes(catid, response);
-                            console.log("ab");
                         },
                         error: function(responseError, statusError, throwError) {
                             local_eudecustom_modal_invtimes(catid, '02');
