@@ -3981,20 +3981,18 @@ function local_eudecustom_add_user_to_cohort($userid) {
             echo 'Setting "local_eudecustom_cohort" not set';
         }
     } else {
-        $text = $CFG->local_eudecustom_mailmessage;
         $cohortid = $CFG->local_eudecustom_cohort;
         cohort_add_member($cohortid, $userid);
-        local_eudecustom_send_notification($userid, $text);
+        local_eudecustom_send_notification($userid);
     }
 }
 
 /**
  * Send message to user
  * @param int $userid
- * @param string $msg
  * @return boolean
  */
-function local_eudecustom_send_notification($userid, $msg) {
+function local_eudecustom_send_notification($userid) {
     global $USER, $DB, $CFG;
     $userrecord = $DB->get_record('user', array('id' => $userid));
     try {
@@ -4003,11 +4001,43 @@ function local_eudecustom_send_notification($userid, $msg) {
         } else {
             $usermailer = $CFG->local_eudecustom_usermailer;
         }
-        email_to_user($userrecord, $usermailer, get_string('subject', 'local_eudecustom'), $msg, $msg);
-        if (debugging()) {
-            echo "\nMessage sended to user $userid \n $msg";
+        if (empty($CFG->local_eudecustom_usermailerbcc)) {
+            $usercc = $usermailer;
+        } else {
+            $usercc = $CFG->local_eudecustom_usermailerbcc;
         }
-        return true;
+        $msg = $CFG->local_eudecustom_mailmessage;
+        if (empty($msg)) {
+            $msg = "Congratulations! You have approved.";
+        }
+
+        $supportmail = "altacv@eude.es";
+        if (!empty($CFG->supportemail)) {
+            $supportmail = $CFG->supportemail;
+        }
+
+        $mail = get_mailer();
+        $mail->Sender = $usermailer;
+        $mail->From = $usermailer;
+        $mail->AddReplyTo($supportmail);
+        $mail->Subject = get_string('subject', 'local_eudecustom');
+        $mail->AddAddress($userrecord->email);
+        $mail->Body = $msg;
+        $mail->addBCC($usercc);
+        $mail->IsHTML(true);
+
+        if ($mail->Send()) {
+            $mail->IsSMTP();
+            if (debugging() || !empty($mail->SMTPDebug)) {
+                echo "\nMessage sended to user ".fullname($userrecord)." \n $msg";
+                return true;
+            }
+        } else {
+            if (debugging() || !empty($mail->SMTPDebug)) {
+                echo "\n".$e->getMessage();
+                return false;
+            }
+        }
     } catch (Exception $e) {
         echo "\n".$e->getMessage();
         return false;

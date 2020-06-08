@@ -838,7 +838,33 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
             dashboard: function () {
                 $(document).ready(function () {
                     var tableid = "local_eudecustom_datatable";
-                    var table = $('#' + tableid + '').DataTable();
+                    var table = $('#' + tableid + '').DataTable({
+                        initComplete: function () {
+                            this.api().columns( '.mustfilter' ).every( function () {
+                                var column = this;
+                                var select = $('<select><option value=""></option></select>')
+                                    .appendTo($(column.footer()).empty())
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
+                                        column.search( val ? '^' + val + '$' : '', true, false ).draw();
+                                    });
+                                column.data().unique().sort().each(function (d, j) {
+                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                } );
+                            } );
+                        }
+                    });
+
+                    // Make each row clickable.
+                    $('#' + tableid + ' tr').click(function() {
+                        var href = $(this).find("a").attr("href");
+                        if (href) {
+                            window.location = href;
+                        }
+                    });
+
                     $('#eude-reportbtn').on('click', function() {
                         var data = table.buttons.exportData( {
                             columns: ':visible',
@@ -848,8 +874,6 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                                 }
                             }
                         } );
-
-                        console.log(data);
 
                         var csvContent = '';
                         // Elimino la última columna que lo contiene el enlace de abrir detalle.
@@ -864,7 +888,6 @@ define(['jquery', 'jqueryui', 'local_eudecustom/datatables', 'local_eudecustom/d
                             csvContent += cols + '\n';
                         }
 
-                        console.log(csvContent);
                         var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                         var encodedUri = URL.createObjectURL(blob);
                         var link = document.createElement("a");

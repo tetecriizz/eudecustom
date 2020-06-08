@@ -2076,3 +2076,6 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 .report-header-box.sb-searchdiv {
     padding: 20px 0px 0px 0px;
 }
+#local_eudecustom_datatable tr:hover {
+    cursor: pointer;
+}

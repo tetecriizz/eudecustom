@@ -47,7 +47,7 @@ class cron_task extends \core\task\scheduled_task {
      *
      */
     public function execute() {
-        global $CFG, $DB;
+        global $CFG;
         require_once($CFG->dirroot . '/local/eudecustom/utils.php');
         if ( isset($CFG->local_eudecustom_category) && !empty($CFG->local_eudecustom_category) ) {
             $categories = explode(',', $CFG->local_eudecustom_category);

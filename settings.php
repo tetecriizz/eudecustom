@@ -97,6 +97,10 @@ if ($hassiteconfig) {
         $settings->add(new admin_setting_configtext('local_eudecustom_usermailer',
                 new lang_string('usermailer', 'local_eudecustom'), new lang_string('usermailer_desc', 'local_eudecustom'), '2',
                 PARAM_TEXT, null));
+
+        $settings->add(new admin_setting_configtext('local_eudecustom_usermailerbcc',
+                new lang_string('usermailerbcc', 'local_eudecustom'), new lang_string('usermailerbcc_desc', 'local_eudecustom'),
+                'altacv@eude.es', PARAM_TEXT, null));
     }
     $ADMIN->add('localplugins', $settings);
 }
