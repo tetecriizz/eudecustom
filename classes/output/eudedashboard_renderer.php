@@ -722,13 +722,16 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html .= html_writer::end_tag('tbody');
+        // Generate tfoots for this table.
         $html .= html_writer::start_tag('tfoot');
         $html .= html_writer::start_tag('tr');
+        // Each tfoot has th header.
         $html .= html_writer::tag('th', '');
         $html .= html_writer::tag('th', get_string('singularcourse', 'local_eudecustom'));
         $html .= html_writer::tag('th', get_string('singularstudent', 'local_eudecustom'));
         $html .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
         $html .= html_writer::tag('th', get_string('averagegrade', 'local_eudecustom'));
+        // Don't want the link is sortable.
         $html .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
         $html .= html_writer::end_tag('tr');
         $html .= html_writer::end_tag('tfoot');
@@ -1026,6 +1029,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         }
 
         $html2 .= html_writer::end_tag('tbody');
+        // Generating tfoot for this table.
         $html2 .= html_writer::start_tag('tfoot');
         $html2 .= html_writer::start_tag('tr');
         $html2 .= html_writer::tag('th', '');
@@ -1033,6 +1037,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::tag('th', get_string('activitiesfinished', 'local_eudecustom'));
         $html2 .= html_writer::tag('th', get_string('completed', 'local_eudecustom'));
         $html2 .= html_writer::tag('th', get_string('finalgrade', 'local_eudecustom'));
+        // Must not be sortable.
         $html2 .= html_writer::tag('th', '', array('class' => 'sorting_disabled'));
         $html2 .= html_writer::end_tag('tr');
         $html2 .= html_writer::end_tag('tfoot');
