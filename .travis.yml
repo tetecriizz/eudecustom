@@ -1,17 +1,14 @@
-notifications:
-  email: false
-
 language: php
 
-sudo: true
+os: linux
+dist: xenial
 
 services:
-  mysql
+  - mysql
+  - postgresql
 
 addons:
-  # firefox: "47.0.1"
-  postgresql: "9.6"
-  chrome: stable
+  firefox: "47.0.1"
   apt:
     packages:
       - openjdk-8-jre-headless
@@ -20,48 +17,56 @@ addons:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.npm
 
-php:
- - 7.1
- - 7.2
+jobs:
+  include:
+    - php: 7.4
+      env:
+        - MOODLE_BRANCH=master
+        - DB=mysqli
+        - DIFFERENT_GRUNT=yes
 
-env:
- global:
-  - MOODLE_BRANCH=MOODLE_37_STABLE
- matrix:
-  - DB=pgsql
-  - DB=mysqli
+    - php: 7.3
+      env:
+        - MOODLE_BRANCH=MOODLE_38_STABLE
+        - DB=pgsql
+        - DIFFERENT_GRUNT=yes
+
+    - php: 7.2
+      env:
+        - MOODLE_BRANCH=MOODLE_37_STABLE
+        - DB=mysqli
+        - DIFFERENT_GRUNT=yes
 
 before_install:
   - phpenv config-rm xdebug.ini
+
+  - if [ -z $DIFFERENT_GRUNT ]; then
+      export DIFFERENT_GRUNT=no;
+    fi
+
+  - if [ -z $NODE ]; then
+      export NODE=14;
+    fi
+  - nvm install $NODE
+  - nvm use $NODE
+
   - cd ../..
-  - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci dev-poet
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
-  # - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1 &
-  # - docker run -d -p 4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 install:
-  # - moodle-plugin-ci add-plugin --clone https://github.com/tetecriizz/eudecustom.git
-  - moodle-plugin-ci add-plugin --clone https://github.com/blackboard-open-source/moodle-theme_snap
   - moodle-plugin-ci install
-  # - nvm install 14.3.0
-  # - nvm use 14.3.0
-  # Start Selenium Standalone with Chrome/Firefox installed.
-  # - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-chrome:3
 
 script:
   - moodle-plugin-ci phplint
   - moodle-plugin-ci phpcpd
   - moodle-plugin-ci phpmd
   - moodle-plugin-ci codechecker
-  - moodle-plugin-ci codechecker --standard poet
-  - moodle-plugin-ci csslint
-  - moodle-plugin-ci shifter
-  - moodle-plugin-ci jshint # da error 
   - moodle-plugin-ci validate
+  - moodle-plugin-ci savepoints
+  - moodle-plugin-ci mustache || true
+  - moodle-plugin-ci grunt || [ "$DIFFERENT_GRUNT" = 'yes' ]
   - moodle-plugin-ci phpunit
-  # - moodle-plugin-ci behat # da error de selenium 
-  # - moodle-plugin-ci behat --moodle=/home/travis/build/moodle
-  # - moodle-plugin-ci behat --tags=@local_eudecustom
-  - moodle-plugin-ci phpunit --coverage-text
+  - moodle-plugin-ci behat
