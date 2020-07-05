@@ -17,7 +17,7 @@
 /**
  * Definition of Scheduled tasks.
  *
- * @package    local_eudecustom
+ * @package    local_eudedashboard
  * @copyright  2020 Planificación Entornos Tecnológicos {@link http://www.pentec.es/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
     array(
-        'classname' => 'local_eudecustom\task\cron_task',
+        'classname' => 'local_eudedashboard\task\cron_task',
         'blocking' => 0,
         'minute' => '*',
         'hour' => '0',

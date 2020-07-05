@@ -17,16 +17,16 @@
 /**
  * Version details.
  *
- * @package local_eudecustom
- * @copyright  2017 Planificacion de Entornos Tecnologicos SL
+ * @package local_eudedashboard
+ * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020050500;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2020052801;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2015051100;        // Requires this Moodle version.
-$plugin->component = 'local_eudecustom'; // Full name of the plugin (used for diagnostics).
+$plugin->component = 'local_eudedashboard'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE; // This is considered as ready for production sites.
 $plugin->release = 'v1.1.0'; // This is the current version.
 $plugin->dependencies = array(

@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle integration of previous company data page.
+ * Main page of plugin local_eudedashboard
  *
- * @package    local_eudecustom
- * @copyright  2017 Planificacion de Entornos Tecnologicos SL
+ * @package    local_eudedashboard
+ * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(__DIR__ . '/../../config.php');
 
 // Restrict access if the plugin is not active.
-if (is_callable('mr_off') && mr_off('eudecustom', '_MR_LOCAL')) {
+if (is_callable('mr_off') && mr_off('eudedashboard', '_MR_LOCAL')) {
     die("Plugin not enabled.");
 }
 
@@ -33,14 +33,11 @@ require_once(__DIR__ . '/utils.php');
 
 require_login(null, false, null, false, true);
 
-global $USER;
-global $OUTPUT;
-global $CFG;
-global $DB;
+global $USER, $OUTPUT, $CFG, $DB;
 
 // Set up the page.
 $string = 'headdashboard';
-$url = new moodle_url("/local/eudecustom/eudedashboard.php");
+$url = new moodle_url("/local/eudedashboard/eudedashboard.php");
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
@@ -49,18 +46,33 @@ $PAGE->set_pagelayout('standard');
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('ui');
 $PAGE->requires->jquery_plugin('ui-css');
-$PAGE->requires->js_call_amd("local_eudecustom/eude", "dashboard");
 
-$PAGE->requires->css('/local/eudecustom/style/datatables.css', true);
-$PAGE->requires->css('/local/eudecustom/style/datatables.min.css', true);
-$PAGE->requires->css("/local/eudecustom/style/eudecustom_style.css");
 
-$output = $PAGE->get_renderer('local_eudecustom', 'eudedashboard');
+$PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.min.js'), true);
+$PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.buttons.min.js'), true);
+$PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/my_datatables.js'));
+$PAGE->requires->js_call_amd("local_eudedashboard/eude", "dashboard");
+
+$PAGE->requires->css('/local/eudedashboard/style/datatables.css', true);
+$PAGE->requires->css('/local/eudedashboard/style/datatables.min.css', true);
+$PAGE->requires->css("/local/eudedashboard/style/eudedashboard_style.css");
+
+$output = $PAGE->get_renderer('local_eudedashboard', 'eudedashboard');
 
 $sesskey = sesskey();
 
-$isteacher = check_user_is_teacher($USER->id);
-$isstudent = check_user_is_student($USER->id);
+// Top links.
+$htmltopmenu = html_writer::empty_tag('br');
+$htmltopmenu .= html_writer::empty_tag('br');
+$htmltopmenu .= html_writer::empty_tag('br');
+$dashboardurl = new \moodle_url($PAGE->url);
+$reportsurl = new \moodle_url($CFG->wwwroot.'/local/eudedashboard/eudelistados.php');
+$htmltopmenu .= html_writer::start_div('eudedashboard-toplinks', array('style' => ''));
+$htmltopmenu .= html_writer::tag('span', html_writer::link($dashboardurl, get_string('dashboard', 'local_eudedashboard')),
+        array('style' => 'margin: 0px 15px;', 'class' => 'eude_topmenu_active active'));
+$htmltopmenu .= html_writer::tag('span', html_writer::link($reportsurl, get_string('reports', 'local_eudedashboard')),
+        array('style' => 'margin: 0px 15px', 'class' => 'eude_topmenu_active'));
+$htmltopmenu .= html_writer::end_div();
 
 // Get params.
 $catid = optional_param('catid', null, PARAM_INT);
@@ -68,103 +80,138 @@ $view = optional_param('view', null, PARAM_TEXT);
 $aluid = optional_param('aluid', null, PARAM_INT);
 $teacherid = optional_param('teacherid', null, PARAM_INT);
 $courseid = optional_param('courseid', null, PARAM_INT);
+$tab = optional_param('tab', 'activities', PARAM_TEXT);
 
 // Check user roles.
-$hassomerole = check_access_to_dashboard();
+$hassomerole = local_eudedashboard_check_access_to_dashboard();
 
 // If has no roles redirect to frontpage page.
-if ( !$hassomerole && !$isteacher && !$isstudent ) {
+if ( !$hassomerole ) {
     $url = new moodle_url('/', null);
     redirect($url);
 }
 
 // Call the functions of the renderar that prints the content.
 if ( $hassomerole ) {
-    $confcategories = explode(",", $CFG->local_eudecustom_category);
     if ( $view == null && $catid == null ) {
-        // Pantalla 1/7.
-        // Para cualquier otro caso devolver al dashboard
-        // no se espera otro caso posible sin parametros.
-        $title = get_string('headdashboardhome', 'local_eudecustom');
+        // Show dashboard frontpage.
+        $title = get_string('headdashboardhome', 'local_eudedashboard');
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $managerdata = get_dashboard_manager_data();
-        echo $output->eude_dashboard_manager_page($managerdata);
+        $managerdata = local_eudedashboard_get_dashboard_manager_data();
+        echo $htmltopmenu;
+        echo $output->local_eudedashboard_eude_dashboard_manager_page($managerdata);
         return;
     }
-    if ( $view == null || $catid == null || ($catid != null && !in_array($catid, $confcategories)) ) {
-        // Pantalla 1/7.
-        // Si no se recibe catid o view, carga el dashboard por defecto.
-        $title = get_string('headdashboardhome', 'local_eudecustom');
+    if ( $view == null || $catid == null || !local_eudedashboard_is_allowed_category($catid) ) {
+        // With missing catid or view param show dashboard frontpage.
+        $title = get_string('headdashboardhome', 'local_eudedashboard');
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $url = new moodle_url('/local/eudecustom/eudedashboard.php', null);
+        $url = new moodle_url('/local/eudedashboard/eudedashboard.php', null);
         redirect($url);
     }
 
-    // Si se recibe catid y view tiene que cargar el detalle.
-    if ( $view == 'students' && $aluid == null ) {
-        // Pantalla 4/7.
-        // Carga la lista de estudiantes de una categoria.
-        $title = get_string('headdashboardcate', 'local_eudecustom');
+    if ($view == 'students' && $aluid == null) {
+        // Category student list.
+        $title = get_string('headdashboardcate', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $PAGE->requires->js_call_amd("local_eudecustom/eude", "updatetimespent", array($catid));
-        $categorydata = get_dashboard_manager_data($catid);
-        $managerdata = get_dashboard_studentlist_oncategory_data($catid);
-        echo $output->eude_dashboard_studentlist_oncategory_page($categorydata[$catid], $managerdata);
-    } else if ( $view == 'students' && $aluid != null ) {
-        // Pantalla 5/7.
-        // Cargar la informacion de un alumno en una categoria.
-        $title = get_string('headdashboarduser', 'local_eudecustom');
+        // Update page url.
+        $params = array('catid' => $catid, 'view' => $view);
+        $url->params($params);
+        $PAGE->set_url($url);
+        // Require js that will update the invested times on course.
+        $PAGE->requires->js_call_amd("local_eudedashboard/eude", "updatetimespent", array($catid));
+        $categorydata = local_eudedashboard_get_dashboard_manager_data($catid);
+        $managerdata = local_eudedashboard_get_dashboard_studentlist_oncategory_data($catid);
+        echo $htmltopmenu;
+        echo $output->local_eudedashboard_eude_dashboard_studentlist_oncategory_page($categorydata[$catid], $managerdata);
+    } else if ($view == 'students' && $aluid != null) {
+        // Student detail info in category.
+        $title = get_string('headdashboarduser', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $alu = $DB->get_record("user", array('id' => $aluid));
-        $managerdata = get_dashboard_studentinfo_oncategory_data($catid, $aluid);
-        echo $output->eude_dashboard_studentinfo_oncategory_page($catid, $managerdata, $alu);
-    } else if ( $view == 'teachers' && $teacherid == null ) {
-        // Pantalla 6/7.
-        // Carga la lista de profesores de una categoria.
-        $title = get_string('headdashboardcate', 'local_eudecustom');
+        // Update page url.
+        $params = array('catid' => $catid, 'view' => $view, 'aluid' => $aluid);
+        $url->params($params);
+        $PAGE->set_url($url);
+        echo $htmltopmenu;
+        if ($tab == 'activities') {
+            $alu = $DB->get_record("user", array('id' => $aluid));
+            $managerdata = local_eudedashboard_get_dashboard_studentinfo_oncategory_data_activities($catid, $aluid);
+            echo $output->local_eudedashboard_eude_dashboard_studentinfo_oncategory_page_activities($catid, $managerdata, $alu);
+        } else {
+            $alu = $DB->get_record("user", array('id' => $aluid));
+            $managerdata = local_eudedashboard_get_dashboard_studentinfo_oncategory_data($catid, $aluid);
+            echo $output->local_eudedashboard_eude_dashboard_studentinfo_oncategory_page($catid, $managerdata, $alu);
+        }
+    } else if ($view == 'teachers' && $teacherid == null) {
+        // Teacher list in category.
+        $title = get_string('headdashboardcate', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $categorydata = get_dashboard_manager_data($catid);
-        $managerdata = get_dashboard_teacherlist_oncategory_data($catid);
-        echo $output->eude_dashboard_teacherlist_oncategory_page($categorydata[$catid], $managerdata);
+        // Update page url.
+        $params = array('catid' => $catid, 'view' => $view);
+        $url->params($params);
+        $PAGE->set_url($url);
+        $categorydata = local_eudedashboard_get_dashboard_manager_data($catid);
+        $managerdata = local_eudedashboard_get_dashboard_teacherlist_oncategory_data($catid);
+        echo $htmltopmenu;
+        echo $output->local_eudedashboard_eude_dashboard_teacherlist_oncategory_page($categorydata[$catid], $managerdata);
     } else if ( $view == 'teachers' && $teacherid != null ) {
         // Pantalla 7/7.
-        // Cargar la informacion de un alumno en una categoria.
-        $title = get_string('headdashboarduser', 'local_eudecustom');
+        // Teacher detail info in category.
+        $title = get_string('headdashboarduser', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $tea = $DB->get_record("user", array('id' => $teacherid));
-        $managerdata = get_dashboard_teacherinfo_oncategory_data($catid, $teacherid);
-        echo $output->eude_dashboard_teacherinfo_oncategory_page($catid, $managerdata, $tea);
+        $params = array('catid' => $catid, 'view' => $view, 'teacherid' => $teacherid);
+        $params ['tab'] = $tab;
+        // Update page url.
+        $url->params($params);
+        $PAGE->set_url($url);
+        echo $htmltopmenu;
+        if ( $tab == 'activities' ) {
+            $tea = $DB->get_record("user", array('id' => $teacherid));
+            $managerdata = local_eudedashboard_get_dashboard_teacherinfo_oncategory_data_activities($catid, $teacherid);
+            echo $output->local_eudedashboard_eude_dashboard_teacherinfo_oncategory_page_activities($catid, $managerdata, $tea);
+        } else {
+            $tea = $DB->get_record("user", array('id' => $teacherid));
+            $managerdata = local_eudedashboard_get_dashboard_teacherinfo_oncategory_data_modules($catid, $teacherid);
+            echo $output->local_eudedashboard_eude_dashboard_teacherinfo_oncategory_page_modules($catid, $managerdata, $tea);
+        }
     } else if ( $view == 'courses' && $courseid == null ) {
-        // Pantalla 2/7.
-        // Cargar la lista de cursos de una categoria.
-        $title = get_string('headdashboardcate', 'local_eudecustom');
+        // Course list in category.
+        $title = get_string('headdashboardcate', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
-        $categorydata = get_dashboard_manager_data($catid);
-        $managerdata = get_dashboard_courselist_oncategory_data($catid);
-        echo $output->eude_dashboard_courselist_oncategory_page($categorydata[$catid], $managerdata);
+        // Update page url.
+        $params = array('catid' => $catid, 'view' => $view);
+        $url->params($params);
+        $PAGE->set_url($url);
+        $categorydata = local_eudedashboard_get_dashboard_manager_data($catid);
+        $managerdata = local_eudedashboard_get_dashboard_courselist_oncategory_data($catid);
+        echo $htmltopmenu;
+        echo $output->local_eudedashboard_eude_dashboard_courselist_oncategory_page($categorydata[$catid], $managerdata);
     } else if ( $view == 'courses' && $courseid != null ) {
-        // Pantalla 3/7
-        // Cargar la informacion del curso.
-        $title = get_string('headdashboardcour', 'local_eudecustom');
+        // Course detail info in category.
+        $title = get_string('headdashboardcour', 'local_eudedashboard');
+        // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);
+        // Update page url.
+        $params = array('catid' => $catid, 'view' => $view, 'courseid' => $courseid);
+        $url->params($params);
+        $PAGE->set_url($url);
         $course = $DB->get_record("course", array('id' => $courseid));
-        $categorydata = get_dashboard_manager_data($catid);
-        $managerdata = get_dashboard_courseinfo_oncategory_data($catid, $courseid);
-        echo $output->eude_dashboard_courseinfo_oncategory_page($categorydata[$catid], $managerdata, $course);
+        $categorydata = local_eudedashboard_get_dashboard_manager_data($catid);
+        $managerdata = local_eudedashboard_get_dashboard_courseinfo_oncategory_data($catid, $courseid);
+        echo $htmltopmenu;
+        echo $output->local_eudedashboard_eude_dashboard_courseinfo_oncategory_page($categorydata[$catid], $managerdata, $course);
     }
-
-} else if ($isteacher) {
-    $teacherdata = get_dashboard_teacher_data($USER->id);
-    echo $output->eude_dashboard_teacher_page($teacherdata);
-} else {
-    $studentdata = get_dashboard_student_data($USER->id);
-    echo $output->eude_dashboard_student_page($studentdata);
 }

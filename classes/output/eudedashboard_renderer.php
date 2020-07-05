@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle custom renderer class for eudeprofile view.
+ * Moodle custom renderer class for eudedashboard view.
  *
- * @package    local_eudecustom
- * @copyright  2017 Planificacion de Entornos Tecnologicos SL
+ * @package    local_eudedashboard
+ * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_eudecustom\output;
+namespace local_eudedashboard\output;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -30,380 +30,25 @@ use \html_writer;
 use renderable;
 
 /**
- * Renderer for eude custom actions plugin.
+ * Renderer for eudedashboard plugin.
  *
- * @copyright  2017 Planificacion de Entornos Tecnologicos SL
+ * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class eudedashboard_renderer extends \plugin_renderer_base {
-
-    /**
-     * Render custom for eude new dashboard.
-     *
-     * @param array $data all the student data related to this view.
-     * @return string html to output.
-     */
-    public function eude_dashboard_student_page($data) {
-        $response = '';
-        $response .= $this->header();
-
-        $html = html_writer::start_div('row');
-        $html .= html_writer::start_div('col-xs-12 col-md-12 col-lg-10  offset-lg-1');
-
-        $html .= html_writer::start_tag('ul',
-                                        array('class' => 'nav nav-tabs nav-tabs-responsive',
-                                              'id' => 'eudedashboardmyTab', 'role' => 'tablist'));
-        $catnum = 0;
-        foreach ($data as $key => $value) {
-            $active = "";
-            $ariaselected = "false";
-            if ($catnum == 0) {
-                $active = "active";
-                $ariaselected = "true";
-            }
-            if ($catnum == 1) {
-                $active = "next";
-            }
-            $html .= $this->eude_dashboard_nav_category_tab($key, $value, $active, $ariaselected);
-            $catnum += 1;
-        }
-        $html .= html_writer::end_tag('ul');
-
-        $html .= html_writer::start_tag('div', array('class' => 'tab-content', 'id' => 'eudedashboardmyTabContent'));
-        $catnum = 0;
-        foreach ($data as $key => $value) {
-            $active = "";
-            if ($catnum == 0) {
-                $active = "show active";
-            }
-            $html .= $this->eude_dashboard_nav_category_content($key, $value, $active);
-            $catnum += 1;
-        }
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-
-        $response .= $html;
-        $response .= $this->footer();
-        return $response;
-    }
-
-    /**
-     * Render custom for eude new dashboard.
-     *
-     * @param array $data all the teacher data related to this view.
-     * @return string html to output.
-     */
-    public function eude_dashboard_teacher_page($data) {
-        global $CFG;
-        $response = '';
-        $response .= $this->header();
-
-        $html = html_writer::start_tag('div', array('class' => "row col-md-10 offset-md-1",
-                                                        'id' => "eudedashboardmyTabContent"));
-        $html .= html_writer::start_div('row');
-        $html .= html_writer::start_div('filterbuttonswrapper col-md-12');
-
-        $html .= html_writer::start_tag('button',
-                                        array('class' => "btn btn-default dashboardbtn dashboardbtnteachertotal eudeactive",
-                                              'id' => "dashboardbtnteachertotal"));
-        $html .= "<span class='edb-number edb-total'>" . count($data->courses) . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfiltertotal', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-bullseye'></i>";
-        $html .= html_writer::end_tag('button');
-
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnteacherincourse",
-                                                        'id' => "dashboardbtnteacherincourse"));
-        $html .= "<span class='edb-number edb-teacherincourse'>" . $data->totalactivestudents  . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterteacherincourse', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-info-circle'></i>";
-        $html .= html_writer::end_tag('button');
-
-        if ($CFG->local_eudecustom_enabledashboardpendingactivities == 1) {
-            $html .= html_writer::start_tag('button',
-                                        array('class' => "btn btn-default dashboardbtn dashboardbtnteacherpendingactivities",
-                                              'id' => "dashboardbtnteacherpendingactivities"));
-            $html .= "<span class='edb-number edb-teacherpendingactivities'>" . $data->totalpendingactivities  . "</span>";
-            $html .= "<span class='edb-text'>" . get_string('dashboardbtnteacherpendingactivities', 'local_eudecustom') . "</span>";
-            $html .= "<i class='icon edbicon fa fa-arrow-down'></i>";
-            $html .= html_writer::end_tag('button');
-        }
-
-        if ($CFG->local_eudecustom_enabledashboardunreadmsgs == 1) {
-            $html .= html_writer::start_tag('button',
-                                        array('class' => "btn btn-default dashboardbtn dashboardbtnteacherpendingmessages",
-                                              'id' => "dashboardbtnteacherpendingmessages"));
-            $html .= "<span class='edb-number edb-teacherpendingmessages'>" . $data->totalpendingmessages  . "</span>";
-            $html .= "<span class='edb-text'>" . get_string('dashboardbtnteacherpendingmessages', 'local_eudecustom') . "</span>";
-            $html .= "<i class='icon edbicon fa fa-check-circle'></i>";
-            $html .= html_writer::end_tag('button');
-        }
-
-        $html .= html_writer::end_div();
-
-        $html .= html_writer::start_div('dashboardcoursecardswrapper col-md-12 row');
-
-        foreach ($data->courses as $key => $value) {
-            $html .= $this->eude_dashboard_teacher_course_card($key, $value);
-        }
-
-        $html .= html_writer::end_div();
-
-        $html .= html_writer::end_div();
-
-        $html .= html_writer::end_tag('div');
-
-        $response .= $html;
-        $response .= $this->footer();
-        return $response;
-    }
-
-    /**
-     * Render nav tabs for course categories
-     *
-     * @param string $categoryid category id
-     * @param stdClass $categoryinfo object with info from the courses in the category
-     * @param string $active for bootstrap tab
-     * @param string $ariaselected for bootstrap tab
-     * @return string html to output.
-     */
-    public function eude_dashboard_nav_category_tab($categoryid, $categoryinfo, $active = "", $ariaselected = "false") {
-        $response = "";
-        $html = html_writer::start_tag('li', array('class' => "nav-item col-md-3 $active"));
-        $html .= html_writer::start_tag('a', array('class' => "nav-link $active",
-                                                   'id' => "nav-category$categoryid-tab",
-                                                   'data-toggle' => 'tab',
-                                                   'href' => "#nav-category$categoryid",
-                                                   'role' => 'tab',
-                                                   'aria-controls' => "nav-category$categoryid",
-                                                   'aria-selected' => $ariaselected));
-        $html .= "<span class='eudedashboardcategoryname'>" . $categoryinfo->name . "</span>";
-        if ($categoryinfo->averagecoursecompletion > 0  && $categoryinfo->nextconvocatory == "") {
-            $html .= "<span class='eudedashboardprogressinfo'>" . intval($categoryinfo->averagecoursecompletion)
-                     . get_string('dashboardcategorycourseprogresstext', 'local_eudecustom') . "</span>";
-            $html .= "<div class='progress eudedashboardprogresswrapper'>"
-                     . "<div class='progress-bar eudedashboardprogressbar' role='progressbar' aria-valuenow='"
-                     . $categoryinfo->averagecoursecompletion . "' aria-valuemin='0' aria-valuemax='100' style='width:"
-                     . $categoryinfo->averagecoursecompletion . "%'><span class='sr-only'>70% Complete</span></div></div>";
-        }
-        if ($categoryinfo->nextconvocatory != "") {
-            $html .= "<span class='eudedashboardcategoryconvocatory'>"
-                     . get_string('eudedashboardcategoryconvocatory', 'local_eudecustom')
-                     . " " . $categoryinfo->nextconvocatory . "</span>";
-        }
-        $html .= html_writer::end_tag('a');
-        $html .= html_writer::end_tag('li');
-
-        $response = $html;
-
-        return $response;
-    }
-
-    /**
-     * Render nav tab content for course categories
-     *
-     * @param string $categoryid category id
-     * @param stdClass $categoryinfo object with info from the courses in the category
-     * @param string $active for bootstrap tab
-     * @return string html to output.
-     */
-    public function eude_dashboard_nav_category_content($categoryid, $categoryinfo, $active = "") {
-        $response = "";
-
-        $html = html_writer::start_tag('div', array('class' => "tab-pane fade $active",
-                                                  'id' => "nav-category$categoryid",
-                                                  'aria-labelledby' => "nav-category$categoryid-tab",
-                                                  'role' => 'tabpanel'));
-        $html .= html_writer::start_div('row');
-
-        $html .= html_writer::start_div('filterbuttonswrapper col-md-12');
-        $html .= html_writer::start_tag('button',
-                                        array('class' => "btn btn-default dashboardbtn dashboardbtntotal col-md-2 eudeactive",
-                                              'id' => "dashboardbtntotal-$categoryid"));
-        $html .= "<span class='edb-number edb-total'>" . count($categoryinfo->courses) . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfiltertotal', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-bullseye'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnincourse col-md-2",
-                                                        'id' => "dashboardbtnincourse-$categoryid"));
-        $html .= "<span class='edb-number edb-incourse'>" . $categoryinfo->totalincourse . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterincourse', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-info-circle'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnfailed col-md-2",
-                                                        'id' => "dashboardbtnfailed-$categoryid"));
-        $html .= "<span class='edb-number edb-failed'>" . $categoryinfo->totalfailed . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterfailed', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-arrow-down'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnpassed col-md-2",
-                                                        'id' => "dashboardbtnpassed-$categoryid"));
-        $html .= "<span class='edb-number edb-passed'>" . $categoryinfo->totalpassed  . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterpassed', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-check-circle'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnconvalidated col-md-2",
-                                                        'id' => "dashboardbtnconvalidated-$categoryid"));
-        $html .= "<span class='edb-number edb-convalidated'>" . $categoryinfo->totalconvalidated . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterconvalidated', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-exchange'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::start_tag('button', array('class' => "btn btn-default dashboardbtn dashboardbtnpending col-md-2",
-                                                        'id' => "dashboardbtnpending-$categoryid"));
-        $html .= "<span class='edb-number edb-total'>" . $categoryinfo->totalpending  . "</span>";
-        $html .= "<span class='edb-text'>" . get_string('dashboardfilterpending', 'local_eudecustom') . "</span>";
-        $html .= "<i class='icon edbicon fa fa-hourglass-half'></i>";
-        $html .= html_writer::end_tag('button');
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::start_div('dashboardcoursecardswrapper col-md-12 row');
-
-        foreach ($categoryinfo->courses as $key => $value) {
-            $html .= $this->eude_dashboard_nav_category_course_card($key, $value);
-        }
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $response = $html;
-
-        return $response;
-    }
-
-    /**
-     * Render dashboard custom course box
-     *
-     * @param string $courseid course id
-     * @param stdClass $coursedata object with info from the course
-     * @return string html to output.
-     */
-    public function eude_dashboard_nav_category_course_card($courseid, $coursedata) {
-        global $CFG;
-
-        $response = "";
-
-        $html = html_writer::start_tag('div', array('class' => "dashboardcoursebox col-md-3 $coursedata->filterclasses",
-                                                    'id' => "dashboardcoursebox-$courseid"));
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcourseimagewrapper"));
-        $html .= html_writer::start_tag('img', array('class' => "dashboardcourseimage",
-                                                             'src' => $coursedata->courseimagepath));
-        $html .= html_writer::end_tag('img');
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcourseinfowrapper"));
-
-        $html .= html_writer::tag('span', $coursedata->coursename, array('class' => "dashboardcoursename"));
-
-        $html .= html_writer::tag('span', $coursedata->coursecatname, array('class' => "dashboardcoursecategoryname"));
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcoursecompletionbar"));
-
-        if (is_numeric($coursedata->completionstatus) && $coursedata->completionstatus >= 0) {
-            $html .= "<span class='eudedashboardprogressinfo'>"
-                     . intval($coursedata->completionstatus)
-                     . get_string('dashboardcourseprogresstext', 'local_eudecustom') . "</span>";
-            $html .= "<div class='progress eudedashboardprogresswrapper'>"
-                     . "<div class='progress-bar eudedashboardprogressbar' role='progressbar' aria-valuenow='"
-                     . $coursedata->completionstatus . "' aria-valuemin='0' aria-valuemax='100' style='width:"
-                     . $coursedata->completionstatus . "%'><span class='sr-only'>70% Complete</span></div></div>";
-        } else {
-            $html .= "<span class='eudedashboardprogressinfo'>"
-                    . get_string('dashboardcourseprogressnottracked', 'local_eudecustom') . "</span>";
-        }
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcoursefooter"));
-        if (strpos($coursedata->filterclasses, "pending") !== false) {
-            $html .= html_writer::tag('span', get_string('eudedashboardupcomingcourse', 'local_eudecustom'),
-                                      array('class' => "dashboardcourseupcomingmessage"));
-        } else {
-            $html .= html_writer::tag('span', $coursedata->coursefinalgrade, array('class' => "dashboardcoursefinalgrade"));
-
-            $html .= html_writer::start_tag('a', array('class' => "dashboardcourselink dashboardcourseimage",
-                                               'href' => $CFG->wwwroot . "/course/view.php?id=$coursedata->courseid"));
-                $html .= "<i class='icon edbicon fa fa-arrow-right'></i>";
-            $html .= html_writer::end_tag('a');
-        }
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $response = $html;
-
-        return $response;
-    }
-
-    /**
-     * Render dashboard custom course box for teacher views
-     *
-     * @param string $courseid course id
-     * @param stdClass $coursedata object with info from the course
-     * @return string html to output.
-     */
-    public function eude_dashboard_teacher_course_card($courseid, $coursedata) {
-        global $CFG;
-
-        $response = "";
-
-        $html = html_writer::start_tag('div',
-                                array('class' => "dashboardcoursebox col-md-3 dashboardcourse "
-                                      . "$coursedata->activestudents $coursedata->pendingactivities $coursedata->pendingmessages",
-                                      'id' => "dashboardcoursebox-$courseid"));
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcourseimagewrapper"));
-        $html .= html_writer::start_tag('img', array('class' => "dashboardcourseimage",
-                                                             'src' => $coursedata->courseimagepath));
-        $html .= html_writer::end_tag('img');
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcourseinfowrapper"));
-
-        $html .= html_writer::tag('span', $coursedata->coursename, array('class' => "dashboardcoursename"));
-
-        $html .= "<br>";
-
-        $html .= html_writer::tag('span', $coursedata->coursecatname, array('class' => "dashboardcoursecategoryname"));
-
-        $html .= html_writer::start_tag('div', array('class' => "dashboardcoursefooter"));
-
-        $html .= html_writer::start_tag('a', array('class' => "dashboardcourselink dashboardcourseimage",
-                                                           'href' => $CFG->wwwroot . "/course/view.php?id=$coursedata->courseid"));
-        $html .= "<i class='icon edbicon fa fa-arrow-right'></i>";
-        $html .= html_writer::end_tag('a');
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $html .= html_writer::end_tag('div');
-
-        $response = $html;
-
-        return $response;
-    }
-
     /**
      * Return style for row
      * @param string $classname
      * @param int $perc
      * @return array
      */
-    public function local_eudecustom_get_row_style($classname, $perc) {
+    public function local_eudedashboard_get_row_style($classname, $perc) {
         $padding = "";
         if ($perc > 0) {
             $padding = 'padding: 1px;';
         }
         return array('class' => $classname, 'colspan' => 5,
-                        'style' => $padding.'width:'.$perc.'%;background-color:'. get_color($perc));
+                        'style' => $padding.'width:'.$perc.'%;background-color:'. local_eudedashboard_get_color($perc));
     }
     /**
      * Print card of eudedashboard.
@@ -411,19 +56,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      * @param string $role
      * @return string html to output.
      */
-    public function local_eudecustom_print_card($dataconn, $role) {
+    public function local_eudedashboard_print_card($dataconn, $role) {
         $html = '';
         $type = $role.'s';
         $html .= html_writer::start_div('dashboard-container '.$role.'time col-12 col-lg-4 eude-data-info',
             array('id' => $role.'time'));
         $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::div(get_string('time'.$type, 'local_eudecustom'), 'dashboard-investedtimes-title');
+        $html .= html_writer::div(get_string('time'.$type, 'local_eudedashboard'), 'dashboard-investedtimes-title');
         $html .= html_writer::start_div('dashboard_singlemodule_wrapper');
         $html .= html_writer::start_div('dashboard-investedtimes-wrapper');
         $html .= html_writer::start_div('investedtimestotalhourswrapper');
         $html .= html_writer::start_div('investedtimestotalhours');
         $html .= html_writer::span(gmdate("H", $dataconn[$type]['totaltime']), 'eude-bignumber');
-        $html .= html_writer::span(get_string('totalhours', 'local_eudecustom'), 'eude-smalltext');
+        $html .= html_writer::span(get_string('totalhours', 'local_eudedashboard'), 'eude-smalltext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimeshourschart');
         $html .= html_writer::start_div('eude-row eude-col-6 chart-container investedtimeschart');
@@ -473,19 +118,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('investedtimesaccesses');
         $html .= html_writer::start_div('investedtimestotalaccesses');
         $html .= html_writer::span($dataconn[$type]['accesses'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimesaverageaccesses');
         $html .= html_writer::span(gmdate("H:i", $dataconn[$type]['averagetime']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimeslastdaysaccesses');
-        $html .= html_writer::div(get_string('lastdays', 'local_eudecustom'), 'investedtimeslastdaysaccessestitle');
+        $html .= html_writer::div(get_string('lastdays', 'local_eudedashboard'), 'investedtimeslastdaysaccessestitle');
         $html .= html_writer::start_div('investedtimeslastdaysaccessesinfo');
         $html .= html_writer::span($dataconn[$type]['accesseslastdays'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::span(gmdate("H:i", $dataconn[$type]['averagetimelastdays']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
@@ -502,33 +147,115 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      * @param array $cms
      * @param stdClass $coursestats
      */
-    public function local_eudecustom_print_data($cms, $coursestats) {
+    public function local_eudedashboard_print_data($cms, $coursestats) {
         $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
             array('id' => 'studentdata'));
         $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
         $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('accesses', 'local_eudecustom'), 'subtitle');
+        $html .= html_writer::div(get_string('accesses', 'local_eudedashboard'), 'subtitle');
         $html .= html_writer::start_div('borderright');
         $html .= html_writer::start_div('container-top');
         $html .= html_writer::span($cms['completed'], 'big-text').\html_writer::start_tag('sub'). get_string('activitiescompleted',
-                        'local_eudecustom').\html_writer::end_tag('sub');
+                        'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('container-bottom');
         $html .= html_writer::span($cms['total'], 'big-text').\html_writer::start_tag('sub').get_string('activitiestotal',
-                        'local_eudecustom').\html_writer::end_tag('sub');
+                        'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('performance', 'local_eudecustom'), 'subtitle');
+        $html .= html_writer::div(get_string('performance', 'local_eudedashboard'), 'subtitle');
         $html .= html_writer::start_div();
         $html .= html_writer::start_div('container-top');
         $html .= html_writer::span($coursestats->messagesforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('forummessages', 'local_eudecustom').\html_writer::end_tag('sub');
+            get_string('forummessages', 'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('container-bottom');
         $html .= html_writer::span($coursestats->announcementsforum, 'big-text').\html_writer::start_tag('sub').
-            get_string('newsforum', 'local_eudecustom').\html_writer::end_tag('sub');
+            get_string('newsforum', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        return $html;
+    }
+
+    /**
+     * Generic function used to print student data.
+     * @param array $coursestats
+     * @return string
+     */
+    public function local_eudedashboard_print_data_student($coursestats) {
+        $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
+            array('id' => 'studentdata'));
+        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('accesses', 'local_eudedashboard'), 'subtitle');
+        $html .= html_writer::start_div('borderright');
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($coursestats['totalactivitiescompleted'], 'big-text').
+            \html_writer::start_tag('sub'). get_string('activitiescompleted', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($coursestats['totalactivitiescourse'], 'big-text').
+            \html_writer::start_tag('sub').get_string('activitiestotal', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('performance', 'local_eudedashboard'), 'subtitle');
+        $html .= html_writer::start_div();
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($coursestats['messagesforum'], 'big-text').\html_writer::start_tag('sub').
+            get_string('forummessages', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($coursestats['announcementsforum'], 'big-text').\html_writer::start_tag('sub').
+            get_string('newsforum', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        return $html;
+    }
+
+    /**
+     * Print course stats
+     * @param array $coursestats
+     * @return string
+     */
+    public function local_eudedashboard_print_data_teacher($coursestats) {
+        $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
+            array('id' => 'studentdata'));
+        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('accesses', 'local_eudedashboard'), 'subtitle');
+        $html .= html_writer::start_div('borderright');
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($coursestats['teacheractivitiesgraded'].'/'.$coursestats['teacheractivitiestotal'], 'big-text').
+                \html_writer::start_tag('sub'). get_string('activitiesgraded', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($coursestats['diffgradedsubmitted'], 'big-text').
+            \html_writer::start_tag('sub').get_string('averagedelaydays', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('width50');
+        $html .= html_writer::div(get_string('performance', 'local_eudedashboard'), 'subtitle');
+        $html .= html_writer::start_div();
+        $html .= html_writer::start_div('container-top');
+        $html .= html_writer::span($coursestats['messagesforum'], 'big-text').\html_writer::start_tag('sub').
+            get_string('forummessages', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('container-bottom');
+        $html .= html_writer::span($coursestats['announcementsforum'], 'big-text').\html_writer::start_tag('sub').
+            get_string('newsforum', 'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
@@ -560,14 +287,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_tag($table);
         return $html;
     }
+
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 1/7 del mockup
      *
      * @param array $data all the teacher data related to this view.
      * @return string html to output.
      */
-    public function eude_dashboard_manager_page($data) {
+    public function local_eudedashboard_eude_dashboard_manager_page($data) {
         global $CFG;
         $response = $this->header();
         $totalcategories = 0;
@@ -579,12 +306,13 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $html2 = html_writer::start_div('table-responsive-sm eude-table-home');
         $html2 .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-dashboard eude-table-categories'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-dashboard eude-table-categories'));
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', get_string('categories', 'local_eudecustom')),
-            array('th', get_string('teachers', 'local_eudecustom')),
-            array('th', get_string('students', 'local_eudecustom')),
-            array('th', get_string('courses', 'local_eudecustom')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
+            array('th', get_string('categories', 'local_eudedashboard')),
+            array('th', get_string('teachers', 'local_eudedashboard')),
+            array('th', get_string('students', 'local_eudedashboard')),
+            array('th', get_string('courses', 'local_eudedashboard')),
         ));
 
         $html2 .= html_writer::start_tag('tbody');
@@ -594,16 +322,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $totalcourses += $category->totalcourses;
             $totalstudents += $category->totalstudents;
             $totalteachers += $category->totalteachers;
-            $html2 .= html_writer::start_tag('tr');
+            $html2 .= html_writer::start_tag('tr', array('data-id' => $category->catid));
+            $html2 .= html_writer::tag('td', '', array('class' => 'details-control', 'style' => 'max-width: 40px'));
             $html2 .= html_writer::start_tag('td', array('style' => 'width:50%'));
             $html2 .= $category->catname;
             $html2 .= html_writer::end_tag('td');
-            $html2 .= print_record_eude_dashboard_manager_page("eudedashboard.php?catid=".$category->catid."&view=teachers",
-                        $category->totalteachers, get_string('teachers', 'local_eudecustom'));
-            $html2 .= print_record_eude_dashboard_manager_page("eudedashboard.php?catid=".$category->catid."&view=students",
-                        $category->totalstudents, get_string('students', 'local_eudecustom'));
-            $html2 .= print_record_eude_dashboard_manager_page("eudedashboard.php?catid=".$category->catid."&view=courses",
-                        $category->totalcourses, get_string('courses', 'local_eudecustom'));
+            $html2 .= html_writer::tag('td', $category->totalteachers, array('class' => 'eudedashboard-tablevalues'));
+            $html2 .= html_writer::tag('td', $category->totalstudents, array('class' => 'eudedashboard-tablevalues'));
+            $html2 .= html_writer::tag('td', $category->totalcourses, array('class' => 'eudedashboard-tablevalues'));
             $html2 .= html_writer::end_tag('tr');
         }
 
@@ -612,19 +338,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::end_div();
 
         // Get selected categories.
-        $categories = explode(",", $CFG->local_eudecustom_category);
+        $categories = explode(",", $CFG->local_eudedashboard_category);
         foreach ($categories as $category) {
             // Get students and teachers array.
-            $students = get_students_from_category($category);
-            $teachers = get_teachers_from_category($category);
+            $students = local_eudedashboard_get_students_from_program($category);
+            $teachers = local_eudedashboard_get_teachers_from_program($category);
             // Get the records.
-            $records = get_times_from_category($category);
+            $records = local_eudedashboard_get_times_from_category($category);
             foreach ($records as $record) {
                 // Add to totaltime if userid is student or teacher.
-                if ( in_array($record->userid, array_column($students, "studentid")) ) {
+                if ( in_array($record->userid, array_column($students, "userid")) ) {
                     $totalspenttimestudents += $record->totaltime;
                 }
-                if ( in_array($record->userid, array_column($teachers, "teacherid")) ) {
+                if ( in_array($record->userid, array_column($teachers, "userid")) ) {
                     $totalspenttimeteachers += $record->totaltime;
                 }
             }
@@ -642,25 +368,25 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html = html_writer::start_div('report-header-box');
         $html .= html_writer::start_div('report-header-box-left');
         $html .= html_writer::start_div('eude-card');
-        $html .= print_divcard_eude_dashboard_manager_page('col-4',
-            get_string('categories', 'local_eudecustom'), $totalcategories);
-        $html .= print_divcard_eude_dashboard_manager_page('col-4',
-            get_string('courses', 'local_eudecustom'), $totalcourses);
-        $html .= print_divcard_eude_dashboard_manager_page('col-4',
-            get_string('students', 'local_eudecustom'), $totalstudents);
+        $html .= local_eudedashboard_print_divcard_eude_dashboard_manager_page('col-4',
+            get_string('categories', 'local_eudedashboard'), $totalcategories);
+        $html .= local_eudedashboard_print_divcard_eude_dashboard_manager_page('col-4',
+            get_string('courses', 'local_eudedashboard'), $totalcourses);
+        $html .= local_eudedashboard_print_divcard_eude_dashboard_manager_page('col-4',
+            get_string('students', 'local_eudedashboard'), $totalstudents);
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('report-header-box-right');
         $html .= html_writer::start_div('eude-card');
-        $html .= print_divcard_eude_dashboard_manager_page('col-6',
-                    get_string('averagetimespentstu', 'local_eudecustom'), gmdate("H:i", $timeaveragestudent));
-        $html .= print_divcard_eude_dashboard_manager_page('col-6',
-                    get_string('averagetimespenttea', 'local_eudecustom'), gmdate("H:i", $timeaverageteacher));
+        $html .= local_eudedashboard_print_divcard_eude_dashboard_manager_page('col-6',
+                    get_string('averagetimespentstu', 'local_eudedashboard'), gmdate("H:i", $timeaveragestudent));
+        $html .= local_eudedashboard_print_divcard_eude_dashboard_manager_page('col-6',
+                    get_string('averagetimespenttea', 'local_eudedashboard'), gmdate("H:i", $timeaverageteacher));
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('report-header-box sb-searchdiv');
-        $html .= html_writer::tag('h2', get_string('categories', 'local_eudecustom'), array('class' => 'section-title'));
+        $html .= html_writer::tag('h2', get_string('categories', 'local_eudedashboard'), array('class' => 'section-title'));
         $html .= html_writer::end_div();
 
         $response .= $html.$html2;
@@ -670,75 +396,63 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 2/7 del mockup
      * @param stdClass $category
      * @param array $data
      * @return string
      */
-    public function eude_dashboard_courselist_oncategory_page($category, $data) {
+    public function local_eudedashboard_eude_dashboard_courselist_oncategory_page($category, $data) {
+        global $CFG;
         $response = $this->header();
 
         $urlback = 'eudedashboard.php';
-        $html = print_return_generate_report($urlback);
+        $html = local_eudedashboard_print_return_generate_report($urlback);
 
-        $html .= print_header_category($category, 'courses');
+        // Print category selector.
+        $view = $this->page->url->param('view');
+        $params = array('view' => $view);
+        $html .= local_eudedashboard_print_category_selector($category->catid, $params);
 
-        $html .= html_writer::tag('h2', get_string('courses', 'local_eudecustom'), array('class' => 'section-title'));
+        $html .= local_eudedashboard_print_header_category($category, 'courses');
+
+        $html .= html_writer::tag('h2', get_string('courses', 'local_eudedashboard'), array('class' => 'section-title'));
 
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-courselist'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-courselist'));
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom')),
-            array('th', get_string('averagegrade', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard')),
+            array('th', get_string('averagegrade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::start_tag('tbody');
 
         foreach ($data as $record) {
-            $course = get_course($record->courseid);
-            $students = get_course_students($record->courseid, 'student');
-            $total = 0;
-            $completed = 0;
-            foreach ($students as $student) {
-                $activitiesinfo = get_cmcompletion_user_course($student->id, $course);
-                $total += $activitiesinfo['total'];
-                $completed += $activitiesinfo['completed'];
-            }
-            $percentage = $total == 0 ? 0 : $completed * 100 / $total;
-
-            if ( $record->totalstudents == null ) {
-                $record->totalstudents = 0;
-            }
-            if ( $record->average == null ) {
-                $record->average = 0;
-            }
 
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $percentage));
-            $html .= html_writer::tag('td', $record->course);
-            $html .= html_writer::tag('td', count($students));
-            $html .= html_writer::tag('td', number_format($percentage, 1) .'%');
-            $html .= html_writer::tag('td', number_format($record->average, 1));
+            $html .= html_writer::tag('td', $record['course']);
+            $html .= html_writer::tag('td', $record['totalstudents']);
+            $html .= html_writer::tag('td', $record['percentage'] .'%');
+            $html .= html_writer::tag('td', $record['average']);
             $html .= html_writer::start_tag('td');
             $html .= html_writer::start_tag('a',
-                        array('href' => 'eudedashboard.php?courseid='.$record->courseid.'&view=courses&catid='.$category->catid));
+                        array('href' => 'eudedashboard.php?courseid='.$record['courseid'].'&view=courses&catid='.$category->catid));
             $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html .= html_writer::end_tag('a');
+            $html .= html_writer::tag('div', '',
+                    $this->local_eudedashboard_get_row_style('background-progression', $record['percentage']));
+            $html .= html_writer::end_tag('div');
             $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
         }
 
         $html .= html_writer::end_tag('tbody');
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom')),
-            array('th', get_string('averagegrade', 'local_eudecustom')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard')),
+            array('th', get_string('averagegrade', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::end_tag('table');
@@ -751,97 +465,85 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 3/7 del mockup
      * @param stdClass $category
      * @param array $data
      * @param stdClass $course
      * @return string
      */
-    public function eude_dashboard_courseinfo_oncategory_page($category, $data, $course) {
+    public function local_eudedashboard_eude_dashboard_courseinfo_oncategory_page($category, $data, $course) {
         $response = $this->header();
-        $dataconn = get_times_from_course($course->id);
-        $coursestats = get_data_coursestats_incourse ($course->id);
-        $cms = get_cmcompletion_course($course);
+        $dataconn = local_eudedashboard_get_times_from_course($course->id);
+        $coursestats = local_eudedashboard_get_data_coursestats_incourse ($course->id);
+        $cms = local_eudedashboard_get_cmcompletion_course($course);
 
         $countstudents = count($data);
+        $averagegrade = 0;
         $countaveragegrade = 0;
         $countfinished = 0;
-        $counter = 0;
         $studentsinrisk = 0;
 
         $urlback = 'eudedashboard.php?view=courses&catid='.$category->catid;
-        $html = print_return_generate_report($urlback);
+        $html = local_eudedashboard_print_return_generate_report($urlback);
 
-        if ( $coursestats == null ) {
-            $coursestats = new \stdClass();
-            $coursestats->activitiescompleted = 0;
-            $coursestats->activities = 0;
-            $coursestats->messagesforum = 0;
-            $coursestats->announcementsforum = 0;
-        }
-
-        $html2 = html_writer::tag('h2', get_string('students', 'local_eudecustom'), array('class' => 'section-title'));
+        $html2 = html_writer::tag('h2', get_string('students', 'local_eudedashboard'), array('class' => 'section-title'));
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html2 .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-coursedetail'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-coursedetail'));
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('activities', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('risklevel', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('activities', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard')),
+            array('th', get_string('temporalnote', 'local_eudedashboard')),
+            array('th', get_string('recoverynote', 'local_eudedashboard')),
+            array('th', get_string('finalrecoverynote', 'local_eudedashboard')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html2 .= html_writer::start_tag('tbody');
 
         foreach ($data as $student) {
-            $activitiesinfo = get_cmcompletion_user_course($student->userid, $course);
-            if ( $student->finalgrade == null ) {
-                $student->finalgrade = 0;
-            }
-            if ( $activitiesinfo['total'] == 0 ) {
-                $student->percentage = 0;
-            } else {
-                $student->percentage = $activitiesinfo['completed'] * 100 / $activitiesinfo['total'];
-            }
-
-            $countaveragegrade += intval($student->finalgrade);
-            $countfinished += intval($student->percentage);
-            $counter++;
-
-            $perc = intval($student->percentage);
-            $risk = get_risk_level_module($student->lasttimeaccess, intval($student->percentage));
-            if ($risk > 0) {
+            if ($student['risk'] > 0) {
                 $studentsinrisk ++;
             }
+            $countfinished += $student['finalization'];
+            if (is_numeric($student['finalgrade'])) {
+                $averagegrade += $student['finalgrade'];
+            }
+            $countaveragegrade ++;
 
             $html2 .= html_writer::start_tag('tr');
-            $html2 .= html_writer::tag('td', '',
-                        array('class' => "background-progression", 'colspan' => 5,
-                              'style' => 'width:'.$perc.'%;background-color:'. get_color($perc)));
-            $html2 .= html_writer::tag('td', $student->fullname);
-            $html2 .= html_writer::tag('td', $risk);
-            $html2 .= html_writer::tag('td', $activitiesinfo['completed'] . '/' . $activitiesinfo['total']);
-            $html2 .= html_writer::tag('td', intval($student->percentage) .'%');
-            $html2 .= html_writer::tag('td', number_format($student->finalgrade, 1));
+            $html2 .= html_writer::tag('td', $student['fullname']);
+            $html2 .= html_writer::tag('td', $student['risk']);
+            $html2 .= html_writer::tag('td', $student['activities']);
+            $html2 .= html_writer::tag('td', intval($student['finalization']) .'%');
+            $html2 .= html_writer::tag('td', $student['temporalnote']);
+            $html2 .= html_writer::tag('td', $student['recoverynote']);
+            $html2 .= html_writer::tag('td', $student['finalrecoverynote']);
+            $html2 .= html_writer::tag('td', $student['finalgrade']);
             $html2 .= html_writer::start_tag('td');
             $html2 .= html_writer::start_tag('a',
-                        array('href' => 'eudedashboard.php?catid='.$category->catid.'&aluid='.$student->userid.'&view=students'));
+                        array('href' => 'eudedashboard.php?catid='.$category->catid.'&aluid='.
+                            $student['userid'].'&view=students'));
             $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html2 .= html_writer::end_tag('a');
+            $html2 .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('background-progression',
+                $student['finalization']));
+            $html2 .= html_writer::end_tag('div');
             $html2 .= html_writer::end_tag('td');
             $html2 .= html_writer::end_tag('tr');
         }
 
         $html2 .= html_writer::end_tag('tbody');
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('risklevel', 'local_eudecustom')),
-            array('th', get_string('activities', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('risklevel', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('activities', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard')),
+            array('th', get_string('temporalnote', 'local_eudedashboard')),
+            array('th', get_string('recoverynote', 'local_eudedashboard')),
+            array('th', get_string('finalrecoverynote', 'local_eudedashboard')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html2 .= html_writer::end_tag('table');
@@ -853,7 +555,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('report-header-box');
         $html .= html_writer::start_div('box-header-title');
         $html .= html_writer::start_div('course-img', array('style' => 'float:left'));
-        $html .= course_image($course->id);
+        $html .= local_eudedashboard_course_image($course->id);
         $html .= html_writer::end_div();
 
         $html .= html_writer::start_div('bbbb', array('style' => 'float:left;margin-left: 20px;'));
@@ -862,28 +564,28 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= print_divcard_eude_header('col-3', $countstudents, get_string('enroledstudents', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-3',
+        $html .= local_eudedashboard_print_divcard_eude_header('col-3', $countstudents, get_string('enroledstudents', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-3',
             intval($countstudents == 0 ? 0 : ($studentsinrisk * 100) / $countstudents).'%',
-            get_string('studentsinrisk', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-3',
+            get_string('studentsinrisk', 'local_eudedashboard'), $studentsinrisk);
+        $html .= local_eudedashboard_print_divcard_eude_header('col-3',
             intval($percentage).'%',
-            get_string('finished', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-3',
-            number_format( ($countstudents == 0 ? 0 : $countaveragegrade / $countstudents), 1),
-            get_string('averagegrade', 'local_eudecustom'));
+            get_string('completed', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-3',
+            number_format( $countaveragegrade == 0 ? 0 : ($averagegrade / $countaveragegrade), 1),
+            get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $percentage));
+        $html .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('eude-progress-bar', $percentage));
         $html .= html_writer::end_div();
 
         // Cards.
-        $html .= $this->local_eudecustom_print_card($dataconn, 'student');
+        $html .= $this->local_eudedashboard_print_card($dataconn, 'student');
 
         // Teachers.
-        $html .= $this->local_eudecustom_print_card($dataconn, 'teacher');
+        $html .= $this->local_eudedashboard_print_card($dataconn, 'teacher');
 
         // Student data.
-        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
+        $html .= $this->local_eudedashboard_print_data($cms, $coursestats);
 
         $response .= $html.$html2.$this->footer();
         return $response;
@@ -891,59 +593,60 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 4/7 del mockup
      * @param stdClass $category
      * @param array $users
      * @return string
      */
-    public function eude_dashboard_studentlist_oncategory_page($category, $users) {
+    public function local_eudedashboard_eude_dashboard_studentlist_oncategory_page($category, $users) {
         $response = $this->header();
 
         $urlback = 'eudedashboard.php';
-        $html = print_return_generate_report($urlback);
-        $html .= print_header_category($category, 'students');
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+        $view = 'students';
+        $params = array('view' => $view);
+        $html .= local_eudedashboard_print_category_selector($category->catid, $params);
+        $html .= local_eudedashboard_print_header_category($category, $view);
 
-        $html .= html_writer::tag('h2', get_string('students', 'local_eudecustom'), array('class' => 'section-title'));
+        $html .= html_writer::tag('h2', get_string('students', 'local_eudedashboard'), array('class' => 'section-title'));
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-studentlist'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist'));
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('risklevel', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('activities', 'local_eudecustom')),
-            array('th', get_string('finished', 'local_eudecustom')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('risklevel', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('activities', 'local_eudedashboard')),
+            array('th', get_string('finished', 'local_eudedashboard')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::start_tag('tbody');
 
         foreach ($users as $data) {
-            $perc = intval($data->percent);
+            $perc = $data['perctotal'];
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
-            $html .= html_writer::tag('td', $data->firstname. ' '. $data->lastname);
-            $html .= html_writer::tag('td', get_risk_level($data->lastimeaccess, $data->suspended));
-            $html .= html_writer::tag('td', $data->totalfinished . '/' . $data->totalactivities);
+            $html .= html_writer::tag('td', $data['fullname']);
+            $html .= html_writer::tag('td', $data['risk']);
+            $html .= html_writer::tag('td', $data['totalactivitiescompleted'] . '/' . $data['totalactivitiescourse']);
             $html .= html_writer::tag('td', intval($perc) .'%');
-            $html .= html_writer::tag('td', number_format($data->finalgrade, 1));
+            $html .= html_writer::tag('td', number_format($data['totalfinalgrade'], 1));
             $html .= html_writer::start_tag('td');
             $html .= html_writer::start_tag('a',
-                        array('href' => 'eudedashboard.php?aluid='.$data->userid.'&view=students&catid='.$category->catid));
+                        array('href' => 'eudedashboard.php?aluid='.$data['userid'].'&view=students&catid='.$category->catid));
             $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html .= html_writer::end_tag('a');
+            $html .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('background-progression', $perc));
+            $html .= html_writer::end_tag('div');
             $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
         }
 
         $html .= html_writer::end_tag('tbody');
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularstudent', 'local_eudecustom')),
-            array('th', get_string('risklevel', 'local_eudecustom')),
-            array('th', get_string('activities', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('risklevel', 'local_eudedashboard')),
+            array('th', get_string('activities', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::end_tag('table');
@@ -956,61 +659,53 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 5/7 del mockup
      * @param int $categoryid
      * @param array $data
      * @param stdClass $alu
      * @return string
      */
-    public function eude_dashboard_studentinfo_oncategory_page($categoryid, $data, $alu) {
-        $dataconn = get_times_from_user($alu->id, $categoryid, 'students');
-        $coursestats = get_data_coursestats_bycourse ($categoryid, $alu->id);
+    public function local_eudedashboard_eude_dashboard_studentinfo_oncategory_page($categoryid, $data, $alu) {
+        $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
+        $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
 
-        $countfinalgrades = 0;
-        $totalfinalgrade = 0;
-        $totalcourses = count($data);
-        $totalactivitiescompleted = 0;
-        $totalactivitiescourse = 0;
-        $countaveragegrade = 0;
-        $perctotal = 0;
+        $params = $this->page->url->params();
+        $params['tab'] = 'activities';
+        $activitiesparams = $params;
+        $params['tab'] = 'modules';
+        $modulesparams = $params;
+        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
+        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
 
-        $html2 = html_writer::tag('h2', get_string('coursesstudentincategory', 'local_eudecustom'),
-            array('class' => 'section-title'));
-        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
+        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
+        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'));
+        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'), array('class' => 'active'));
+        $html2 .= html_writer::end_tag('div');
+
+        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html2 .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-studentdetail'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentdetail'));
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('activitiesfinished', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('activitiesfinished', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html2 .= html_writer::start_tag('tbody');
         foreach ($data as $record) {
             $course = get_course($record->courseid);
-            $activitiesinfo = get_cmcompletion_user_course($alu->id, $course);
+            $activitiesinfo = local_eudedashboard_get_cmcompletion_user_course($alu->id, $course);
             if ( $record->finalgrade == null ) {
                 $record->finalgrade = 0;
-            } else {
-                $countfinalgrades++;
-                $totalfinalgrade += $record->finalgrade;
             }
 
             if ( $activitiesinfo['total'] == 0 ) {
                 $perc = 0;
             } else {
                 $perc = intval($activitiesinfo['completed'] * 100 / $activitiesinfo['total']);
-                $perctotal += $perc;
             }
 
-            $totalactivitiescompleted += $activitiesinfo['completed'];
-            $totalactivitiescourse += $activitiesinfo['total'];
-
-            $countaveragegrade += $record->finalgrade;
             $html2 .= html_writer::start_tag('tr');
-            $html2 .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html2 .= html_writer::tag('td', $record->fullname);
             $html2 .= html_writer::tag('td', $activitiesinfo['completed'] . '/' . $activitiesinfo['total']);
             $html2 .= html_writer::tag('td', $perc .'%');
@@ -1020,6 +715,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
                         array('href' => 'eudedashboard.php?catid='.$categoryid.'&courseid='.$record->courseid.'&view=courses'));
             $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html2 .= html_writer::end_tag('a');
+            $html2 .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('background-progression', $perc));
+            $html2 .= html_writer::end_tag('div');
             $html2 .= html_writer::end_tag('td');
             $html2 .= html_writer::end_tag('tr');
         }
@@ -1027,26 +724,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::end_tag('tbody');
         // Generating tfoot for this table.
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('activitiesfinished', 'local_eudecustom')),
-            array('th', get_string('completed', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('finalgrade', 'local_eudecustom')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('activitiesfinished', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html2 .= html_writer::end_tag('table');
         $html2 .= html_writer::end_tag('div');
 
         $urlback = 'eudedashboard.php?view=students&catid='.$categoryid;
-        $html = print_return_generate_report($urlback);
-        if ( $coursestats == null ) {
-            $coursestats = new \stdClass();
-            $coursestats->activitiescompleted = 0;
-            $coursestats->activities = 0;
-            $coursestats->messagesforum = 0;
-            $coursestats->announcementsforum = 0;
-        }
-        $perc = $perctotal / $totalcourses;
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+        $params = array('view' => 'students', 'aluid' => $alu->id, 'tab' => $params['tab']);
+        $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
         $html .= html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
@@ -1062,26 +752,27 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= print_divcard_eude_header('col-4', $totalactivitiescompleted.'/'.$totalactivitiescourse,
-                    get_string('activities', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-4', $totalcourses, get_string('courses', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 : $countaveragegrade / count($data), 1),
-                    get_string('averagegrade', 'local_eudecustom'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['totalactivitiescompleted'].'/'.
+            $infodetail['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
+            $infodetail['countaveragegrade'] / count($data), 1), get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $perc));
+        $html .= html_writer::tag('div', '',
+            $this->local_eudedashboard_get_row_style('eude-progress-bar', $infodetail['perctotal']));
         $html .= html_writer::end_div();
 
         // Cards.
         $html .= html_writer::start_div('dashboard-container studenttime col-12 col-lg-4 eude-data-info',
             array('id' => 'studenttime'));
         $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::div(get_string('timestudents', 'local_eudecustom'), 'dashboard-investedtimes-title');
+        $html .= html_writer::div(get_string('timestudents', 'local_eudedashboard'), 'dashboard-investedtimes-title');
         $html .= html_writer::start_div('dashboard_singlemodule_wrapper');
         $html .= html_writer::start_div('dashboard-investedtimes-wrapper');
         $html .= html_writer::start_div('investedtimestotalhourswrapper');
         $html .= html_writer::start_div('investedtimestotalhours');
         $html .= html_writer::span(gmdate("H", $dataconn['students']['totaltime']), 'eude-bignumber');
-        $html .= html_writer::span(get_string('totalhours', 'local_eudecustom'), 'eude-smalltext');
+        $html .= html_writer::span(get_string('totalhours', 'local_eudedashboard'), 'eude-smalltext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimeshourschart');
         $html .= html_writer::start_div('eude-row eude-col-6 chart-container investedtimeschart');
@@ -1131,19 +822,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('investedtimesaccesses');
         $html .= html_writer::start_div('investedtimestotalaccesses');
         $html .= html_writer::span($dataconn['students']['accesses'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimesaverageaccesses');
         $html .= html_writer::span(gmdate("H:i", $dataconn['students']['averagetime']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('investedtimeslastdaysaccesses');
-        $html .= html_writer::div(get_string('lastdays', 'local_eudecustom'), 'investedtimeslastdaysaccessestitle');
+        $html .= html_writer::div(get_string('lastdays', 'local_eudedashboard'), 'investedtimeslastdaysaccessestitle');
         $html .= html_writer::start_div('investedtimeslastdaysaccessesinfo');
         $html .= html_writer::span($dataconn['students']['accesseslastdays'], 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('accesses', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::span(gmdate("H:i", $dataconn['students']['averagetimelastdays']), 'eude-mediumnumber');
-        $html .= html_writer::span(get_string('averagetime', 'local_eudecustom'), 'eude-mediumtext');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
@@ -1154,9 +845,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         // Student data.
-        $cms['completed'] = $totalactivitiescompleted;
-        $cms['total'] = $totalactivitiescourse;
-        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
+        $html .= $this->local_eudedashboard_print_data_student($infodetail);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;
@@ -1164,57 +853,57 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 6/7 del mockup
      * @param stdClass $category
      * @param array $users
      * @return string
      */
-    public function eude_dashboard_teacherlist_oncategory_page($category, $users) {
+    public function local_eudedashboard_eude_dashboard_teacherlist_oncategory_page($category, $users) {
         $response = $this->header();
 
         $urlback = 'eudedashboard.php';
-        $html = print_return_generate_report($urlback);
-        $html .= print_header_category($category, 'teachers');
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+        $view = 'teachers';
+        $params = array('view' => $view);
+        $html .= local_eudedashboard_print_category_selector($category->catid, $params);
+        $html .= local_eudedashboard_print_header_category($category, $view);
 
-        $html .= html_writer::tag('h2', get_string('teachers', 'local_eudecustom'), array('class' => 'section-title'));
+        $html .= html_writer::tag('h2', get_string('teachers', 'local_eudedashboard'), array('class' => 'section-title'));
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
         $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-teacherlist'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-teacherlist'));
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularteacher', 'local_eudecustom')),
-            array('th', get_string('activitiesgraded', 'local_eudecustom')),
-            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('lastaccess', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularteacher', 'local_eudedashboard')),
+            array('th', get_string('activitiesgraded', 'local_eudedashboard')),
+            array('th', get_string('passedstudents', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::start_tag('tbody');
 
-        foreach ($users as $id => $data) {
-            $perc = intval($data['percent']);
-
+        foreach ($users as $data) {
             $html .= html_writer::start_tag('tr');
-            $html .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html .= html_writer::tag('td', $data['firstname']. ' '. $data['lastname']);
             $html .= html_writer::tag('td',  $data['totalactivitiesgradedcategory'] . '/' . $data['totalactivities']);
-            $html .= html_writer::tag('td', $perc .'%');
+            $html .= html_writer::tag('td', $data['percent'] .'%');
             $html .= html_writer::tag('td', $data['lastaccess']);
             $html .= html_writer::start_tag('td');
             $html .= html_writer::start_tag('a',
-                        array('href' => 'eudedashboard.php?teacherid='.$id.'&view=teachers&catid='.$category->catid));
+                        array('href' => 'eudedashboard.php?teacherid='.$data['userid'].'&view=teachers&catid='.$category->catid));
             $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html .= html_writer::end_tag('a');
+            $html .= html_writer::tag('div', '',
+                $this->local_eudedashboard_get_row_style('background-progression', $data['percent']));
+            $html .= html_writer::end_tag('div');
             $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
         }
 
         $html .= html_writer::end_tag('tbody');
         $html .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularteacher', 'local_eudecustom')),
-            array('th', get_string('activitiesgraded', 'local_eudecustom')),
-            array('th', get_string('passedstudents', 'local_eudecustom')),
-            array('th', get_string('lastaccess', 'local_eudecustom')),
+            array('th', get_string('singularteacher', 'local_eudedashboard')),
+            array('th', get_string('activitiesgraded', 'local_eudedashboard')),
+            array('th', get_string('passedstudents', 'local_eudedashboard')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::end_tag('table');
@@ -1226,33 +915,337 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Render custom for eude new dashboard.
-     * Pantalla 7/7 del mockup
+     * @param int $categoryid
+     * @param array $data
+     * @param stdClass $alu
+     * @return string
+     */
+    public function local_eudedashboard_eude_dashboard_studentinfo_oncategory_page_activities($categoryid, $data, $alu) {
+        $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
+        $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
+
+        $params = $this->page->url->params();
+        $params['tab'] = 'activities';
+        $activitiesparams = $params;
+        $params['tab'] = 'modules';
+        $modulesparams = $params;
+        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
+        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
+
+        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
+        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'), array('class' => 'active'));
+        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'));
+        $html2 .= html_writer::end_tag('div');
+
+        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
+        $html2 .= html_writer::start_tag('table',
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-teacherdetail'));
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', get_string('singularactivity', 'local_eudedashboard')),
+            array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('deliveried', 'local_eudedashboard')),
+            array('th', get_string('grade', 'local_eudedashboard')),
+            array('th', get_string('feedback', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
+        $html2 .= html_writer::start_tag('tbody');
+
+        foreach ($data as $record) {
+            $html2 .= html_writer::start_tag('tr');
+            $html2 .= html_writer::tag('td', $record['activity']);
+            $html2 .= html_writer::tag('td', $record['module']);
+            $html2 .= html_writer::tag('td', $record['deliveried']);
+            $html2 .= html_writer::tag('td', $record['grade']);
+            $html2 .= html_writer::tag('td', $record['feedback']);
+            $html2 .= html_writer::start_tag('td');
+            $html2 .= html_writer::start_tag('a',
+                        array('href' => 'eudedashboard.php?courseid='.$record['moduleid'].'&view=courses&catid='.$categoryid));
+            $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
+            $html2 .= html_writer::end_tag('a');
+            $html2 .= html_writer::end_tag('td');
+            $html2 .= html_writer::end_tag('tr');
+        }
+
+        $html2 .= html_writer::end_tag('tbody');
+        // Generating tfoot for this table.
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('activitiesfinished', 'local_eudedashboard')),
+            array('th', get_string('completed', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('finalgrade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
+        $html2 .= html_writer::end_tag('table');
+        $html2 .= html_writer::end_tag('div');
+
+        $urlback = 'eudedashboard.php?view=students&catid='.$categoryid;
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+
+        $params = array('view' => 'students', 'name' => $params['tab'], 'aluid' => $alu->id);
+        $html .= local_eudedashboard_print_category_selector($categoryid, $params);
+
+        $html .= html_writer::start_div('dashboard-row');
+        $html .= html_writer::start_div('eude-block-header');
+        $html .= html_writer::start_div('report-header-box');
+        $html .= html_writer::start_div('box-header-title');
+        $html .= html_writer::start_div('course-img', array('style' => 'float:left'));
+        $html .= $this->output->user_picture($alu, array('size' => '70px'));
+        $html .= html_writer::end_div();
+
+        $html .= html_writer::start_div('bbbb', array('style' => 'float:left;margin-left: 20px;'));
+        $html .= html_writer::tag('h4', $alu->firstname. ' ' . $alu->lastname);
+        $html .= html_writer::tag('h5', $alu->email);
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('box-header-values');
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['totalactivitiescompleted'].'/'.
+            $infodetail['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
+            $infodetail['countaveragegrade'] / count($data), 1), get_string('averagegrade', 'local_eudedashboard'));
+        $html .= html_writer::end_div();
+        $html .= html_writer::tag('div', '',
+            $this->local_eudedashboard_get_row_style('eude-progress-bar', $infodetail['perctotal']));
+        $html .= html_writer::end_div();
+
+        // Cards.
+        $html .= html_writer::start_div('dashboard-container studenttime col-12 col-lg-4 eude-data-info',
+            array('id' => 'studenttime'));
+        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
+        $html .= html_writer::div(get_string('timestudents', 'local_eudedashboard'), 'dashboard-investedtimes-title');
+        $html .= html_writer::start_div('dashboard_singlemodule_wrapper');
+        $html .= html_writer::start_div('dashboard-investedtimes-wrapper');
+        $html .= html_writer::start_div('investedtimestotalhourswrapper');
+        $html .= html_writer::start_div('investedtimestotalhours');
+        $html .= html_writer::span(gmdate("H", $dataconn['students']['totaltime']), 'eude-bignumber');
+        $html .= html_writer::span(get_string('totalhours', 'local_eudedashboard'), 'eude-smalltext');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('investedtimeshourschart');
+        $html .= html_writer::start_div('eude-row eude-col-6 chart-container investedtimeschart');
+        $html .= html_writer::start_tag('ul', array('class' => 'chart'));
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percmon'].'% / 1); background-color: #7963bb;'));
+        $html .= html_writer::span('M', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['mon']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['perctue'].'% / 1); background-color: #a695da;'));
+        $html .= html_writer::span('T', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['tue']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percwed'].'% / 1); background-color: #7963bb;'));
+        $html .= html_writer::span('W', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['wed']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percthu'].'% / 1); background-color: #a695da;'));
+        $html .= html_writer::span('T', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['thu']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percfri'].'% / 1); background-color: #7963bb;'));
+        $html .= html_writer::span('F', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['fri']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percsat'].'% / 1); background-color: #a695da;'));
+        $html .= html_writer::span('S', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['sat']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip', 'style' => 'height:calc('.
+            $dataconn['students']['percsun'].'% / 1); background-color: #7963bb;'));
+        $html .= html_writer::span('S', 'eude-bar-daytext');
+        $html .= html_writer::span(gmdate("H:i:s", $dataconn['students']['sun']), 'eude-tooltiptext');
+        $html .= html_writer::end_tag('li');
+        $html .= html_writer::start_tag('li', array('class' => 'eude-bar eude-tooltip eude-hiddenli',
+            'style' => 'height:calc(100% / 1); background-color: white;'));
+        $html .= html_writer::end_tag('ul');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('investedtimesaccesswrapper');
+        $html .= html_writer::start_div('investedtimesaccesses');
+        $html .= html_writer::start_div('investedtimestotalaccesses');
+        $html .= html_writer::span($dataconn['students']['accesses'], 'eude-mediumnumber');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('investedtimesaverageaccesses');
+        $html .= html_writer::span(gmdate("H:i", $dataconn['students']['averagetime']), 'eude-mediumnumber');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('investedtimeslastdaysaccesses');
+        $html .= html_writer::div(get_string('lastdays', 'local_eudedashboard'), 'investedtimeslastdaysaccessestitle');
+        $html .= html_writer::start_div('investedtimeslastdaysaccessesinfo');
+        $html .= html_writer::span($dataconn['students']['accesseslastdays'], 'eude-mediumnumber');
+        $html .= html_writer::span(get_string('accesses', 'local_eudedashboard'), 'eude-mediumtext');
+        $html .= html_writer::span(gmdate("H:i", $dataconn['students']['averagetimelastdays']), 'eude-mediumnumber');
+        $html .= html_writer::span(get_string('averagetime', 'local_eudedashboard'), 'eude-mediumtext');
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+
+        // Student data.
+        $html .= $this->local_eudedashboard_print_data_student($infodetail);
+
+        $response = $this->header().$html.$html2.$this->footer();
+        return $response;
+    }
+
+    /**
+     * Render custom for eude new dashboard.
+     * @param int $categoryid
+     * @param array $records
+     * @param stdClass $tea
+     * @return string
+     */
+    public function local_eudedashboard_eude_dashboard_teacherinfo_oncategory_page_activities($categoryid, $records, $tea) {
+        $header = local_eudedashboard_get_detail_teacher_header($categoryid, $tea->id);
+        $dataconn = local_eudedashboard_get_times_from_user($tea->id, $categoryid, 'teachers');
+        $coursestats = local_eudedashboard_get_data_coursestats_bycourse_teacher ($categoryid, $tea->id);
+
+        $params = $this->page->url->params();
+        $params['tab'] = 'modules';
+        $modulesparams = $params;
+        $params['tab'] = 'activities';
+        $activitiesparams = $params;
+        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
+        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
+
+        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
+        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'), array('class' => 'active'));
+        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'));
+        $html2 .= html_writer::end_tag('div');
+
+        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
+        $html2 .= html_writer::start_tag('table',
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-teacherdetail'));
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
+            array('th', ''),
+            array('th', get_string('singularactivity', 'local_eudedashboard')),
+            array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('singularstudent', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('deliveried', 'local_eudedashboard')),
+            array('th', get_string('dategraded', 'local_eudedashboard')),
+            array('th', get_string('grade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
+        $html2 .= html_writer::start_tag('tbody');
+
+        foreach ($records as $record) {
+            $html2 .= html_writer::start_tag('tr');
+            $html2 .= html_writer::tag('td', '');
+            $html2 .= html_writer::tag('td', $record['activity']);
+            $html2 .= html_writer::tag('td', $record['module']);
+            $html2 .= html_writer::tag('td', $record['student']);
+            $html2 .= html_writer::tag('td', $record['deliveried']);
+            $html2 .= html_writer::tag('td', $record['dategraded']);
+            $html2 .= html_writer::tag('td', $record['grade']);
+            $html2 .= html_writer::start_tag('td');
+            $html2 .= html_writer::start_tag('a',
+                        array('href' => 'eudedashboard.php?courseid='.$record['moduleid'].'&view=courses&catid='.$categoryid));
+            $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
+            $html2 .= html_writer::end_tag('a');
+            $html2 .= html_writer::end_tag('td');
+            $html2 .= html_writer::end_tag('tr');
+        }
+
+        $html2 .= html_writer::end_tag('tbody');
+        $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
+            array('th', ''),
+            array('th', get_string('singularactivity', 'local_eudedashboard')),
+            array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('singularstudent', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('deliveried', 'local_eudedashboard')),
+            array('th', get_string('dategraded', 'local_eudedashboard')),
+            array('th', get_string('grade', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled')),
+        ));
+        $html2 .= html_writer::end_tag('table');
+        $html2 .= html_writer::end_tag('div');
+
+        $urlback = 'eudedashboard.php?view=teachers&catid='.$categoryid;
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+        $params = array('view' => 'teachers', 'teacherid' => $tea->id, 'tab' => $params['tab']);
+        $html .= local_eudedashboard_print_category_selector($categoryid, $params);
+
+        $html .= html_writer::start_div('box-header-values');
+        $html .= html_writer::start_div('dashboard-row');
+        $html .= html_writer::start_div('eude-block-header');
+        $html .= html_writer::start_div('report-header-box');
+        $html .= html_writer::start_div('box-header-title');
+        $html .= html_writer::start_div('course-img', array('style' => 'float:left'));
+        $html .= $this->output->user_picture($tea, array('size' => '70px'));
+        $html .= html_writer::end_div();
+
+        $html .= html_writer::start_div('bbbb', array('style' => 'float:left;margin-left: 20px;'));
+        $html .= html_writer::tag('h4', $tea->firstname. ' ' . $tea->lastname);
+        $html .= html_writer::tag('h5', $tea->email);
+        $html .= html_writer::end_div();
+        $html .= html_writer::end_div();
+        $html .= html_writer::start_div('box-header-values');
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['teacheractivitiesgraded'].'/'.
+                $header['teacheractivitiestotal'], get_string('activitiesgraded', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['modules'], get_string('courses', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['approved'].'%',
+                    get_string('passedstudents', 'local_eudedashboard'));
+        $html .= html_writer::end_div();
+        $html .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('eude-progress-bar', $header['approved']));
+        $html .= html_writer::end_div();
+
+        $html .= $this->local_eudedashboard_print_card($dataconn, 'teacher');
+
+        // Cards data.
+        $html .= $this->local_eudedashboard_print_data_teacher($coursestats);
+
+        $response = $this->header().$html.$html2.$this->footer();
+        return $response;
+    }
+
+    /**
+     * Render custom for eude new dashboard.
      * @param int $categoryid
      * @param array $users
      * @param stdClass $tea
      * @return string
      */
-    public function eude_dashboard_teacherinfo_oncategory_page($categoryid, $users, $tea) {
-        $dataconn = get_times_from_user($tea->id, $categoryid, 'teachers');
-        $coursestats = get_data_coursestats_bycourse ($categoryid, $tea->id);
+    public function local_eudedashboard_eude_dashboard_teacherinfo_oncategory_page_modules($categoryid, $users, $tea) {
+        $header = local_eudedashboard_get_detail_teacher_header($categoryid, $tea->id);
+        $dataconn = local_eudedashboard_get_times_from_user($tea->id, $categoryid, 'teachers');
+        $coursestats = local_eudedashboard_get_data_coursestats_bycourse_teacher ($categoryid, $tea->id);
 
         $totalcourses = 0;
         $totalactivitiescompleted = 0;
         $totalactivitiescourse = 0;
         $totalfinalgradeperc = 0;
 
-        $html2 = html_writer::tag('h2', get_string('coursesteacherincategory', 'local_eudecustom'),
-            array('class' => 'section-title'));
-        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list');
+        $params = $this->page->url->params();
+        $params['tab'] = 'activities';
+        $activitiesparams = $params;
+        $params['tab'] = 'modules';
+        $modulesparams = $params;
+        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
+        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
+
+        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
+        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'));
+        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'), array('class' => 'active'));
+        $html2 .= html_writer::end_tag('div');
+
+        $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html2 .= html_writer::start_tag('table',
-            array('id' => 'local_eudecustom_datatable', 'class' => 'table eudecustom-teacherdetail'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-teacherdetail'));
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('thead', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('activitiesgraded', 'local_eudecustom')),
-            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('lastaccess', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('activitiesgraded', 'local_eudedashboard')),
+            array('th', get_string('passedstudents', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html2 .= html_writer::start_tag('tbody');
 
@@ -1264,7 +1257,6 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $totalfinalgradeperc += $perc;
 
             $html2 .= html_writer::start_tag('tr');
-            $html2 .= html_writer::tag('td', '', $this->local_eudecustom_get_row_style('background-progression', $perc));
             $html2 .= html_writer::tag('td', $data['coursename']);
             $html2 .= html_writer::tag('td', $data['totalactivitiesgradedcategory'] . '/' . $data['totalactivities']);
             $html2 .= html_writer::tag('td', $perc .'%');
@@ -1274,24 +1266,29 @@ class eudedashboard_renderer extends \plugin_renderer_base {
                         array('href' => 'eudedashboard.php?courseid='.$id.'&view=courses&catid='.$categoryid));
             $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html2 .= html_writer::end_tag('a');
+            $html2 .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('background-progression', $perc));
+            $html2 .= html_writer::end_tag('div');
             $html2 .= html_writer::end_tag('td');
             $html2 .= html_writer::end_tag('tr');
         }
 
         $html2 .= html_writer::end_tag('tbody');
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', ''),
-            array('th', get_string('singularcourse', 'local_eudecustom')),
-            array('th', get_string('activitiesgraded', 'local_eudecustom')),
-            array('th', get_string('passedstudents', 'local_eudecustom'), array('class' => 'mustfilter')),
-            array('th', get_string('lastaccess', 'local_eudecustom')),
-            array('th', '', array('class' => 'sorting_disabled')),
+            array('th', get_string('singularcourse', 'local_eudedashboard')),
+            array('th', get_string('activitiesgraded', 'local_eudedashboard')),
+            array('th', get_string('passedstudents', 'local_eudedashboard'), array('class' => 'mustfilter')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
+            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html2 .= html_writer::end_tag('table');
         $html2 .= html_writer::end_tag('div');
 
         $urlback = 'eudedashboard.php?view=teachers&catid='.$categoryid;
-        $html = print_return_generate_report($urlback);
+        $html = local_eudedashboard_print_return_generate_report($urlback);
+
+        $selectparams = array('view' => 'teachers', 'teacherid' => $tea->id, 'tab' => $params['tab']);
+        $html .= local_eudedashboard_print_category_selector($categoryid, $selectparams);
+
         $perc = intval( $totalcourses == 0 ? 0 : $totalfinalgradeperc / $totalcourses);
 
         $html .= html_writer::start_div('dashboard-row');
@@ -1308,29 +1305,21 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= print_divcard_eude_header('col-4', $totalactivitiescompleted.'/'.$totalactivitiescourse,
-                    get_string('activitiesgraded', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-4', $totalcourses, get_string('courses', 'local_eudecustom'));
-        $html .= print_divcard_eude_header('col-4', $perc.'%',
-                    get_string('passedstudents', 'local_eudecustom'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['teacheractivitiesgraded'].'/'.
+                $header['teacheractivitiestotal'], get_string('activitiesgraded', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['modules'], get_string('courses', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['approved'].'%',
+                    get_string('passedstudents', 'local_eudedashboard'));
         $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', $this->local_eudecustom_get_row_style('eude-progress-bar', $perc));
+        $html .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('eude-progress-bar', $header['approved']));
         $html .= html_writer::end_div();
 
-        if ( $coursestats == null ) {
-            $coursestats = new \stdClass();
-            $coursestats->activitiescompleted = 0;
-            $coursestats->activities = 0;
-            $coursestats->messagesforum = 0;
-            $coursestats->announcementsforum = 0;
-        }
-
-        $html .= $this->local_eudecustom_print_card($dataconn, 'teacher');
+        $html .= $this->local_eudedashboard_print_card($dataconn, 'teacher');
 
         // Student data.
         $cms['completed'] = $totalactivitiescompleted;
         $cms['total'] = $totalactivitiescourse;
-        $html .= $this->local_eudecustom_print_data($cms, $coursestats);
+        $html .= $this->local_eudedashboard_print_data_teacher($coursestats);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;

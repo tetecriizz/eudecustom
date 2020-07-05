@@ -17,15 +17,15 @@
 /**
  * A scheduled task.
  *
- * @package    local_eudecustom
+ * @package    local_eudedashboard
  * @copyright  2020 Planificación Entornos Tecnológicos {@link http://www.pentec.es/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_eudecustom\task;
+namespace local_eudedashboard\task;
 
 defined('MOODLE_INTERNAL') || die();
 /**
- * Simple task to run the Eudecustom cron.
+ * Simple task to run the eudedashboard cron.
  *
  * @copyright  2020 Planificación Entornos Tecnológicos {@link http://www.pentec.es/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -38,7 +38,7 @@ class cron_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('pluginname', 'local_eudecustom');
+        return get_string('pluginname', 'local_eudedashboard');
     }
 
     /**
@@ -47,18 +47,46 @@ class cron_task extends \core\task\scheduled_task {
      *
      */
     public function execute() {
-        global $CFG;
-        require_once($CFG->dirroot . '/local/eudecustom/utils.php');
-        if ( isset($CFG->local_eudecustom_category) && !empty($CFG->local_eudecustom_category) ) {
-            $categories = explode(',', $CFG->local_eudecustom_category);
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/local/eudedashboard/utils.php');
+        if ( isset($CFG->local_eudedashboard_category) && !empty($CFG->local_eudedashboard_category) ) {
+            $categories = explode(',', $CFG->local_eudedashboard_category);
             // Iterate each category to refresh time of users.
             foreach ($categories as $category) {
-                echo refresh_time_invested($category);
+                $editions = local_eudedashboard_get_editions_from_confcat($category);
+                if (count($editions) > 0 ) {
+                    foreach ($editions as $edition) {
+                        echo local_eudedashboard_refresh_time_invested($edition->id);
+                    }
+                }
             }
-            // Call function to check if has to send emails when program is completed.
-            local_eudecustom_check_completion_program($category);
+
+            // Check program completion.
+            foreach ($categories as $category) {
+                $programs = $DB->get_records('course_categories', array('parent' => $category));
+                foreach ($programs as $program) {
+                    $programcat = \core_course_category::get($program->id);
+                    $programcourses = count($programcat->get_courses(array('recursive' => true)));
+                    $students = local_eudedashboard_get_students_from_program($program->id);
+                    if (empty($students)) {
+                        continue;
+                    }
+
+                    foreach ($students as $student) {
+                        $hasapprovedprogram = local_eudedashboard_user_has_approved_program($student->userid, $program->id);
+                        if ($hasapprovedprogram) {
+                            $notified = $DB->count_records('local_eudedashboard_notifs',
+                                    array('categoryid' => $program->id, 'userid' => $student->userid)) > 0;
+                            if (!$notified) {
+                                local_eudedashboard_complete_program($program, $student->userid);
+                            }
+                        }
+                    }
+
+                }
+            }
         } else {
-            echo 'The "local_eudecustom_category" configuration is not set!';
+            echo 'The "local_eudedashboard_category" configuration is not set!';
         }
     }
 }

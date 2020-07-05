@@ -1,61 +1,86 @@
-/* BEGIN EUDEDASHBOARD */
-
+/**
+ * File eudedashboard_style.css.
+ * Contains base styles for plugin.
+ */
 @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
-#page-local-eudecustom-eudedashboard{
+#page-local-eudedashboard-eudedashboard{
     background-color: #f2f2f2;
     box-sizing: border-box;
     font-family: 'Bai Jamjuree', sans-serif;
 }
-#page-local-eudecustom-eudedashboard a {
+#page-local-eudedashboard-eudedashboard a {
     color: #691A32;
 }
-#page-local-eudecustom-eudedashboard #page-content {
+#page-local-eudedashboard-eudedashboard #page-content {
   padding-bottom: 2em !important;
 }
 
-/* card header */
-#page-local-eudecustom-eudedashboard #page-header {
-    padding-top: 5em;
-    background-color: transparent;
+/* top tabs */
+.eudedashboard-toplinks {
+    max-width: 92%;
+    padding: 0 2em;
+    margin: 15px auto 0 auto;
+    text-transform: uppercase;
 }
-#page-local-eudecustom-eudedashboard #page-header .card,
-#page-local-eudecustom-eudedashboard #page-header .card-body{
+.eudedashboard-toplinks span.eude_topmenu_active a{
+    color: #444444 !important;
+    opacity: .5;
+    font-size: 18px;
+    font-weight: bold;
+}
+.eudedashboard-toplinks .eude_topmenu_active.active a{
+    color: #6f193d !important;
+    opacity: 1;
+}
+
+/* card header */
+#page-local-eudedashboard-eudedashboard #page-header {
+    padding-top: 1em;
+    background-color: transparent;
+    text-transform: uppercase;
+    text-align: center;
+}
+#page-local-eudedashboard-eudedashboard #page-header h1 {
+    font-size: 24px;
+}
+#page-local-eudedashboard-eudedashboard #page-header .card,
+#page-local-eudedashboard-eudedashboard #page-header .card-body{
     border: none;
     background: transparent;
 }
 
-#page-local-eudecustom-eudedashboard #page-header .card-body {
+#page-local-eudedashboard-eudedashboard #page-header .card-body {
     padding-bottom: 0px;
 }
 
-#page-local-eudecustom-eudedashboard #page-header .card .page-context-header h1{
+#page-local-eudedashboard-eudedashboard #page-header .card .page-context-header h1{
     font-family: 'Bai Jamjuree', sans-serif;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 28px;
 }
-#page-local-eudecustom-eudedashboard #page-header,
-#page-local-eudecustom-eudedashboard #page-header .mr-auto{
+#page-local-eudedashboard-eudedashboard #page-header,
+#page-local-eudedashboard-eudedashboard #page-header .mr-auto{
     margin: auto;
 }
 
 
 /* top info */
-#page-local-eudecustom-eudedashboard #region-main {
+#page-local-eudedashboard-eudedashboard #region-main {
     border: none;
     background: transparent;
         padding: 0 2em;
 }
 @media only screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard #page-header #page-mast>h1 {
+    #page-local-eudedashboard-eudedashboard #page-header #page-mast>h1 {
         padding-top: 15px;
     }
-    #page-local-eudecustom-eudedashboard #region-main {
+    #page-local-eudedashboard-eudedashboard #region-main {
         padding: 0 15px;
     }
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box {
     max-width: 100%;
     overflow: visible;
     display: flex;
@@ -64,36 +89,36 @@
     margin-bottom: 0px;
     padding-bottom: 0;
 }
-#page-local-eudecustom-eudedashboard #region-main .eude-block-header .report-header-box {
+#page-local-eudedashboard-eudedashboard #region-main .eude-block-header .report-header-box {
     padding-bottom: 15px;
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-left,
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-right  {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-left,
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-right  {
     width: 50%;
     border-radius: 2px;
     overflow: visible;
 }
 @media only screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard #region-main .report-header-box {
+    #page-local-eudedashboard-eudedashboard #region-main .report-header-box {
         display: block;
         float: left;
     }
-    #page-local-eudecustom-eudedashboard #region-main .report-header-box-left,
-    #page-local-eudecustom-eudedashboard #region-main .report-header-box-right {
+    #page-local-eudedashboard-eudedashboard #region-main .report-header-box-left,
+    #page-local-eudedashboard-eudedashboard #region-main .report-header-box-right {
         width:100% !important;
         float: left;
         padding: 0 !important;
         margin-bottom: 10px;
     }
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-left{
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-left{
     padding-right: .5em;
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-right{
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-right{
     padding-left: .5em;
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-left .eude-card,
-#page-local-eudecustom-eudedashboard #region-main .report-header-box-right .eude-card {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-left .eude-card,
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box-right .eude-card {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
     border-radius: 2px;
@@ -105,7 +130,7 @@
     max-height: 115px;
 }
 
-#page-local-eudecustom-eudedashboard #region-main .eude-card:before {
+#page-local-eudedashboard-eudedashboard #region-main .eude-card:before {
     content: "";
     background-color: #691A32;
     width: 8px;
@@ -114,9 +139,9 @@
     left: 0;
     top: calc(50% - 29px);
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .title,
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .value,
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .sub-title{
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .title,
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .value,
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .sub-title{
     width: 100%;
     float: left;
     text-align: center;
@@ -124,19 +149,27 @@
     font-family: 'Bai Jamjuree', sans-serif;
 }
 
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .title {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .title {
     font-size: 15px;
     color: #404040;
     opacity: 0.6;
     line-height: 15px;
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .value {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .value {
     color: #691A32;
     font-size: 28px;
     font-weight: bold;
     letter-spacing: 5px;
 }
-#page-local-eudecustom-eudedashboard #region-main .report-header-box div .sub-title {
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .value.value-risk {
+    width: auto;
+}
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .substring.sub-title-risk {
+    float: left;
+    margin: 3px 0 0 5px;
+    opacity: .6;
+}
+#page-local-eudedashboard-eudedashboard #region-main .report-header-box div .sub-title {
     font-size: 12px;
     color: #404040;
     opacity: 0.6;
@@ -169,7 +202,7 @@
     font-size: 14px;
 }
 
-#page-local-eudecustom-eudedashboard thead th{
+#page-local-eudedashboard-eudedashboard thead th{
     background: #F2F4F8;
     border-bottom: 0;
     font-family: 'Bai Jamjuree', sans-serif;
@@ -182,31 +215,23 @@ table.dataTable thead .sorting_disabled:after {
     display: none;
 }
 
-#page-local-eudecustom-eudedashboard table:not(.eude-table-categories) thead th:first-child{
-    padding: 0 !important;
-    width: 0.1px !important;
-}
-
-#page-local-eudecustom-eudedashboard td a,
-#page-local-eudecustom-eudedashboard td label {
+#page-local-eudedashboard-eudedashboard td a,
+#page-local-eudedashboard-eudedashboard td label {
     font-family: 'Bai Jamjuree', sans-serif;
     text-transform: uppercase;
 }
-#page-local-eudecustom-eudedashboard tr:hover td {
-    background: rgba(242, 244, 248, .5);
-}
 /* footer */
-#page-local-eudecustom-eudedashboard table.dataTable.no-footer {
+#page-local-eudedashboard-eudedashboard table.dataTable.no-footer {
     border-bottom: 1px solid #dee2e6;
 }
-#page-local-eudecustom-eudedashboard div.dataTables_info, #page-local-eudecustom-eudedashboard div.dataTables_paginate {
+#page-local-eudedashboard-eudedashboard div.dataTables_info, #page-local-eudedashboard-eudedashboard div.dataTables_paginate {
     padding-top: 1rem;
     padding-bottom: 1rem;
     font-weight: 400;
     font-size: 16px;
 }
 
-#page-local-eudecustom-eudedashboard .pagination {
+#page-local-eudedashboard-eudedashboard .pagination {
     display: -ms-flexbox;
     display: flex;
     padding-left: 0;
@@ -220,20 +245,20 @@ table.dataTable thead .sorting_disabled:after {
 }
 
 /* end footer */
-#page-local-eudecustom-eudedashboard .dataTables_info {
+#page-local-eudedashboard-eudedashboard .dataTables_info {
     padding-left: 25px;
 }
 
-#page-local-eudecustom-eudedashboard .save-btn {
+#page-local-eudedashboard-eudedashboard .save-btn {
     color: #691A32;
     font-size: 16px;
     font-weight: 600;
 }
-#page-local-eudecustom-eudedashboard .save-btn .fa {
+#page-local-eudedashboard-eudedashboard .save-btn .fa {
     margin-right: 6px;
 }
 
-#page-local-eudecustom-eudedashboard h2.section-title {
+#page-local-eudedashboard-eudedashboard h2.section-title {
     margin-top: 1.5em;
     font-size: 18px;
     font-weight: bold;
@@ -243,8 +268,8 @@ table.dataTable thead .sorting_disabled:after {
     float: left;
     width: 100%;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm,
-#page-local-eudecustom-eudedashboard #region-main .eude-block-header{
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm,
+#page-local-eudedashboard-eudedashboard #region-main .eude-block-header{
     float: left;
     width: 100%;
     margin: .5em 0;
@@ -253,103 +278,102 @@ table.dataTable thead .sorting_disabled:after {
     border-radius: 2px;
     font-family: 'Bai Jamjuree', sans-serif;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm {
     overflow-x: auto;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm > table {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm > table {
     margin-bottom: 0;
     max-width: 100%;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm td{
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm td{
     vertical-align: middle;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td {
-    min-width: 220px;
-}
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-generic-list tr {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-generic-list tr {
     transform: scale(1);
+    position: relative;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-generic-list td {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-generic-list td {
     padding: 1em;
     font-family: 'Bai Jamjuree', sans-serif;
     text-transform: uppercase;
     font-weight: 500;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-generic-list a {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-generic-list a {
     color: #691A32;
 }
 
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-generic-list .background-progression {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-generic-list .background-progression {
     padding: 0px;
     position: absolute;
     border: none;
     bottom: 0;
+    left: 0;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header {
     text-transform: uppercase;
 }
 
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
     display: flex;
     flex-wrap: wrap;
     padding: 1em ;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values div {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values div {
     padding: 0 5px;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header div {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header div {
     font-weight: 600;
     font-size: 18px;
     color:  rgba(68, 68, 68, .8);
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
     padding: 1em 1em 0 1em;
     width: 50%;
     float: left;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
      width: 50%;
      float: left;
      padding-left: 0;
  }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header label {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header label {
     font-family: 'Bai Jamjuree', sans-serif;
 }
-#page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values a {
+#page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values a {
     overflow: hidden;
 }
 
 @media screen and (max-width: 980px) {
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title,
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title,
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
         width: 100%;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-title {
         padding-bottom: 0;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header .box-header-values {
         padding: 1em;
     }
 }
 @media screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header > div {
         padding: 0px 2px;
         text-align: center;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div > a{
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header > div > a{
         padding-left: 5px;
         padding-right: 5px;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div:first-child {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header > div:first-child {
         padding-bottom: 10px;
 
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-header > div .fa{
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-header > div .fa{
         display: none;
     }
 }
 
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn {
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn {
     color:  #691A32;
     background: #F2EFF1 0% 0% no-repeat padding-box;
     border: 1px solid rgba(129, 89, 115, .8);
@@ -363,41 +387,41 @@ table.dataTable thead .sorting_disabled:after {
     white-space: nowrap;
     height: 38px;
 }
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn.unactive {
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn.unactive {
     color:  rgba(68, 68, 68, .8);
     background: #F9F9F9 0% 0% no-repeat padding-box;
     border: 1px solid rgba(230, 230, 230, .8);
 }
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn:hover{
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn:hover{
     background: #dbd7d9 0% 0% no-repeat padding-box;
     text-decoration: none;
     cursor: pointer;
 }
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn label {
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn label {
     font-size: 16px;
     margin: 0;
     font-weight: 400;
 }
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn label:hover {
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn label:hover {
     cursor: pointer;
 }
-#page-local-eudecustom-eudedashboard  #region-main .table-responsive-sm a.interactive-btn .fa {
+#page-local-eudedashboard-eudedashboard  #region-main .table-responsive-sm a.interactive-btn .fa {
     position: absolute;
     right: 15px;
     top: 10px;
 }
 
 @media screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm.eude-table-home td {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm.eude-table-home td {
         min-width: unset;
         width: auto !important;
         font-size: 95%;
         padding: .5em 2em .5em 1em;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm a.interactive-btn {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm a.interactive-btn {
         width: auto !important;
     }
-    #page-local-eudecustom-eudedashboard #region-main .table-responsive-sm label {
+    #page-local-eudedashboard-eudedashboard #region-main .table-responsive-sm label {
         font-size: 12px !important;
     }
 }
@@ -421,7 +445,7 @@ table.dataTable thead .sorting_disabled:after {
     text-decoration: none;
     background: rgba(0,0,0, .05);
 }
-.eude-spanrefreshtimes #eudecustom-spenttime {
+.eude-spanrefreshtimes #eudedashboard-spenttime {
     margin-left: 5px;
 }
 
@@ -990,7 +1014,7 @@ div.chart-container.investedtimeschart > ul.chart {
 
 /* VENTANA FLOTANTE */
 
-#page-local-eudecustom-eudeprofile #letpv_ventana-flotante {
+#page-local-eudedashboard-eudeprofile #letpv_ventana-flotante {
     display: none;
     position: fixed;
     z-index: 100;
@@ -1003,7 +1027,7 @@ div.chart-container.investedtimeschart > ul.chart {
 }
 
 /* Modal Content/Box */
-#page-local-eudecustom-eudeprofile #contenedor {
+#page-local-eudedashboard-eudeprofile #contenedor {
     background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
@@ -1012,21 +1036,21 @@ div.chart-container.investedtimeschart > ul.chart {
 }
 
 /* The Close Button */
-#page-local-eudecustom-eudeprofile #letpv_ventana-flotante .letpv_cerrar {
+#page-local-eudedashboard-eudeprofile #letpv_ventana-flotante .letpv_cerrar {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-#page-local-eudecustom-eudeprofile #letpv_ventana-flotante .letpv_cerrar:hover,
-#page-local-eudecustom-eudeprofile #letpv_ventana-flotante .letpv_cerrar:focus {
+#page-local-eudedashboard-eudeprofile #letpv_ventana-flotante .letpv_cerrar:hover,
+#page-local-eudedashboard-eudeprofile #letpv_ventana-flotante .letpv_cerrar:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-#page-local-eudecustom-eudeprofile #contenedor #contenido h3 {
+#page-local-eudedashboard-eudeprofile #contenedor #contenido h3 {
     font-size: 2em;
 }
 
@@ -1044,83 +1068,83 @@ div.chart-container.investedtimeschart > ul.chart {
 
 /*CSS Eude Profile*/
 
-#page-local-eudecustom-eudeprofile button.letpv_abrir{
+#page-local-eudedashboard-eudeprofile button.letpv_abrir{
     margin: 1px;
     text-transform: uppercase;
     color: #565656;
 }
 
-#page-local-eudecustom-eudeprofile button.abrirFechas{
+#page-local-eudedashboard-eudeprofile button.abrirFechas{
     margin: 1px;
     text-transform: uppercase;
 }
 
-#page-local-eudecustom-eudeprofile button.letpv_abrir:hover, #page-local-eudecustom-eudeprofile button.abrirFechas:hover{
+#page-local-eudedashboard-eudeprofile button.letpv_abrir:hover, #page-local-eudedashboard-eudeprofile button.abrirFechas:hover{
     background-color: #6f1a3d;
     color: #fff;
 }
 
-#page-local-eudecustom-eudeprofile td.cell.c1 {
+#page-local-eudedashboard-eudeprofile td.cell.c1 {
     padding: 0;
     height: 45px;
 }
 
-#page-local-eudecustom-eudeprofile li.icon-box:hover {
+#page-local-eudedashboard-eudeprofile li.icon-box:hover {
     background: radial-gradient(closest-side at 65% 50%, #6f193d 50%, #fff )
 }
 
-#page-local-eudecustom-eudeprofile span.eudeprofilespan {
+#page-local-eudedashboard-eudeprofile span.eudeprofilespan {
     padding-left: 10px;
     vertical-align: -8px;
 }
 
-#page-local-eudecustom-eudeprofile i.abrirFechas {
+#page-local-eudedashboard-eudeprofile i.abrirFechas {
     padding: 10px;
     font-size: 0;
     padding-top: 0;
 }
-#page-local-eudecustom-eudeprofile i.abrirFechas:before {
+#page-local-eudedashboard-eudeprofile i.abrirFechas:before {
     color: #565656;
     font-size: 24px;
 }
 
-#page-local-eudecustom-eudeprofile i.abrirFechas:hover {
+#page-local-eudedashboard-eudeprofile i.abrirFechas:hover {
     color: rgba(256,256,256,0);
 }
 
-#page-local-eudecustom-eudeprofile i.abrirFechas:hover:before {
+#page-local-eudedashboard-eudeprofile i.abrirFechas:hover:before {
     color: #6f193d;
 }
-#page-local-eudecustom-eudeprofile td.cell.c0{
+#page-local-eudedashboard-eudeprofile td.cell.c0{
     white-space: nowrap;
     max-width: 15em;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-#page-local-eudecustom-eudeprofile i#info {
+#page-local-eudedashboard-eudeprofile i#info {
     margin-right: -25px;
     margin-left: 10px;
 }
 
-#page-local-eudecustom-eudeprofile i#info:hover {
+#page-local-eudedashboard-eudeprofile i#info:hover {
     cursor: pointer;
 }
 
 /* Extra Eudeprofile CSS */
-#page-local-eudecustom-eudeprofile .editor_atto .menulateral {
+#page-local-eudedashboard-eudeprofile .editor_atto .menulateral {
     display: none;
 }
 
-#page-local-eudecustom-eudeprofile #page{
+#page-local-eudedashboard-eudeprofile #page{
     font-size:18px;
 }
 
-#page-local-eudecustom-eudeprofile i.abrirFechas {
+#page-local-eudedashboard-eudeprofile i.abrirFechas {
     cursor: pointer;
 }
 
-#page-local-eudecustom-eudeprofile .total {
+#page-local-eudedashboard-eudeprofile .total {
     font-weight: bold;
     border-top: 2px solid #ddd;
 }
@@ -1128,104 +1152,104 @@ div.chart-container.investedtimeschart > ul.chart {
 /* Eude Calendar */
 
 /*------------------EUDE CALENDAR------------------*/
-#page-local-eudecustom-eudecalendar .ical-link {
+#page-local-eudedashboard-eudecalendar .ical-link {
     text-align: center;
     display: block;
 }
 
-#page-local-eudecustom-eudecalendar div.cd-eventkey {
+#page-local-eudedashboard-eudecalendar div.cd-eventkey {
     display: inline-block;
     width: 15px;
     height: 15px;
     border-radius: 10px;
     margin: 0 0.5em;
 }
-#page-local-eudecustom-eudecalendar tr.weekdays th {
+#page-local-eudedashboard-eudecalendar tr.weekdays th {
     padding: 1.2em;
 }
 
-#page-local-eudecustom-eudecalendar ul.eventkey {
+#page-local-eudedashboard-eudecalendar ul.eventkey {
     list-style: none;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeymodulebegin {
+#page-local-eudedashboard-eudecalendar .eventkeymodulebegin {
     background-color: #00FF00;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeyactivityend {
+#page-local-eudedashboard-eudecalendar .eventkeyactivityend {
     background-color: salmon;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeytestdate {
+#page-local-eudedashboard-eudecalendar .eventkeytestdate {
     background-color: #FF8000;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeyquestionnairedate {
+#page-local-eudedashboard-eudecalendar .eventkeyquestionnairedate {
     background-color: #323232;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeyintensivemodulebegin {
+#page-local-eudedashboard-eudecalendar .eventkeyintensivemodulebegin {
     background-color: #0080FF;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeyvacation {
+#page-local-eudedashboard-eudecalendar .eventkeyvacation {
     background-color: #FFFF00;
 }
 
-#page-local-eudecustom-eudecalendar .eventkeyeudeevent {
+#page-local-eudedashboard-eudecalendar .eventkeyeudeevent {
     background-color: #FF0000;
 }
 
-#page-local-eudecustom-eudecalendar .day {
+#page-local-eudedashboard-eudecalendar .day {
     height: 14px;
     font-size: 14px;
 }
 
-#page-local-eudecustom-eudecalendar .btn-default {
+#page-local-eudedashboard-eudecalendar .btn-default {
     display: table;
     margin: 2% auto;
 }
 
-#page-local-eudecustom-eudecalendar .calendar-controls h2 {
+#page-local-eudedashboard-eudecalendar .calendar-controls h2 {
     font-size: 34px;
     margin-left: 0.5em;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar {
+#page-local-eudedashboard-eudecalendar .minicalendar {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
 
-#page-local-eudecustom-eudecalendar .calendartable {
+#page-local-eudedashboard-eudecalendar .calendartable {
     width: 100%;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar th {
+#page-local-eudedashboard-eudecalendar .minicalendar th {
     height: auto;
     font-weight: 300;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar th, .block .minicalendar td {
+#page-local-eudedashboard-eudecalendar .minicalendar th, .block .minicalendar td {
     padding: 2px;
     font-size: 0.8em;
 }
 
-#page-local-eudecustom-eudecalendar .calendartable th, #page-local-eudecustom-eudecalendar .calendartable td {
+#page-local-eudedashboard-eudecalendar .calendartable th, #page-local-eudedashboard-eudecalendar .calendartable td {
     width: 14%;
     text-align: center;
     border: 0;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar td {
+#page-local-eudedashboard-eudecalendar .minicalendar td {
     height: 5em;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.weekend {
+#page-local-eudedashboard-eudecalendar .minicalendar div.weekend {
     color: #A00;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.day > a  {
+#page-local-eudedashboard-eudecalendar .minicalendar div.day > a  {
     width: 100%;
     height: 10px;
     display: block;
@@ -1233,121 +1257,121 @@ div.chart-container.investedtimeschart > ul.chart {
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.today:not(.hasevent) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.today:not(.hasevent) {
     border-radius: 50px;
     border: 1px solid #dadada ;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent {
     color: #565656;
     background-color: transparent;
     border: 1px solid black;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.weekend {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.weekend {
     color: #A00;
     background-color: transparent;
 }
 
-#page-local-eudecustom-eudecalendar .calendar-event-panel{
+#page-local-eudedashboard-eudecalendar .calendar-event-panel{
     position: fixed;
     top: 20%;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.modulebegin:not(.disabledmodulebegin) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.modulebegin:not(.disabledmodulebegin) {
     background-color: #00FF00;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.modulebegin.disabledmodulebegin {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.modulebegin.disabledmodulebegin {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.activityend:not(.disabledactivityend){
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.activityend:not(.disabledactivityend){
     background-color: salmon;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.activityend.disabledactivityend{
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.activityend.disabledactivityend{
     display:none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.testdate:not(.disabledtestdate) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.testdate:not(.disabledtestdate) {
     background-color: #FF8000;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.testdate.disabledtestdate {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.testdate.disabledtestdate {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.intensivemodulebegin:not(.disabledintensivemodulebegin) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.intensivemodulebegin:not(.disabledintensivemodulebegin) {
     background-color: #0080FF;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.intensivemodulebegin.disabledintensivemodulebegin {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.intensivemodulebegin.disabledintensivemodulebegin {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.questionnairedate:not(.disabledquestionnairedate) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.questionnairedate:not(.disabledquestionnairedate) {
     background-color: #323232;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.questionnairedate.disabledquestionnairedate {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.questionnairedate.disabledquestionnairedate {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.vacation:not(.disabledvacation) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.vacation:not(.disabledvacation) {
     background-color: #FFFF00;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.vacation.disabledvacation {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.vacation.disabledvacation {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.eudeevent:not(.disabledeudeevent) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.eudeevent:not(.disabledeudeevent) {
     background-color: #FF0000;
     color: #fff;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.eudeevent.disabledeudeevent {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.eudeevent.disabledeudeevent {
     display: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.hasevent.weekend.eudecustomnoevent:not(.disabledeudecustomnoevent) {
+#page-local-eudedashboard-eudecalendar .minicalendar div.hasevent.weekend.eudedashboardnoevent:not(.disabledeudedashboardnoevent) {
     background-color: transparent;
     color: #A00;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.start {
+#page-local-eudedashboard-eudecalendar .minicalendar div.start {
     border-radius: 50px 0px 0px 50px;
     border-right: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.duration {
+#page-local-eudedashboard-eudecalendar .minicalendar div.duration {
     border-radius: 0px;
     border-left: none;
     border-right: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.duration_finish {
+#page-local-eudedashboard-eudecalendar .minicalendar div.duration_finish {
     border-radius: 0px 50px 50px 0px;
     border-left: none;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar div.oneday {
+#page-local-eudedashboard-eudecalendar .minicalendar div.oneday {
     border-radius: 50px;
     border: 1px solid black;
 }
 
-#page-local-eudecustom-eudecalendar .row > div:nth-child(2) .calendar-controls{
+#page-local-eudedashboard-eudecalendar .row > div:nth-child(2) .calendar-controls{
     text-align:right;
 }
 
-#page-local-eudecustom-eudecalendar .daydisplay {
+#page-local-eudedashboard-eudecalendar .daydisplay {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -1356,7 +1380,7 @@ div.chart-container.investedtimeschart > ul.chart {
     height: 1em;
 }
 
-#page-local-eudecustom-eudecalendar .minicalendar td {
+#page-local-eudedashboard-eudecalendar .minicalendar td {
     position: relative;
     padding-top: 20px;
 }
@@ -1367,13 +1391,13 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     overflow: hidden;
 }
 
-#page-local-eudecustom-eudecalendar div.yui3-widget.yui3-overlay.yui3-widget-positioned.yui3-widget-stacked.calendar-event-panel.yui3-overlay.yui3-overlay {
+#page-local-eudedashboard-eudecalendar div.yui3-widget.yui3-overlay.yui3-widget-positioned.yui3-widget-stacked.calendar-event-panel.yui3-overlay.yui3-overlay {
     top: -100px !important;
     z-index: 2000 !important;
     position: absolute;
 }
 
-#page-local-eudecustom-eudecalendar #modalwrapper {
+#page-local-eudedashboard-eudecalendar #modalwrapper {
     width: 100%;
     padding: 150px;
     position: fixed;
@@ -1387,7 +1411,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     background-color: rgba(0,0,0,0.4);
 }
 
-#page-local-eudecustom-eudecalendar .modalcontent{
+#page-local-eudedashboard-eudecalendar .modalcontent{
     background-color: #fefefe;
     margin: 0 auto;
     padding: 20px;
@@ -1396,10 +1420,10 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     width: 100%;
 }
 
-#page-local-eudecustom-eudecalendar .modalcontent > div.row {
+#page-local-eudedashboard-eudecalendar .modalcontent > div.row {
     margin: 10px;
 }
-#page-local-eudecustom-eudecalendar .inputdate {
+#page-local-eudedashboard-eudecalendar .inputdate {
     max-width: 130px;
     margin-left: 10px;
 }
@@ -1409,29 +1433,29 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 }
 
 /*------------------EUDE INTENSIVE MODULE DATES------------------*/
-#page-local-eudecustom-eudeintensivemoduledates .inputdate {
+#page-local-eudedashboard-eudeintensivemoduledates .inputdate {
     cursor: pointer;
     text-align: center;
 }
 
-#page-local-eudecustom-eudeintensivemoduledates .calldatecell {
+#page-local-eudedashboard-eudeintensivemoduledates .calldatecell {
     text-align: center;
 }
 
-#page-local-eudecustom-eudeintensivemoduledates #contenido-fecha-matriculas {
+#page-local-eudedashboard-eudeintensivemoduledates #contenido-fecha-matriculas {
     margin-top: 10px;
 }
 
-#page-local-eudecustom-eudeintensivemoduledates table th {
+#page-local-eudedashboard-eudeintensivemoduledates table th {
     width: auto !important;
 }
 
-#page-local-eudecustom-eudeintensivemoduledates #ui-datepicker-div {
+#page-local-eudedashboard-eudeintensivemoduledates #ui-datepicker-div {
     position: absolute !important;
 }
 
 /*------------------EUDE EVENT LIST------------------*/
-#page-local-eudecustom-eudeeventlist div.cd-eventkey {
+#page-local-eudedashboard-eudeeventlist div.cd-eventkey {
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -1439,45 +1463,45 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     margin: 0 0.5em;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeymodulebegin, #page-local-eudecustom-eudeeventlist div.normalmodule {
+#page-local-eudedashboard-eudeeventlist .eventkeymodulebegin, #page-local-eudedashboard-eudeeventlist div.normalmodule {
     background-color: #00FF00 !important;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeyactivityend, #page-local-eudecustom-eudeeventlist div.assignmentevent {
+#page-local-eudedashboard-eudeeventlist .eventkeyactivityend, #page-local-eudedashboard-eudeeventlist div.assignmentevent {
     background-color: salmon !important;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeytestdate, #page-local-eudecustom-eudeeventlist div.quizevent {
+#page-local-eudedashboard-eudeeventlist .eventkeytestdate, #page-local-eudedashboard-eudeeventlist div.quizevent {
     background-color: #FF8000 !important;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeyquestionnairedate, #page-local-eudecustom-eudeeventlist div.questionnaireevent {
+#page-local-eudedashboard-eudeeventlist .eventkeyquestionnairedate, #page-local-eudedashboard-eudeeventlist div.questionnaireevent {
     background-color: #323232 !important;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeyintensivemodulebegin, #page-local-eudecustom-eudeeventlist div.intensivemodule {
+#page-local-eudedashboard-eudeeventlist .eventkeyintensivemodulebegin, #page-local-eudedashboard-eudeeventlist div.intensivemodule {
     background-color: #0080FF !important;
 }
 
-#page-local-eudecustom-eudeeventlist .eventkeyeudeevent, #page-local-eudecustom-eudeeventlist div.globalevent {
+#page-local-eudedashboard-eudeeventlist .eventkeyeudeevent, #page-local-eudedashboard-eudeeventlist div.globalevent {
     background-color: #FF0000 !important;
 }
 
-#page-local-eudecustom-eudeeventlist .inputdate {
+#page-local-eudedashboard-eudeeventlist .inputdate {
     max-width: 130px;
     margin-left: 10px;
 }
 
-#page-local-eudecustom-eudeeventlist .datepickerwrapper {
+#page-local-eudedashboard-eudeeventlist .datepickerwrapper {
     padding-top: 3px;
     padding-bottom: 3px;
 }
 
-#page-local-eudecustom-eudeeventlist .printbuttonwrapper {
+#page-local-eudedashboard-eudeeventlist .printbuttonwrapper {
     margin-top: 10px;
 }
 
-#page-local-eudecustom-eudeeventlist th.datecolumn {
+#page-local-eudedashboard-eudeeventlist th.datecolumn {
     min-width: 100px;
 }
 
@@ -1485,17 +1509,17 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     body {
         -webkit-print-color-adjust: exact;
     }
-    #page-local-eudecustom-eudeeventlist tbody th {
+    #page-local-eudedashboard-eudeeventlist tbody th {
         font-weight: normal;
     }
 }
 
 /* Teacher control panel view */
-#page-local-eudecustom-eudeteachercontrolpanel .row-panel-list {
+#page-local-eudedashboard-eudeteachercontrolpanel .row-panel-list {
     overflow-y: auto;
     height: 250px;
 }
-#page-local-eudecustom-eudeteachercontrolpanel .eude_panel_bg .panelitem{
+#page-local-eudedashboard-eudeteachercontrolpanel .eude_panel_bg .panelitem{
     list-style: none;
     border-bottom: 1px #6F1A3D solid;
     background-color: none;
@@ -1505,7 +1529,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     padding-left: 3px;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .linkselect {
+#page-local-eudedashboard-eudeteachercontrolpanel .linkselect {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 5px;
@@ -1519,51 +1543,51 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     cursor: pointer;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .panelitem a {
+#page-local-eudedashboard-eudeteachercontrolpanel .panelitem a {
     color: #565656;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .panelitem a:hover {
+#page-local-eudedashboard-eudeteachercontrolpanel .panelitem a:hover {
     color: #6F1A3D;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .eude_panel_bg .itemname {
+#page-local-eudedashboard-eudeteachercontrolpanel .eude_panel_bg .itemname {
     float: left;
     padding-top: 5px;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .eude_panel_bg .itemselect {
+#page-local-eudedashboard-eudeteachercontrolpanel .eude_panel_bg .itemselect {
     float: right;
     padding-right: 2px;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .eude_panel_bg .itemselect-small {
+#page-local-eudedashboard-eudeteachercontrolpanel .eude_panel_bg .itemselect-small {
     width: 100%;
     margin-bottom: 10px;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .linkselect option {
+#page-local-eudedashboard-eudeteachercontrolpanel .linkselect option {
     padding-left: 15px;
     text-transform: uppercase;
 }
 
-#page-local-eudecustom-eudeteachercontrolpanel .eude_panel_bg h4 {
+#page-local-eudedashboard-eudeteachercontrolpanel .eude_panel_bg h4 {
     text-transform: uppercase;
 }
 
 /* Banner backgorund */
-#page-my-index #page-mast, #page-local-eudecustom-eudeprofile #page-mast,
-#page-local-eudecustom-eudeteachercontrolpanel #page-mast,
-#page-local-eudecustom-eudecalendar #page-mast, #page-local-eudecustom-eudemessages #page-mast,
+#page-my-index #page-mast, #page-local-eudedashboard-eudeprofile #page-mast,
+#page-local-eudedashboard-eudeteachercontrolpanel #page-mast,
+#page-local-eudedashboard-eudecalendar #page-mast, #page-local-eudedashboard-eudemessages #page-mast,
 #page-user-profile #page-mast, #page-grade-report-overview-index #page-mast {
     background-image: url('../pix/headerbg.jpg');
     background-position: center;
     padding: 10px;
 }
 
-#page-my-index #page-mast h1, #page-local-eudecustom-eudeprofile #page-mast h1,
-#page-local-eudecustom-eudeteachercontrolpanel #page-mast h1,
-#page-local-eudecustom-eudecalendar #page-mast h1, #page-local-eudecustom-eudemessages #page-mast h1,
+#page-my-index #page-mast h1, #page-local-eudedashboard-eudeprofile #page-mast h1,
+#page-local-eudedashboard-eudeteachercontrolpanel #page-mast h1,
+#page-local-eudedashboard-eudecalendar #page-mast h1, #page-local-eudedashboard-eudemessages #page-mast h1,
 #page-user-profile #page-mast h1, #page-grade-report-overview-index #page-mast h1 {
     color: #fff;
     text-shadow: 3px 2px 2px #000;
@@ -1583,16 +1607,16 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 /**************************/
 /**** STUDENT VIEW TAB ****/
 /**************************/
-#page-local-eudecustom-eudedashboard * {
+#page-local-eudedashboard-eudedashboard * {
     box-sizing: border-box;
 }
-#page-local-eudecustom-eudedashboard .card-body{
+#page-local-eudedashboard-eudedashboard .card-body{
     background-color: #F6F6F6;
 }
-#page-local-eudecustom-eudedashboard  sub {
+#page-local-eudedashboard-eudedashboard  sub {
     font-size: 12px;
 }
-#page-local-eudecustom-eudedashboard .eudedashboardcategoryname {
+#page-local-eudedashboard-eudedashboard .eudedashboardcategoryname {
     font-family: 'Bai Jamjuree', sans-serif;
 }
 #eudedashboardmyTab {
@@ -1633,13 +1657,13 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     margin-top: 0px;
     margin-bottom: 5px;
 }
-#page-local-eudecustom-eudedashboard .eudedashboardprogresswrapper {
+#page-local-eudedashboard-eudedashboard .eudedashboardprogresswrapper {
     border-radius: 10px;
     height: 10px;
     margin-bottom: 5px;
     background-color:#DFDFDF;
 }
-#page-local-eudecustom-eudedashboard .eudedashboardprogressbar {
+#page-local-eudedashboard-eudedashboard .eudedashboardprogressbar {
     background-color:#691A32;
 }
 /*ACTIVE TAB*/
@@ -1669,13 +1693,13 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     margin-right: auto;
     margin-left: auto;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursecardswrapper{
+#page-local-eudedashboard-eudedashboard .dashboardcoursecardswrapper{
     margin-left: 0px;
     margin-right: 0px;
     padding: 25px;
 }
 /*FILTERBUTTONS*/
-#page-local-eudecustom-eudedashboard .filterbuttonswrapper {
+#page-local-eudedashboard-eudedashboard .filterbuttonswrapper {
     border-bottom: 1px solid rgb(223, 223, 223, .7);
     padding: 0 20px;
     text-align: left;
@@ -1684,7 +1708,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     width: auto;
     display: flex;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn {
+#page-local-eudedashboard-eudedashboard .dashboardbtn {
     padding: 10px 30px 10px 50px;
     border-radius: 30px;
     border: 1px solid grey;
@@ -1700,16 +1724,16 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     text-align: left;
     opacity: .55;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn.eudeactive{
+#page-local-eudedashboard-eudedashboard .dashboardbtn.eudeactive{
     border-color: #691A32;
     background-color: rgba(105, 26, 50, 0.07);
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn.eudeactive,
-#page-local-eudecustom-eudedashboard .dashboardbtn.eudeactive span, #page-local-eudecustom-eudedashboard .dashboardbtn.eudeactive i{
+#page-local-eudedashboard-eudedashboard .dashboardbtn.eudeactive,
+#page-local-eudedashboard-eudedashboard .dashboardbtn.eudeactive span, #page-local-eudedashboard-eudedashboard .dashboardbtn.eudeactive i{
     color: #691A32;
     opacity: 1;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn .edb-number {
+#page-local-eudedashboard-eudedashboard .dashboardbtn .edb-number {
     position: absolute;
     left: 13px;
     top: 10px;
@@ -1717,19 +1741,19 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     width: 30px;
     text-align: center;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn .edb-text{
+#page-local-eudedashboard-eudedashboard .dashboardbtn .edb-text{
     text-align: left;
     line-height: 18px;
     display: block;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn .icon {
+#page-local-eudedashboard-eudedashboard .dashboardbtn .icon {
     position: absolute;
     right: 5px;
     top: 20px;
     font-size: 18px;
 }
 /*COURSECARDS*/
-#page-local-eudecustom-eudedashboard .dashboardcoursebox {
+#page-local-eudedashboard-eudedashboard .dashboardcoursebox {
     border-radius:4px;
     border: 0px;
     padding:10px;
@@ -1739,7 +1763,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 @media (max-width: 768px){
-    #page-local-eudecustom-eudedashboard .dashboardcoursecardswrapper{
+    #page-local-eudedashboard-eudedashboard .dashboardcoursecardswrapper{
         margin-left: -15px;
         margin-right: -15px;
         margin:auto;
@@ -1747,54 +1771,54 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     }
 }
 @media (min-width: 768px){
-    #page-local-eudecustom-eudedashboard .dashboardcoursebox {
+    #page-local-eudedashboard-eudedashboard .dashboardcoursebox {
         flex: 0 0 48%;
         max-width: 48%;
         margin: 10px 1%;
     }
 }
 @media (min-width: 1024px){
-    #page-local-eudecustom-eudedashboard .dashboardcoursebox {
+    #page-local-eudedashboard-eudedashboard .dashboardcoursebox {
         flex: 0 0 31%;
         max-width: 31%;
         margin: 10px 1%;
     }
 }
 @media (min-width: 1400px){
-    #page-local-eudecustom-eudedashboard .dashboardcoursebox {
+    #page-local-eudedashboard-eudedashboard .dashboardcoursebox {
         flex: 0 0 23%;
         max-width: 23%;
         margin: 10px 1%;
     }
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursebox:hover{
+#page-local-eudedashboard-eudedashboard .dashboardcoursebox:hover{
     cursor: default;
     box-shadow: 0 0px 28px rgba(0,0,0,0.15);
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursebox.pending{
+#page-local-eudedashboard-eudedashboard .dashboardcoursebox.pending{
     opacity:.3 !important;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursebox.pending:hover{
+#page-local-eudedashboard-eudedashboard .dashboardcoursebox.pending:hover{
     opacity:.6 !important;
 }
-#page-local-eudecustom-eudedashboard .dashboardcourseimagewrapper {
+#page-local-eudedashboard-eudedashboard .dashboardcourseimagewrapper {
     margin:-10px;
     height: 170px;
 }
-#page-local-eudecustom-eudedashboard img.dashboardcourseimage {
+#page-local-eudedashboard-eudedashboard img.dashboardcourseimage {
     width: 100%;
     border-radius:4px 4px 0px 0px;
     *content: url(https://source.unsplash.com/random/370x170);
     object-fit: cover;
     height: 170px;
 }
-#page-local-eudecustom-eudedashboard .dashboardcourseinfowrapper {
+#page-local-eudedashboard-eudedashboard .dashboardcourseinfowrapper {
     margin: 10px -10px -10px;
     padding: 20px;
     padding-bottom: 0;
     min-height: 240px;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursename {
+#page-local-eudedashboard-eudedashboard .dashboardcoursename {
     font-family: 'Bai Jamjuree', sans-serif;
     font-size: 20px;
     text-transform: uppercase;
@@ -1807,7 +1831,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     text-overflow: ellipsis;
     max-height: 63px;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursecategoryname {
+#page-local-eudedashboard-eudedashboard .dashboardcoursecategoryname {
     font-family: 'Bai Jamjuree', sans-serif;
     opacity: .7;
     display: block;
@@ -1818,17 +1842,17 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     text-overflow: ellipsis;
     height: 25px;
 }
-#page-local-eudecustom-eudedashboard .eudedashboardprogressinfo {
+#page-local-eudedashboard-eudedashboard .eudedashboardprogressinfo {
     opacity: .7;
     display:block;
     margin-top:10px;
     margin-bottom:5px;
     font-size:14px;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursecompletionbar .eudedashboardprogressbar {
+#page-local-eudedashboard-eudedashboard .dashboardcoursecompletionbar .eudedashboardprogressbar {
     background-color:#FDBF2C;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursefooter {
+#page-local-eudedashboard-eudedashboard .dashboardcoursefooter {
     margin-top: 20px;
     border-top: 1px solid rgb(223, 223, 223, .7);
     margin-left: -20px;
@@ -1839,7 +1863,7 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     width: 100%;
     bottom: 0;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursefooter .dashboardcoursefinalgrade{
+#page-local-eudedashboard-eudedashboard .dashboardcoursefooter .dashboardcoursefinalgrade{
     font-family: 'Bai Jamjuree', sans-serif;
     font-weight: 500;
     padding: 4px 20px;
@@ -1850,30 +1874,30 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     text-align: center;
     float: left;
 }
-#page-local-eudecustom-eudedashboard .dashboardcourse.passed .dashboardcoursefooter .dashboardcoursefinalgrade,
-#page-local-eudecustom-eudedashboard .dashboardcourse.convalidated .dashboardcoursefooter .dashboardcoursefinalgrade {
+#page-local-eudedashboard-eudedashboard .dashboardcourse.passed .dashboardcoursefooter .dashboardcoursefinalgrade,
+#page-local-eudedashboard-eudedashboard .dashboardcourse.convalidated .dashboardcoursefooter .dashboardcoursefinalgrade {
     color: #40a670;
     border: 1px solid #8dcaaa;
 }
-#page-local-eudecustom-eudedashboard .dashboardcourse.failed .dashboardcoursefooter .dashboardcoursefinalgrade{
+#page-local-eudedashboard-eudedashboard .dashboardcourse.failed .dashboardcoursefooter .dashboardcoursefinalgrade{
     color: #C84B58;
     border: 1px solid #e5848e;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursefooter .dashboardcourseimage {
+#page-local-eudedashboard-eudedashboard .dashboardcoursefooter .dashboardcourseimage {
     float:right;
     width:auto;
     color:#691A32;
 }
-#page-local-eudecustom-eudedashboard .dashboardcoursefooter .dashboardcourseimage .edbicon {
+#page-local-eudedashboard-eudedashboard .dashboardcoursefooter .dashboardcourseimage .edbicon {
     font-size:24px;
 }
 /* TABS RESPONSIVE */
 @media screen and (max-width: 768px) {
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li {
     display: none;
     width: 23%;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li > a {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li > a {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1883,41 +1907,41 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     text-align: center;
     vertical-align: top;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.active {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.active {
     width: 70%;
     margin-right: 0px !important;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.active:first-child {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.active:first-child {
     margin-left: 15% !important;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.active, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.active, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next {
     display: block;
    }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next {
     display: block;
     background: transparent !important;
     width: 14%;
     margin: 0px !important;
   }
-   #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev a, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next a{
+   #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev a, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next a{
       background: transparent !important;
    }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next {
     -webkit-transform: scale(0.9);
     transform: scale(0.9);
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a {
     -webkit-transition: none;
     transition: none;
     padding: 0px !important;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardcategoryname, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardcategoryname,
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardprogressinfo, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardprogressinfo,
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardprogresswrapper, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardprogresswrapper,
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardcategoryconvocatory, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardcategoryconvocatory{
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardcategoryname, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardcategoryname,
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardprogressinfo, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardprogressinfo,
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardprogresswrapper, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardprogresswrapper,
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a .eudedashboardcategoryconvocatory, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a .eudedashboardcategoryconvocatory{
     display: none !important;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a:after, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a:after, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a:after, #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a:after {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a:after, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a:after, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a:after, #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a:after {
     font-size: 24px;
     position: relative;
     top: 1px;
@@ -1929,20 +1953,20 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.prev > a:after {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.prev > a:after {
     content: "\f060";
   }
-  #page-local-eudecustom-eudedashboard .nav-tabs-responsive > li.next > a:after {
+  #page-local-eudedashboard-eudedashboard .nav-tabs-responsive > li.next > a:after {
     content: "\f061";
   }
 }
-#page-local-eudecustom-eudedashboard .dashboardbtn {
+#page-local-eudedashboard-eudedashboard .dashboardbtn {
     position:relative;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtnteacherpendingactivities {
+#page-local-eudedashboard-eudedashboard .dashboardbtnteacherpendingactivities {
     max-width:260px;
 }
-#page-local-eudecustom-eudedashboard .dashboardbtnteacherpendingmessages {
+#page-local-eudedashboard-eudedashboard .dashboardbtnteacherpendingmessages {
     max-width:260px;
 }
 
@@ -1950,22 +1974,22 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 /* STUDENT VIEW */
 
 /* header */
-#page-local-eudecustom-eudedashboard .eude-block-header {
+#page-local-eudedashboard-eudedashboard .eude-block-header {
     padding: 1rem;
 }
 
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-title{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-title{
     float: left;
     width: 60%;
     text-transform: uppercase;
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-title .course-img{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-title .course-img{
     border-radius: 50%;
     width: 60px; height: 60px;
     background-repeat: no-repeat;
     background-size: cover;
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-values{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-values{
     margin-top: 5px;
     float: left;
     width: 40%;
@@ -1974,77 +1998,77 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 }
 
 @media only screen and (max-width: 768px) {
-    #page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-title,
-    #page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-values {
+    #page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-title,
+    #page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-values {
         width: 100%;
     }
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-values .value {
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-values .value {
     line-height: 32px;
     color: rgba(68, 68, 68, .8) !important;
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-values .value,
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-values .sub-title{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-values .value,
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-values .sub-title{
     text-align: left !important;
     text-transform: none !important;
 }
 
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-title h4{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-title h4{
     margin-top: 5px;
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 20px;
     color: rgba(68, 68, 68, .8);
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .box-header-title h5{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .box-header-title h5{
     font-size: 15px;
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box  {
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box  {
     position: relative;
 }
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box .eude-progress-bar {
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box .eude-progress-bar {
     padding: 1px;
     position: absolute;
     border: none;
     bottom: 0;
 }
 
-#page-local-eudecustom-eudedashboard .eude-block-header .report-header-box *{
+#page-local-eudedashboard-eudedashboard .eude-block-header .report-header-box *{
     font-family: 'Bai Jamjuree', sans-serif;
 }
 
-#page-local-eudecustom-eudedashboard .edue-gray-block {
+#page-local-eudedashboard-eudedashboard .edue-gray-block {
     background-color: #F6F6F6;
     border-radius: 4px;
     padding: 15px;
 }
 /* invested times && data-info */
-#page-local-eudecustom-eudedashboard .eude-invested-times,
-#page-local-eudecustom-eudedashboard .eude-data-info {
+#page-local-eudedashboard-eudedashboard .eude-invested-times,
+#page-local-eudedashboard-eudedashboard .eude-data-info {
     float: left;
     padding: 12px 6px;
     width: 33.33%;
     max-width: 550px;
 }
-#page-local-eudecustom-eudedashboard .investedtimeslastdaysaccessesinfo .eude-mediumtext {
+#page-local-eudedashboard-eudedashboard .investedtimeslastdaysaccessesinfo .eude-mediumtext {
     line-height: 12px;
 }
 @media only screen and (max-width: 1200px){
-    #page-local-eudecustom-eudedashboard .eude-invested-times,
-    #page-local-eudecustom-eudedashboard .eude-data-info {
+    #page-local-eudedashboard-eudedashboard .eude-invested-times,
+    #page-local-eudedashboard-eudedashboard .eude-data-info {
         width: 49%;
         margin-right: 0%;
         margin-left: 1%;
     }
 
-    #page-local-eudecustom-eudedashboard .eude-invested-times {
+    #page-local-eudedashboard-eudedashboard .eude-invested-times {
         margin-right: 1%;
         margin-left: 0;
     }
 }
 @media only screen and (max-width: 920px){
-    #page-local-eudecustom-eudedashboard .eude-invested-times,
-    #page-local-eudecustom-eudedashboard .eude-data-info {
+    #page-local-eudedashboard-eudedashboard .eude-invested-times,
+    #page-local-eudedashboard-eudedashboard .eude-data-info {
         width: 100%;
         margin: 0;
         max-width: unset;
@@ -2052,19 +2076,19 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 }
 
 /* data-info */
-#page-local-eudecustom-eudedashboard .eude-data-info .col {
+#page-local-eudedashboard-eudedashboard .eude-data-info .col {
     width: 50%;
     float: left;
     padding: 15px;
 }
-#page-local-eudecustom-eudedashboard .eude-data-info .value {
+#page-local-eudedashboard-eudedashboard .eude-data-info .value {
     font-size: 28px;
     font-weight: bold;
     letter-spacing: 5px;
     float: left; width: 100%;
     line-height: 30px;
 }
-#page-local-eudecustom-eudedashboard .eude-data-info .sub-title {
+#page-local-eudedashboard-eudedashboard .eude-data-info .sub-title {
     font-size: 12px;
     color: #404040;
     opacity: 0.6;
@@ -2076,6 +2100,142 @@ div[name="normalcourse"], div[name="activitysubmission"], div[name="testsubmissi
 .report-header-box.sb-searchdiv {
     padding: 20px 0px 0px 0px;
 }
-#local_eudecustom_datatable tr:hover {
+#local_eudedashboard_datatable tr:hover {
     cursor: pointer;
+}
+td.details-control {
+    background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('http://www.datatables.net/examples/resources/details_close.png') no-repeat center center;
+}
+
+
+
+/* LISTADOS */
+
+#page-local-eudedashboard-eudedashboard .mt-0 {
+    margin-top: 0px;
+}
+#page-local-eudedashboard-eudedashboard .list-tabs {
+    text-align: center;
+    width: 100%;
+    float: left;
+    padding-bottom: 20px;
+}
+#page-local-eudedashboard-eudedashboard .list-tabs a {
+    font-family: 'Bai Jamjuree', sans-serif;
+    text-transform: uppercase;
+    padding: 10px 30px 17px;
+    color: #444;
+    opacity: .5;
+    font-weight: bold;
+}
+#page-local-eudedashboard-eudedashboard .list-tabs a.active {
+    color: #6f193d;
+    opacity: 1;
+    border-bottom: 4px solid #6f193d;
+}
+#page-local-eudedashboard-eudedashboard .form-filters {
+    float: left;
+    width: 100%;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    padding: 15px;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem {
+    float: left;
+    font-family: 'Bai Jamjuree', sans-serif;
+    margin-left: 1.5rem;
+    margin-bottom: .5rem;
+}
+#page-local-eudedashboard-eudedashboard .form-filters fieldset {
+    display: contents;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .form-inline .fitem {
+    margin-left: 0;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem .fitemtitle label {
+    margin-bottom: 0px;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem > div:first-child {
+    font-size: 14px;
+    opacity: .6;
+    min-height: 25px;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem select,
+#page-local-eudedashboard-eudedashboard .form-filters .fitem input {
+    background-color: #f2f2f2;
+    font-size: 14px;
+}
+
+#page-local-eudedashboard-eudedashboard .form-filters .fitem select {
+    display: inline-block;
+    width: 100%;
+    padding: .375rem 1.75rem .375rem .75rem;
+    line-height: 1.5;
+    color: #495057;
+    vertical-align: middle;
+    -webkit-background-size: 8px 10px;
+    background-size: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem_fhierselect select {
+    float: left;
+    float: left;
+    width: 48%;
+    margin-right: 1%;
+}
+#page-local-eudedashboard-eudedashboard .form-filters .fitem input[type=submit]{
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-family: 'Bai Jamjuree', sans-serif;
+    padding: 5px 20px;
+    background-color: #6f193d;
+    font-size: 16px;
+}
+
+/* HOME NEW TABLE FUNCTIONS SUBTABLES */
+
+#page-local-eudedashboard-eudedashboard td.details-control {
+    min-width: 40px !important;
+    padding: 0 !important;
+    max-width: 40px !important;
+}
+#page-local-eudedashboard-eudedashboard td {
+    font-family: 'Bai Jamjuree', sans-serif;
+    padding: 8px 10px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+#page-local-eudedashboard-eudedashboard #local_eudedashboard_datatable td p {
+    margin: 0;
+}
+#page-local-eudedashboard-eudedashboard #local_eudedashboard_datatable > tbody > tr > td {
+    padding: 14px 18px;
+}
+#page-local-eudedashboard-eudedashboard #local_eudedashboard_datatable > tbody > tr:not(.odd):not(.even) > td{
+    padding: 0 !important;
+    background: #F2F4F8;
+}
+#page-local-eudedashboard-eudedashboard table.eude-tablesubrows th {
+    color: rgba(86, 86, 86, 0.6);
+}
+#page-local-eudedashboard-eudedashboard table.eude-tablesubrows td {
+    background: #F2F4F8;
+}
+/* SELECT TOP */
+
+#page-local-eudedashboard-eudedashboard select#catId {
+    float: right;
+    max-width: 430px;
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-size: 14px;
 }

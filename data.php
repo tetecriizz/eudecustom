@@ -17,7 +17,7 @@
 /**
  * Process ajax requests to enhance UX.
  *
- * @package    local_eudecustom
+ * @package    local_eudedashboard
  * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 define('AJAX_SCRIPT', true);
 
 require_once(__DIR__ .'/../../config.php');
-require_once($CFG->dirroot.'/local/eudecustom/utils.php');
+require_once($CFG->dirroot.'/local/eudedashboard/utils.php');
 
 require_login($SITE->id);
 
@@ -35,19 +35,16 @@ $val = optional_param('val', '', PARAM_TEXT);
 $userid = optional_param('userid', '', PARAM_TEXT);
 $courseid = optional_param('courseid', '', PARAM_TEXT);
 $time = optional_param('time', '', PARAM_TEXT);
+$fetch = optional_param('fetch', '', PARAM_INT);
 
-if ($catid != null && check_access_to_dashboard()) {
-    $confcategories = explode(",", $CFG->local_eudecustom_category);
-    if (!empty($confcategories) && in_array($catid, $confcategories)) {
-        // Only call when user has permission to access,
-        // and category is checked as enabled to be shown.
-        echo refresh_time_invested($catid, false);
-    }
+
+if ($catid != null) {
+    echo local_eudedashboard_refresh_time_invested($catid, false);
 }
 
 // Remove col with val.
 if (is_siteadmin() && !empty($col) && !empty($val)) {
-    $result = local_eudecustom_delete_data($col, $val, $time);
+    $result = local_eudedashboard_delete_data($col, $val, $time);
     if ($result) {
         echo 'Ejecutado correctamente';
     } else {
@@ -57,7 +54,7 @@ if (is_siteadmin() && !empty($col) && !empty($val)) {
 
 // Remove userid and courseid.
 if (is_siteadmin() && !empty($userid) && !empty($courseid)) {
-    $result = local_eudecustom_delete_data_usercourse($userid, $courseid);
+    $result = local_eudedashboard_delete_data_usercourse($userid, $courseid);
     if ($result) {
         echo 'Ejecutado correctamente';
     } else {
@@ -65,3 +62,7 @@ if (is_siteadmin() && !empty($userid) && !empty($courseid)) {
     }
 }
 
+if ($fetch != null) {
+    $data = local_eudedashboard_get_subrows_from_category($fetch);
+    echo json_encode($data);
+}

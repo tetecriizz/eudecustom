@@ -17,11 +17,11 @@
 /**
  * Data privacy provider
  *
- * @package local_eudecustom
+ * @package    local_eudedashboard
  * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_eudecustom\privacy;
+namespace local_eudedashboard\privacy;
 
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\metadata\provider as metadataprovider;
@@ -34,7 +34,7 @@ use \core_privacy\local\request\approved_contextlist;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Implementation of the privacy subsystem plugin provider for the eudecustom plugin.
+ * Implementation of the privacy subsystem plugin provider for the eudedashboard plugin.
  *
  * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -48,48 +48,26 @@ class provider implements metadataprovider, pluginprovider {
      * @return  collection     A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection) : collection {
-
         $collection->add_database_table(
-            'local_eudecustom_mat_int',
+            'local_eudedashboard_invtimes',
             [
-                'id' => 'privacy:metadata:local_eudecustom_mat_int:id',
-                'user_email' => 'privacy:metadata:local_eudecustom_mat_int:user_email',
-                'course_shortname' => 'privacy:metadata:local_eudecustom_mat_int:course_shortname',
-                'category_id' => 'privacy:metadata:local_eudecustom_mat_int:category_id',
-                'matriculation_date' => 'privacy:metadata:local_eudecustom_mat_int:matriculation_date',
-                'conv_number' => 'privacy:metadata:local_eudecustom_mat_int:conv_number'
+                'id' => 'privacy:metadata:local_eudedashboard_invtimes:id',
+                'userid' => 'privacy:metadata:local_eudedashboard_invtimes:userid',
+                'courseid' => 'privacy:metadata:local_eudedashboard_invtimes:courseid',
+                'day1' => 'privacy:metadata:local_eudedashboard_invtimes:day1',
+                'day2' => 'privacy:metadata:local_eudedashboard_invtimes:day2',
+                'day3' => 'privacy:metadata:local_eudedashboard_invtimes:day3',
+                'day4' => 'privacy:metadata:local_eudedashboard_invtimes:day4',
+                'day5' => 'privacy:metadata:local_eudedashboard_invtimes:day5',
+                'day6' => 'privacy:metadata:local_eudedashboard_invtimes:day6',
+                'day7' => 'privacy:metadata:local_eudedashboard_invtimes:day7',
+                'totaltime' => 'privacy:metadata:local_eudedashboard_invtimes:totaltime',
+                'timecreated' => 'privacy:metadata:local_eudedashboard_invtimes:timecreated',
+                'timemodified' => 'privacy:metadata:local_eudedashboard_invtimes:timemodified'
             ],
-            'privacy:metadata:local_eudecustom_mat_int');
-
-            $collection->add_database_table(
-            'local_eudecustom_user',
-            [
-                'id' => 'privacy:metadata:local_eudecustom_user:id',
-                'user_email' => 'privacy:metadata:local_eudecustom_user:user_email',
-                'course_category' => 'privacy:metadata:local_eudecustom_user:course_category',
-                'num_intensive' => 'privacy:metadata:local_eudecustom_user:num_intensive'
-            ],
-            'privacy:metadata:local_eudecustom_user');
-
-            $collection->add_database_table(
-            'local_eudecustom_invtimes',
-            [
-                'id' => 'privacy:metadata:local_eudecustom_invtimes:id',
-                'userid' => 'privacy:metadata:local_eudecustom_invtimes:userid',
-                'courseid' => 'privacy:metadata:local_eudecustom_invtimes:courseid',
-                'day1' => 'privacy:metadata:local_eudecustom_invtimes:day1',
-                'day2' => 'privacy:metadata:local_eudecustom_invtimes:day2',
-                'day3' => 'privacy:metadata:local_eudecustom_invtimes:day3',
-                'day4' => 'privacy:metadata:local_eudecustom_invtimes:day4',
-                'day5' => 'privacy:metadata:local_eudecustom_invtimes:day5',
-                'day6' => 'privacy:metadata:local_eudecustom_invtimes:day6',
-                'day7' => 'privacy:metadata:local_eudecustom_invtimes:day7',
-                'totaltime' => 'privacy:metadata:local_eudecustom_invtimes:totaltime',
-                'timecreated' => 'privacy:metadata:local_eudecustom_invtimes:timecreated',
-                'timemodified' => 'privacy:metadata:local_eudecustom_invtimes:timemodified'
-            ],
-            'privacy:metadata:local_eudecustom_invtimes');
-            return $collection;
+            'privacy:metadata:local_eudedashboard_invtimes'
+        );
+        return $collection;
     }
 
     /**
@@ -101,47 +79,24 @@ class provider implements metadataprovider, pluginprovider {
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new contextlist();
 
-        // Get contexts for local_eudecustom_invtimes table.
+        // Get contexts for local_eudedashboard_invtimes table.
         $sqlinvtimes = "SELECT DISTINCT cx.id cxid
                           FROM {context} cx
-                          JOIN {local_eudecustom_invtimes} invtimes ON invtimes.userid = cx.instanceid
+                          JOIN {local_eudedashboard_invtimes} invtimes ON invtimes.userid = cx.instanceid
                          WHERE cx.instanceid = :userid and cx.contextlevel = :usercontext
                       GROUP BY cx.id";
         $paramsinvtimes = array ('userid' => $userid, 'usercontext' => CONTEXT_USER);
         $contextlist->add_from_sql($sqlinvtimes, $paramsinvtimes);
-
-        // Get contexts for local_eudecustom_mat_int table.
-        $sqlmatint = "SELECT DISTINCT(cx.id) cxid
-                        FROM {local_eudecustom_mat_int} matint
-                        JOIN {user} u ON u.email = matint.user_email
-                        JOIN {context} cx ON cx.instanceid = u.id
-                       WHERE CX.contextlevel = :usercontext
-                             AND cx.instanceid = :userid
-                    GROUP BY cx.id";
-        $paramsmatint = array('userid' => $userid, 'usercontext' => CONTEXT_USER);
-        $contextlist->add_from_sql($sqlmatint, $paramsmatint);
-
-        // Get contexts for local_eudecustom_user table.
-        $sqluser = "SELECT DISTINCT(cx.id) cxid
-                      FROM {local_eudecustom_user} us
-                      JOIN {user} u ON u.email = us.user_email
-                      JOIN {context} cx ON cx.instanceid = u.id
-                     WHERE CX.contextlevel = :usercontext
-                           AND cx.instanceid = :userid
-                  GROUP BY cx.id";
-        $paramsuser = array('userid' => $userid, 'usercontext' => CONTEXT_USER);
-        $contextlist->add_from_sql($sqluser, $paramsuser);
-
         return $contextlist;
     }
 
     /**
-     * Export all eudecustom data for the list of contexts given.
+     * Export all eudedashboard data for the list of contexts given.
      *
      * @param  approved_contextlist $contextlist The list of approved contexts for a user.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
-        // If the user has eudecustom data, then only the User context should be present so get the first context.
+        // If the user has eudedashboard data, then only the User context should be present so get the first context.
         $contexts = $contextlist->get_contexts();
         if (count($contexts) == 0) {
             return;
@@ -154,8 +109,6 @@ class provider implements metadataprovider, pluginprovider {
         }
 
         // Call to functions that write records to export data.
-        self::export_user_data_matint($context);
-        self::export_user_data_user($context);
         self::export_user_data_invtimes($context);
     }
 
@@ -175,12 +128,10 @@ class provider implements metadataprovider, pluginprovider {
         }
         $userid = $context->instanceid;
 
-        // Delete the eudecustom records created for the userid.
+        // Delete the eudedashboard records created for the userid.
         $params = array('id' => $userid);
         $usersselect = "IN (SELECT u.email FROM {user} u WHERE u.id = :id)";
-        $DB->delete_records_select('mdl_local_eudecustom_mat_int', 'user_email '.$usersselect, $params);
-        $DB->delete_records_select('mdl_local_eudecustom_user', 'user_email '.$usersselect, $params);
-        $DB->delete_records('local_eudecustom_invtimes', array('userid' => $userid));
+        $DB->delete_records('local_eudedashboard_invtimes', array('userid' => $userid));
     }
 
     /**
@@ -202,70 +153,10 @@ class provider implements metadataprovider, pluginprovider {
             return;
         }
 
-        // Delete the eudecustom records created for the userid.
+        // Delete the eudedashboard records created for the userid.
         $params = array('id' => $user->id);
         $usersselect = "IN (SELECT u.email FROM {user} u WHERE u.id = :id)";
-        $DB->delete_records_select('mdl_local_eudecustom_mat_int', 'user_email '.$usersselect, $params);
-        $DB->delete_records_select('mdl_local_eudecustom_user', 'user_email '.$usersselect, $params);
-        $DB->delete_records('local_eudecustom_invtimes', array('userid' => $user->id));
-    }
-
-    /**
-     * Export user data of matint table
-     * @param stdClass $context
-     */
-    public static function export_user_data_matint($context) {
-        global $DB;
-        $userid = $context->instanceid;
-        $sql = 'SELECT matint.*
-                  FROM {local_eudecustom_mat_int} matint
-                  JOIN {user} u ON u.email = matint.user_email
-                 WHERE u.id = :userid';
-
-        $params = array('userid' => $userid);
-        $records = $DB->get_records_sql($sql, $params);
-        $subcontext = ['eudecustom-mat-int'];
-
-        foreach ($records as $record) {
-            $data = (object) [
-                'recordid' => $record->id,
-                'user_email' => $record->user_email,
-                'course_shortname' => $record->course_shortname,
-                'category_id' => $record->category_id,
-                'matriculation_date' => $record->matriculation_date,
-                'conv_number' => $record->conv_number
-            ];
-
-            writer::with_context($context)->export_data($subcontext, $data);
-        }
-    }
-
-    /**
-     * Export user data of user table
-     * @param stdClass $context
-     */
-    public static function export_user_data_user($context) {
-        global $DB;
-        $userid = $context->instanceid;
-        $sql = 'SELECT user.*
-                  FROM {local_eudecustom_user} user
-                  JOIN {user} u ON u.email = user.user_email
-                 WHERE u.id = :userid';
-
-        $params = array('userid' => $userid);
-        $records = $DB->get_records_sql($sql, $params);
-        $subcontext = ['eudecustom-user'];
-
-        foreach ($records as $record) {
-            $data = (object) [
-                'recordid' => $record->id,
-                'user_email' => $record->user_email,
-                'course_category' => $record->category_id,
-                'num_intensive' => $record->course_shortname
-            ];
-
-            writer::with_context($context)->export_data($subcontext, $data);
-        }
+        $DB->delete_records('local_eudedashboard_invtimes', array('userid' => $user->id));
     }
 
     /**
@@ -276,12 +167,12 @@ class provider implements metadataprovider, pluginprovider {
         global $DB;
         $userid = $context->instanceid;
         $sql = 'SELECT invtimes.*
-                  FROM {local_eudecustom_invtimes} invtimes
+                  FROM {local_eudedashboard_invtimes} invtimes
                  WHERE invtimes.userid = :userid';
 
         $params = array('userid' => $userid);
         $records = $DB->get_records_sql($sql, $params);
-        $subcontext = ['eudecustom-invtimes'];
+        $subcontext = ['eudedashboard-invtimes'];
 
         foreach ($records as $record) {
             $data = (object) [
