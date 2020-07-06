@@ -1,8 +1,8 @@
 @local @local_eudedashboard @local_eudedashboard_listados @javascript
-Feature: View my custom dashboard
-    In order to see my custom dashboard
-    As a user student or as a user teacher
-    I want to navigate into the system
+Feature: Custom reports for dashboard
+    In order to see my custom reports for dashboard
+    As an admin
+    I need to be able to view custom reports for dashboard
 
   Scenario: Check access capability by configuration
     Given the following "users" exist:

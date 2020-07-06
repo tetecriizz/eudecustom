@@ -1,8 +1,8 @@
 @local @local_eudedashboard @local_eudedashboard_manager @javascript
 Feature: View my custom dashboard
     In order to see my custom dashboard
-    As a user student or as a user teacher
-    I want to navigate into the system
+    As an admin
+    I need to be able to view dashboard
 
   Scenario: Check access capability by configuration
     Given the following "users" exist:
@@ -61,7 +61,7 @@ Feature: View my custom dashboard
       | user3    | Course2ofedition3 | teacher |
       | user3    | Course3ofedition3 | teacher |
 
-    # coursecreator has not an authorized access to 
+    # coursecreator has not an authorized access to
     # manager dashboard and will be redirected to home page
     And I log in as "user3"
     And I go to eudedashboard
@@ -92,7 +92,7 @@ Feature: View my custom dashboard
     And I should see "1 " in the "//div[@class='table-responsive-sm eude-table-header']/div[2]/div[1]/a" "xpath_element"
     And I should see "2 " in the "//div[@class='table-responsive-sm eude-table-header']/div[2]/div[2]/a" "xpath_element"
     And I should see "3 " in the "//div[@class='table-responsive-sm eude-table-header']/div[2]/div[3]/a" "xpath_element"
-    
+
     #Check that information student is correct
     And I should see "1 " in the "//div[@class='table-responsive-sm eude-table-header']/div[2]/div[1]/a" "xpath_element"
     And I should see "2 " in the "//div[@class='table-responsive-sm eude-table-header']/div[2]/div[2]/a" "xpath_element"

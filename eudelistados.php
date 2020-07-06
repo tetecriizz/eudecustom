@@ -36,25 +36,25 @@ require_login(null, false, null, false, true);
 global $USER, $OUTPUT, $CFG;
 
 // Set up the page.
-$string = 'headdashboard';
-$url = new moodle_url("/local/eudedashboard/eudedashboard.php");
+$url = new moodle_url("/local/eudedashboard/eudelistados.php");
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 
 $PAGE->requires->jquery();
+
 $PAGE->requires->jquery_plugin('ui');
 $PAGE->requires->jquery_plugin('ui-css');
-
 $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.min.js'), true);
 $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.buttons.min.js'), true);
+
 $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/my_datatables.js'));
 
 $PAGE->requires->js_call_amd("local_eudedashboard/eude", "dashboard");
-
 $PAGE->requires->css('/local/eudedashboard/style/datatables.css', true);
 $PAGE->requires->css('/local/eudedashboard/style/datatables.min.css', true);
+
 $PAGE->requires->css("/local/eudedashboard/style/eudedashboard_style.css");
 
 

@@ -1695,8 +1695,8 @@ function local_eudedashboard_user_has_approved_program($userid, $programid) {
     $programcourses = count($programcat->get_courses(array('recursive' => true)));
     $incategories = array_column($DB->get_records('course_categories', array('parent' => $programid), '', 'id'), 'id');
     list($insql, $inparams) = $DB->get_in_or_equal($incategories);
-    $sql = "SELECT id 
-              FROM {course} 
+    $sql = "SELECT id
+              FROM {course}
              WHERE category $insql";
 
     $coursesid = array_column($DB->get_records_sql($sql, $inparams), 'id');
