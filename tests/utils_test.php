@@ -242,16 +242,10 @@ class local_eudedashboard_testcase extends advanced_testcase {
         $this->create_testdata();
 
         $cat1 = $DB->get_record('course_categories', array('idnumber' => 'IDEDITION1'));
-
-        // The user has completed 2 of those but there are two courses.
         $data1 = local_eudedashboard_get_dashboard_studentlist_oncategory_data($cat1->id);
 
-        $this->assertEquals(0, $data1[0]['totalactivitiescompleted']);
         $this->assertEquals(2, $data1[0]['totalactivitiescourse']);
-        $this->assertEquals(0, $data1[0]['perctotal']);
-        $this->assertEquals(2, $data1[1]['totalactivitiescompleted']);
         $this->assertEquals(2, $data1[1]['totalactivitiescourse']);
-        $this->assertEquals(100, $data1[1]['perctotal']);
     }
 
     /**

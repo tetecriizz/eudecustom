@@ -2075,7 +2075,7 @@ function local_eudedashboard_check_last_update_invtimes($catid) {
     global $DB;
     $sql = "SELECT MAX(I.timemodified) updatedtime
               FROM {local_eudedashboard_invtimes} I
-              JOIN {course} C
+              JOIN {course} C ON C.id = I.courseid
              WHERE I.courseid = C.id
                    AND C.category = :categoryid";
     $time = $DB->get_record_sql($sql, array('categoryid' => $catid))->updatedtime;

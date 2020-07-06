@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui', 'core/modal_factory'], function ($, ModalFactory) {
+define(['jquery', 'jqueryui'], function ($) {
     function local_eudedashboard_modal_invtimes(catid, response) {
         if (response == '00') {
             $('#result00').css('display', 'block');
@@ -80,14 +80,11 @@ define(['jquery', 'jqueryui', 'core/modal_factory'], function ($, ModalFactory) 
                     async: true,
                     data: {catid: catid},
                     dataType: "text",
-                    success: function(response, status, thrownError) {
+                    success: function(response) {
                         local_eudedashboard_modal_invtimes(catid, response);
                     },
-                    error: function(responseError, statusError, throwError) {
+                    error: function() {
                         local_eudedashboard_modal_invtimes(catid, '02');
-                        console.log(responseError.responseText);
-                        console.log(statusError);
-                        console.log(throwError);
                     }
                 });
             });
