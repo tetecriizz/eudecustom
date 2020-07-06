@@ -967,10 +967,11 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html2 .= html_writer::end_tag('tbody');
         // Generating tfoot for this table.
         $html2 .= $this->local_eudedashboard_print_thead_and_tfoot('tfoot', array(
-            array('th', get_string('singularcourse', 'local_eudedashboard')),
-            array('th', get_string('activitiesfinished', 'local_eudedashboard')),
-            array('th', get_string('completed', 'local_eudedashboard'), array('class' => 'mustfilter')),
-            array('th', get_string('finalgrade', 'local_eudedashboard')),
+            array('th', get_string('singularactivity', 'local_eudedashboard')),
+            array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('deliveried', 'local_eudedashboard')),
+            array('th', get_string('grade', 'local_eudedashboard')),
+            array('th', get_string('feedback', 'local_eudedashboard')),
             array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html2 .= html_writer::end_tag('table');
