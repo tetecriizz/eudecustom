@@ -677,10 +677,10 @@ function local_eudedashboard_get_dashboard_studentinfo_oncategory_data_activitie
                     if ($cdata->completionstate != COMPLETION_INCOMPLETE) {
                         $assign = new \assign($ctxcmmodule, $cm, $course);
                         $assignssubmissions = $assign->get_all_submissions($user->id);
-                            $gradeobj = $assign->get_user_grade($user->id, false);
-                            $feedbacks = $DB->get_records('assignfeedback_comments', array('assignment' => $gradeobj->assignment,
-                                'grade' => $gradeobj->id));
-                            $feedback = end($feedbacks)->commenttext;
+                        $gradeobj = $assign->get_user_grade($user->id, false);
+                        $feedbacks = $DB->get_records('assignfeedback_comments', array('assignment' => $gradeobj->assignment,
+                            'grade' => $gradeobj->id));
+                        $feedback = end($feedbacks)->commenttext;
                         if (count($assignssubmissions) > 0) {
                             $datedeliveried = date("d/m/Y", end($assignssubmissions)->timemodified);
                         }
@@ -1048,7 +1048,6 @@ function local_eudedashboard_get_data_coursestats_bycourse_teacher($catid, $user
  * @return array
  */
 function local_eudedashboard_get_detail_teacher_header ($catid, $userid) {
-    // TODO: CAMBIAR EL NOMBRE DE LA FUNCION
     $coursestats = local_eudedashboard_get_data_coursestats_bycourse_teacher($catid, $userid);
     $approvedstudents = 0;
     $totalstudents = 0;
@@ -1532,11 +1531,14 @@ function local_eudedashboard_print_header_category($category, $active) {
     $html .= html_writer::end_tag('div');
 
     $html .= html_writer::start_tag('div', array('class' => 'box-header-values'));
-    $html .= local_eudedashboard_print_header_interactive_button($classteachers, "eudedashboard.php?catid=".$category->catid."&view=teachers",
-                $category->totalteachers, get_string('teachers', 'local_eudedashboard'));
-    $html .= local_eudedashboard_print_header_interactive_button($classstudents, "eudedashboard.php?catid=".$category->catid."&view=students",
+    $html .= local_eudedashboard_print_header_interactive_button($classteachers,
+            "eudedashboard.php?catid=".$category->catid."&view=teachers",
+            $category->totalteachers, get_string('teachers', 'local_eudedashboard'));
+    $html .= local_eudedashboard_print_header_interactive_button($classstudents,
+                "eudedashboard.php?catid=".$category->catid."&view=students",
                 $category->totalstudents, get_string('students', 'local_eudedashboard'));
-    $html .= local_eudedashboard_print_header_interactive_button($classcourses, "eudedashboard.php?catid=".$category->catid."&view=courses",
+    $html .= local_eudedashboard_print_header_interactive_button($classcourses,
+                "eudedashboard.php?catid=".$category->catid."&view=courses",
                 $category->totalcourses, get_string('courses', 'local_eudedashboard'));
     $html .= html_writer::end_tag('div');
 
@@ -1544,7 +1546,8 @@ function local_eudedashboard_print_header_category($category, $active) {
 
     $html .= html_writer::start_tag('div', array('class' => 'eude-spanrefreshtimes'));
     $html .= html_writer::tag('span', get_string('updatedon', 'local_eudedashboard') );
-    $html .= html_writer::tag('span', local_eudedashboard_check_last_update_invtimes($category->catid), array('id' => 'eudedashboard-spenttime'));
+    $html .= html_writer::tag('span', local_eudedashboard_check_last_update_invtimes($category->catid),
+                array('id' => 'eudedashboard-spenttime'));
     $html .= html_writer::tag('a', get_string('updatenow', 'local_eudedashboard'), array('id' => 'updatespenttime',
                 'data-toggle' => 'modal', 'data-target' => '#eudedashboard-timeinvmodal'));
     $html .= html_writer::end_div();
@@ -1593,7 +1596,8 @@ function local_eudedashboard_print_modal () {
  * @param array $style
  * @return string
  */
-function local_eudedashboard_print_header_interactive_button($unactive, $url, $value, $string, $tag = 'div', $style = array('class' => 'col-4')) {
+function local_eudedashboard_print_header_interactive_button($unactive, $url, $value, $string,
+        $tag = 'div', $style = array('class' => 'col-4')) {
     $html = html_writer::start_tag($tag, $style);
     $html .= html_writer::start_tag('a', array('class' => "interactive-btn $unactive", 'href' => $url));
     $html .= $value.' ';
@@ -1853,11 +1857,14 @@ function local_eudedashboard_get_times_from_user($userid, $catid, $role) {
     foreach ($records as $record) {
         // Add to totaltime if userid is student or teacher.
         if ( $role == 'students' && in_array($record->courseid, array_column($coursesgivencategory, 'id')) ) {
-            $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
+            $agdays = $record->day1 + $record->day2 + $record->day3 +
+                    $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $counter++;
             $totaltimestudents += $record->totaltime;
-            $data ['students']['accesses'] += local_eudedashboard_get_accesses_from_course($record->courseid, 'student', false, $userid);
-            $data ['students']['accesseslastdays'] += local_eudedashboard_get_accesses_from_course($record->courseid, 'student', true, $userid);
+            $data ['students']['accesses'] +=
+                    local_eudedashboard_get_accesses_from_course($record->courseid, 'student', false, $userid);
+            $data ['students']['accesseslastdays'] +=
+                    local_eudedashboard_get_accesses_from_course($record->courseid, 'student', true, $userid);
             $data ['students']['sun'] += $record->day1;
             $data ['students']['mon'] += $record->day2;
             $data ['students']['tue'] += $record->day3;
@@ -1871,8 +1878,10 @@ function local_eudedashboard_get_times_from_user($userid, $catid, $role) {
             $agdays = $record->day1 + $record->day2 + $record->day3 + $record->day4 + $record->day5 + $record->day6 + $record->day7;
             $counter++;
             $totaltimeteachers += $record->totaltime;
-            $data ['teachers']['accesses'] += local_eudedashboard_get_accesses_from_course($record->courseid, 'teacher', false, $userid);
-            $data ['teachers']['accesseslastdays'] += local_eudedashboard_get_accesses_from_course($record->courseid, 'teacher', true, $userid);
+            $data ['teachers']['accesses'] +=
+                    local_eudedashboard_get_accesses_from_course($record->courseid, 'teacher', false, $userid);
+            $data ['teachers']['accesseslastdays'] +=
+                    local_eudedashboard_get_accesses_from_course($record->courseid, 'teacher', true, $userid);
             $data ['teachers']['sun'] += $record->day1;
             $data ['teachers']['mon'] += $record->day2;
             $data ['teachers']['tue'] += $record->day3;
@@ -2122,15 +2131,15 @@ function local_eudedashboard_investedtimes_teachers($catid, $out = true) {
                 $invrectea->totaltime = 0;
 
                 // Get all records since start.
-                $total = local_eudedashboard_get_usertime_incourse ($rec->teacherid, $rec->courseid);
+                $total = local_eudedashboard_get_usertime_incourse($rec->teacherid, $rec->courseid);
             } else {
                 // Get all records since last update.
                 $exist = true;
-                $total = local_eudedashboard_get_usertime_incourse ($rec->teacherid, $rec->courseid, true, $invrectea->timemodified);
+                $total = local_eudedashboard_get_usertime_incourse($rec->teacherid, $rec->courseid, true, $invrectea->timemodified);
             }
 
             // Time in last seven days.
-            $data = local_eudedashboard_get_usertime_incourse ($rec->teacherid, $rec->courseid, true);
+            $data = local_eudedashboard_get_usertime_incourse($rec->teacherid, $rec->courseid, true);
 
             if (count($total) == 0) {
                 // There are no data to update.
@@ -2229,7 +2238,8 @@ function local_eudedashboard_investedtimes_students($catid, $out = true) {
             } else {
                 // Get all records since last update.
                 $exist = true;
-                $total = local_eudedashboard_get_usertime_incourse ($record->studentid, $record->courseid, true, $invrecstu->timemodified);
+                $total = local_eudedashboard_get_usertime_incourse ($record->studentid,
+                        $record->courseid, true, $invrecstu->timemodified);
             }
 
             // Time in last seven days.

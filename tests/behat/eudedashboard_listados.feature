@@ -4,8 +4,7 @@ Feature: View my custom dashboard
     As a user student or as a user teacher
     I want to navigate into the system
 
-      
-Scenario: Check access capability by configuration
+  Scenario: Check access capability by configuration
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | user1    | User      | 1        | user1@example.com    |
@@ -19,7 +18,7 @@ Scenario: Check access capability by configuration
       | Edition1 | Edition1 |  Program1 |
       | Edition2 | Edition2 |  Program1 |
       | Edition3 | Edition3 |  Program1 |
-      
+
     And the following "courses" exist:
       | category | shortname           | fullname            | idnumber          |
       | Edition1 | Course1ofedition1   | Course1ofedition1   | Course1ofedition1 |
@@ -31,7 +30,7 @@ Scenario: Check access capability by configuration
       | Edition3 | Course1ofedition3   | Course1ofedition3   | Course1ofedition3 |
       | Edition3 | Course2ofedition3   | Course2ofedition3   | Course2ofedition3 |
       | Edition3 | Course3ofedition3   | Course3ofedition3   | Course3ofedition3 |
-      
+
     And the following "course enrolments" exist:
       | user     | course            | role    |
       | user1    | Course1ofedition1 | student |
@@ -61,7 +60,6 @@ Scenario: Check access capability by configuration
       | user3    | Course1ofedition3 | teacher |
       | user3    | Course2ofedition3 | teacher |
       | user3    | Course3ofedition3 | teacher |
-      
 
     # Access as admin to enable cat1 and cat2 and add role for coursecreator to manager dashboard
     And I log in as "admin"
@@ -72,9 +70,7 @@ Scenario: Check access capability by configuration
     And I click on "//select[@id='id_s__local_eudedashboard_role']/option[5]" "xpath_element"
     And I click on "//form[@id='adminsettings']//button[@type='submit']" "xpath_element"
     And I go to eudedashboard
-    
+
     And I click on "//div[@class='eudedashboard-toplinks']/span[2]/a" "xpath_element"
     And I click on "//div[@class='list-tabs']/a[2]" "xpath_element"
     And I click on "//div[@class='list-tabs']/a[3]" "xpath_element"
-    
-    

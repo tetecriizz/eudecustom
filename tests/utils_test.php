@@ -65,10 +65,14 @@ class local_eudedashboard_testcase extends advanced_testcase {
         global $DB, $CFG;
 
         // Creating categories.
-        $programsparent = $this->getDataGenerator()->create_category(array('name' => 'Programs 2020', 'idnumber' => 'PARENTPROGRAMS'));
-        $program1 = $this->getDataGenerator()->create_category(array('name' => 'Program1', 'idnumber' => 'IDPROGRAM1', 'parent' => $programsparent->id));
-        $edition1 = $this->getDataGenerator()->create_category(array('name' => 'Edition1', 'idnumber' => 'IDEDITION1', 'parent' => $program1->id));
-        $edition2 = $this->getDataGenerator()->create_category(array('name' => 'Edition2', 'idnumber' => 'IDEDITION2', 'parent' => $program1->id));
+        $programsparent = $this->getDataGenerator()->create_category(
+                array('name' => 'Programs 2020', 'idnumber' => 'PARENTPROGRAMS'));
+        $program1 = $this->getDataGenerator()->create_category(
+                array('name' => 'Program1', 'idnumber' => 'IDPROGRAM1', 'parent' => $programsparent->id));
+        $edition1 = $this->getDataGenerator()->create_category(
+                array('name' => 'Edition1', 'idnumber' => 'IDEDITION1', 'parent' => $program1->id));
+        $edition2 = $this->getDataGenerator()->create_category(
+                array('name' => 'Edition2', 'idnumber' => 'IDEDITION2', 'parent' => $program1->id));
 
         // Creating a few users.
         $user1 = $this->getDataGenerator()->create_user(array('username' => 'user1'));
@@ -280,8 +284,6 @@ class local_eudedashboard_testcase extends advanced_testcase {
         $cat1 = $DB->get_record('course_categories', array('idnumber' => 'IDEDITION1'));
         $data1 = local_eudedashboard_get_dashboard_teacherlist_oncategory_data($cat1->id);
 
-        // Two users, user2 has 78, user3 has 82, 2 passed 0 suspended 0 totalactivitiesgradedcategory.
-        // All students MUST PERFORMED some assign with completion, 100% students passed.
         $this->assertEquals(4, $data1[$user1->id]['totalactivities']);
         $this->assertEquals(0, $data1[$user1->id]['totalactivitiesgradedcategory']);
     }
@@ -499,7 +501,7 @@ class local_eudedashboard_testcase extends advanced_testcase {
         $user2 = $DB->get_record('user', array('username' => 'user2'));
         $user3 = $DB->get_record('user', array('username' => 'user3'));
 
-        // User2 has 0 completed 4 total, user3 has 2 completed 4 total.
+        // User2 has 0 completed 2 total, user3 has 2 completed 2 total.
         $data1 = local_eudedashboard_get_cmcompletion_user_course($user2->id, $module1);
         $data2 = local_eudedashboard_get_cmcompletion_user_course($user3->id, $module1);
 

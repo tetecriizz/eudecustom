@@ -564,7 +564,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= local_eudedashboard_print_divcard_eude_header('col-3', $countstudents, get_string('enroledstudents', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-3',
+                $countstudents, get_string('enroledstudents', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-3',
             intval($countstudents == 0 ? 0 : ($studentsinrisk * 100) / $countstudents).'%',
             get_string('studentsinrisk', 'local_eudedashboard'), $studentsinrisk);
@@ -754,7 +755,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('box-header-values');
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['totalactivitiescompleted'].'/'.
             $infodetail['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4',
+                $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
             $infodetail['countaveragegrade'] / count($data), 1), get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
@@ -1000,7 +1002,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('box-header-values');
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['totalactivitiescompleted'].'/'.
             $infodetail['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4',
+                $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
             $infodetail['countaveragegrade'] / count($data), 1), get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
@@ -1191,7 +1194,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('box-header-values');
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['teacheractivitiesgraded'].'/'.
                 $header['teacheractivitiestotal'], get_string('activitiesgraded', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['modules'], get_string('courses', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4',
+                $header['modules'], get_string('courses', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['approved'].'%',
                     get_string('passedstudents', 'local_eudedashboard'));
         $html .= html_writer::end_div();
@@ -1307,7 +1311,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::start_div('box-header-values');
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['teacheractivitiesgraded'].'/'.
                 $header['teacheractivitiestotal'], get_string('activitiesgraded', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['modules'], get_string('courses', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['modules'],
+                get_string('courses', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['approved'].'%',
                     get_string('passedstudents', 'local_eudedashboard'));
         $html .= html_writer::end_div();
