@@ -1079,7 +1079,7 @@ function local_eudedashboard_get_teachers_from_category($category, $unique = fal
          LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
              WHERE CTX.contextlevel = :context
                    AND (R.shortname = :role1 OR R.shortname = :role2 OR R.shortname = :role3)
-                   AND C.category = :category 
+                   AND C.category = :category
                    $clauseunique
                    $orderby";
 
