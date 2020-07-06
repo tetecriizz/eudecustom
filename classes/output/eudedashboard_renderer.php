@@ -669,18 +669,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
         $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
 
-        $params = $this->page->url->params();
-        $params['tab'] = 'activities';
-        $activitiesparams = $params;
-        $params['tab'] = 'modules';
-        $modulesparams = $params;
-        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
-        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
-
-        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
-        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'));
-        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'), array('class' => 'active'));
-        $html2 .= html_writer::end_tag('div');
+        $html2 = $this->local_eudedashboard_studentinfo_urls('modules');
 
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html2 .= html_writer::start_tag('table',
@@ -736,7 +725,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $urlback = 'eudedashboard.php?view=students&catid='.$categoryid;
         $html = local_eudedashboard_print_return_generate_report($urlback);
-        $params = array('view' => 'students', 'aluid' => $alu->id, 'tab' => $params['tab']);
+        $params = array('view' => 'students', 'aluid' => $alu->id, 'tab' => 'modules');
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
         $html .= html_writer::start_div('dashboard-row');
@@ -916,6 +905,35 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     }
 
     /**
+     * Print tabs html for student detail.
+     * @param string $tab
+     * @return string
+     */
+    public function local_eudedashboard_studentinfo_urls($tab = 'activities') {
+        $activeactivities = "";
+        $activemodules = "";
+        if ($tab == 'activities') {
+            $activeactivities = 'active';
+        } else {
+            $activemodules = 'active';
+        }
+        $params = $this->page->url->params();
+        $params['tab'] = 'activities';
+        $activitiesparams = $params;
+        $params['tab'] = 'modules';
+        $modulesparams = $params;
+        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
+        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
+
+        $html = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
+        $html .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'),
+                array('class' => $activeactivities));
+        $html .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'), array('class' => $activemodules));
+        $html .= html_writer::end_tag('div');
+        return $html;
+    }
+
+    /**
      * Render custom for eude new dashboard.
      * @param int $categoryid
      * @param array $data
@@ -926,18 +944,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
         $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
 
-        $params = $this->page->url->params();
-        $params['tab'] = 'activities';
-        $activitiesparams = $params;
-        $params['tab'] = 'modules';
-        $modulesparams = $params;
-        $activitiesurl = new \moodle_url($this->page->url, $activitiesparams);
-        $modulesurl = new \moodle_url($this->page->url, $modulesparams);
-
-        $html2 = html_writer::start_div('list-tabs', array('style' => 'margin-top:10px'));
-        $html2 .= html_writer::link($activitiesurl, get_string('activities', 'local_eudedashboard'), array('class' => 'active'));
-        $html2 .= html_writer::link($modulesurl, get_string('modules', 'local_eudedashboard'));
-        $html2 .= html_writer::end_tag('div');
+        $html2 = $this->local_eudedashboard_studentinfo_urls('activities');
 
         $html2 .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html2 .= html_writer::start_tag('table',
@@ -983,7 +990,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $urlback = 'eudedashboard.php?view=students&catid='.$categoryid;
         $html = local_eudedashboard_print_return_generate_report($urlback);
 
-        $params = array('view' => 'students', 'name' => $params['tab'], 'aluid' => $alu->id);
+        $params = array('view' => 'students', 'tab' => 'activities', 'aluid' => $alu->id);
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
         $html .= html_writer::start_div('dashboard-row');
