@@ -183,12 +183,23 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         return $html;
     }
 
-    /**
-     * Generic function used to print student data.
-     * @param array $coursestats
-     * @return string
-     */
-    public function local_eudedashboard_print_data_student($coursestats) {
+    public function local_eudedashboard_print_data_html($coursestats, $view) {
+        $index1 = '';
+        $index2 = '';
+        $string1 = '';
+        $string2 = '';
+        if ($view == 'student') {
+            $index1 = 'totalactivitiescompleted';
+            $string1 = 'activitiescompleted';
+            $index2 = 'totalactivitiescourse';
+            $string2 = 'activitiestotal';
+        } else {
+            $index1 = 'teacheractivitiesgraded';
+            $string1 = 'activitiesgraded';
+            $index2 = 'diffgradedsubmitted';
+            $string2 = 'averagedelaydays';
+        }
+
         $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
             array('id' => 'studentdata'));
         $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
@@ -196,12 +207,12 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::div(get_string('accesses', 'local_eudedashboard'), 'subtitle');
         $html .= html_writer::start_div('borderright');
         $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats['totalactivitiescompleted'], 'big-text').
-            \html_writer::start_tag('sub'). get_string('activitiescompleted', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::span($coursestats[$index1], 'big-text').
+            \html_writer::start_tag('sub'). get_string($string1, 'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats['totalactivitiescourse'], 'big-text').
-            \html_writer::start_tag('sub').get_string('activitiestotal', 'local_eudedashboard').\html_writer::end_tag('sub');
+        $html .= html_writer::span($coursestats[$index2], 'big-text').
+            \html_writer::start_tag('sub').get_string($string2, 'local_eudedashboard').\html_writer::end_tag('sub');
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
@@ -223,6 +234,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         return $html;
     }
+    /**
+     * Generic function used to print student data.
+     * @param array $coursestats
+     * @return string
+     */
+    public function local_eudedashboard_print_data_student($coursestats) {
+        // Avoid duplicate code by using local_eudedashboard_print_data_html().
+        return $this->local_eudedashboard_print_data_html($coursestats, 'student');
+    }
 
     /**
      * Print course stats
@@ -230,39 +250,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      * @return string
      */
     public function local_eudedashboard_print_data_teacher($coursestats) {
-        $html = html_writer::start_div('dashboard-container studentdata col-12 col-md-6 col-lg-5 eude-data-info',
-            array('id' => 'studentdata'));
-        $html .= html_writer::start_div('dashboard-card dashboard-row edue-gray-block ');
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('accesses', 'local_eudedashboard'), 'subtitle');
-        $html .= html_writer::start_div('borderright');
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats['teacheractivitiesgraded'].'/'.$coursestats['teacheractivitiestotal'], 'big-text').
-                \html_writer::start_tag('sub'). get_string('activitiesgraded', 'local_eudedashboard').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats['diffgradedsubmitted'], 'big-text').
-            \html_writer::start_tag('sub').get_string('averagedelaydays', 'local_eudedashboard').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('width50');
-        $html .= html_writer::div(get_string('performance', 'local_eudedashboard'), 'subtitle');
-        $html .= html_writer::start_div();
-        $html .= html_writer::start_div('container-top');
-        $html .= html_writer::span($coursestats['messagesforum'], 'big-text').\html_writer::start_tag('sub').
-            get_string('forummessages', 'local_eudedashboard').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('container-bottom');
-        $html .= html_writer::span($coursestats['announcementsforum'], 'big-text').\html_writer::start_tag('sub').
-            get_string('newsforum', 'local_eudedashboard').\html_writer::end_tag('sub');
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        return $html;
+        // Avoid duplicate code by using local_eudedashboard_print_data_html().
+        return $this->local_eudedashboard_print_data_html($coursestats, 'teacher');
     }
 
     /**
