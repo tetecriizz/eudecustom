@@ -906,13 +906,13 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      */
     public function local_eudedashboard_main_card_student($alu, $infoheader, $data, $dataconn) {
         $totalactivitiescompleted = isset($infoheader['totalactivitiescompleted']) ? $infoheader['totalactivitiescompleted'] : 0;
-		$totalactivitiescourse = isset($infoheader['totalactivitiescourse']) ? $infoheader['totalactivitiescourse'] : 0;
-		$risk = isset($infoheader['risk']) ? $infoheader['risk'] : 4;
-		$countaveragegrade = isset($infoheader['countaveragegrade']) ? $infoheader['countaveragegrade'] : 0;
-		$totalcourses = isset($infoheader['totalcourses']) ? $infoheader['totalcourses'] : 0;
-		$perctotal = isset($infoheader['perctotal']) ? $infoheader['perctotal'] : 0;
-		
-		$html = html_writer::start_div('dashboard-row');
+        $totalactivitiescourse = isset($infoheader['totalactivitiescourse']) ? $infoheader['totalactivitiescourse'] : 0;
+        $risk = isset($infoheader['risk']) ? $infoheader['risk'] : 4;
+        $countaveragegrade = isset($infoheader['countaveragegrade']) ? $infoheader['countaveragegrade'] : 0;
+        $totalcourses = isset($infoheader['totalcourses']) ? $infoheader['totalcourses'] : 0;
+        $perctotal = isset($infoheader['perctotal']) ? $infoheader['perctotal'] : 0;
+
+        $html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
         $html .= html_writer::start_div('report-header-box');
         $html .= html_writer::start_div('box-header-title');
