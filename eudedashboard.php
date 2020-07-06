@@ -148,7 +148,7 @@ if ( $hassomerole ) {
     } else if ( $view == 'teachers' && $teacherid != null ) {
         // Pantalla 7/7.
         // Teacher detail info in category.
-        $title = get_string('headdashboarduser', 'local_eudedashboard');
+        $title = get_string('headdashboardteacher', 'local_eudedashboard');
         // Set title of page.
         $PAGE->set_title($title);
         $PAGE->set_heading($title);

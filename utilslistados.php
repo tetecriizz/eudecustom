@@ -203,6 +203,7 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
 /**
  * Return matching results from students report.
  * @param string $name
+ * @param string $cohort
  * @param string $email
  * @param array $programandmodule
  * @param string $state
@@ -210,9 +211,8 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
  * @param string $to
  * @return array
  */
-function local_eudedashboard_get_studentlists_data ($name = '', $email = '', $programandmodule = array(),
+function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $email = '', $programandmodule = array(),
         $state = '', $from = '', $to = '') {
-
     $return = array();
     $records = local_euddedashboard_student_get_results();
     foreach ($records as $record) {
@@ -226,6 +226,12 @@ function local_eudedashboard_get_studentlists_data ($name = '', $email = '', $pr
         }
         if ($name != '') {
             if (strpos(strtolower($record->fullname), strtolower($name)) === false) {
+                continue;
+            }
+        }
+        if ($cohort != '' && $cohort > 0) {
+            $cohortsid = explode(',', $record->cohortsid);
+            if (!in_array($cohort, $cohortsid)) {
                 continue;
             }
         }
@@ -336,6 +342,29 @@ function local_euddedashboard_student_get_results ($filteredprogram = '') {
                     $temp ['enddate'] = ($record->timecompleted != '') ? date('d/m/Y', $record->timecompleted) : '-';
                     $temp ['enddatetimestamp'] = $record->timecompleted;
                     $temp ['grade'] = (isset($gradeobject->cgrade) && $gradeobject->cgrade != '') ? $gradeobject->cgrade : '-';
+
+                    $courseacceses = local_eudedashboard_get_accesses_from_course($record->course, 'student', null, $user->id);
+                    $temp ['courseacceses'] = $courseacceses;
+
+                    $invtime = $DB->get_record('local_eudedashboard_invtimes', array(
+                        'userid' => $user->id, 'courseid' => $record->course));
+
+                    $temp ['courseaveragetime'] = ($invtime != null) ? gmdate("H:i", $invtime->totaltime) : '00:00';
+
+                    $sql = "SELECT MIN(timecreated) timecreated
+                              FROM {logstore_standard_log}
+                             WHERE component = :component
+                                   AND action = :action
+                                   AND target = :target
+                                   AND courseid = :courseid
+                                   AND userid = :userid";
+                    $firstaccess = $DB->get_record_sql($sql, array('component' => 'core', 'action' => 'viewed',
+                    'target' => 'course', 'courseid' => $record->course, 'userid' => $user->id));
+
+                    $temp ['firstaccess'] = ($firstaccess->timecreated != null) ? date('d/m/Y', $firstaccess->timecreated ) : '-';
+
+                    $lastaccess = $DB->get_record('user_lastaccess', array('courseid' => $record->course, 'userid' => $user->id));
+                    $temp ['lastaccess'] = ($lastaccess != null) ? date('d/m/Y', $lastaccess->timeaccess) : '-';
 
                     // Passing the $glue and $pieces parameters in reverse order to implode has been deprecated since PHP 7.4;
                     // $glue should be the first parameter and $pieces the second.

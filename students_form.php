@@ -49,6 +49,10 @@ class local_eudedashboard_students extends moodleform {
         $mform->addElement('text', 'studentname', get_string('name', 'local_eudedashboard'), $attributes);
         $mform->setType('studentname', PARAM_TEXT);
 
+        // Merge would lose keys, then add arrays, keys will not overlap.
+        $cohorts = array(0 => get_string('allcohorts', 'local_eudedashboard')) + local_eudedashboard_get_cohorts_for_settings();
+        $mform->addElement('select', 'cohort', get_string('cohorttitle', 'local_eudedashboard'), $cohorts, array());
+
         $mform->addElement('text', 'studentmail', get_string('mail', 'local_eudedashboard'), $attributes);
         $mform->setType('studentmail', PARAM_TEXT);
 

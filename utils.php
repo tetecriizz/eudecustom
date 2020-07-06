@@ -512,68 +512,27 @@ function local_eudedashboard_get_dashboard_studentinfo_oncategory_data ($catid, 
  * @return array $data
  */
 function local_eudedashboard_get_dashboard_teacherlist_oncategory_data ($category) {
-    // Fetch modules with grade items.
+    global $DB;
     $data = array();
-    $totalactivitiesgradedcategory = 0;
-    $totalactivitiescategory = 0;
-    $totalpassed = 0;
-    $totalsuspended = 0;
-    $lastteacherid = 0;
-    $maxlastaccess = 0;
+    $teachers = local_eudedashboard_get_teachers_from_category($category, true);
+    foreach ($teachers as $teacher) {
+        $insql = array_column($DB->get_records('course', array('category' => $category), '', 'id'), 'id');
+        list($insql, $inparams) = $DB->get_in_or_equal($insql, SQL_PARAMS_NAMED);
+        // Parameter keys does not match.
+        $params = array('userid' => $teacher->teacherid, 'category' => $category) + $inparams;
+        $sql = "SELECT MAX(timeaccess) timeaccess FROM {user_lastaccess} WHERE userid = :userid AND courseid $insql ";
+        $lastaccess = $DB->get_record_sql($sql, $params);
 
-    // Users are teachers in courses in category.
-    $records = local_eudedashboard_get_teachers_from_category($category);
-    foreach ($records as $record) {
-        // Restart counters.
-        $total = 0;
-        $totalactivitiesgradedcategory = 0;
-        $totalactivitiescategory = 0;
-        $totalpassed = 0;
-        $totalsuspended = 0;
-        $datarecord = array(
-            'totalactivities' => 0,
-            'totalactivitiesgradedcategory' => 0,
-            'lastaccess' => 0,
-            'totalpassed' => 0,
-            'totalsuspended' => 0,
-            'lastaccess' => 0
-        );
-        if ($record->teacherid != $lastteacherid) {
-            $lastteacherid = $record->teacherid;
-            $maxlastaccess = 0;
-        }
-        if ($record->lastaccess > $maxlastaccess) {
-            $maxlastaccess = $record->lastaccess;
-        }
-
-        $course = get_course($record->courseid);
-        $activitiesdata = local_eudedashboard_get_data_coursestats_bycourse_teacher($category, $record->teacherid);
-        $datarecord['totalactivities'] += $activitiesdata['teacheractivitiestotal'];
-        $datarecord['totalactivitiesgradedcategory'] += $activitiesdata['teacheractivitiesgraded'];
-
-        // Count students that have course completion marked.
-        $users = local_eudedashboard_get_course_students($course->id, 'student');
-        $total += count($users);
-        foreach ($users as $user) {
-            $cinfo = new \completion_info($course);
-            if ($cinfo->is_course_complete($user->id)) {
-                $totalpassed++;
-            } else {
-                $totalsuspended++;
-            }
-        }
-
-        $user = core_user::get_user($record->teacherid);
-        $lastaccess = $maxlastaccess == 0 ? '-' : date('d/m/Y', $maxlastaccess);
-        $datarecord['userid'] = $user->id;
-        $datarecord['firstname'] = $user->firstname;
-        $datarecord['lastname'] = $user->lastname;
-        $datarecord['percent'] = $total == 0 ? 0 : intval($totalpassed * 100 / $total);
-        $datarecord['lastaccess'] = $lastaccess;
-        $datarecord['totalpassed'] += $totalpassed;
-        $datarecord['totalsuspended'] += $totalsuspended;
-
-        $data [$user->id] = $datarecord;
+        $datarecord = local_eudedashboard_get_detail_teacher_header($category, $teacher->teacherid);
+        $user = core_user::get_user($teacher->teacherid);
+        $data[$teacher->teacherid]['userid'] = $user->id;
+        $data[$teacher->teacherid]['firstname'] = $user->firstname;
+        $data[$teacher->teacherid]['lastname'] = $user->lastname;
+        $data[$teacher->teacherid]['total'] = $datarecord['students'];
+        $data[$teacher->teacherid]['perc'] = $datarecord['approved'];
+        $data[$teacher->teacherid]['totalactivities'] = $datarecord['teacheractivitiestotal'];
+        $data[$teacher->teacherid]['totalactivitiesgradedcategory'] = $datarecord['teacheractivitiesgraded'];
+        $data[$teacher->teacherid]['lastaccess'] = $lastaccess->timeaccess == null ? '-' : date('d/m/Y', $lastaccess->timeaccess);
     }
     return $data;
 }
@@ -810,6 +769,7 @@ function local_eudedashboard_get_dashboard_teacherinfo_oncategory_data_modules (
                 $totalsuspended++;
             }
         }
+        $datarecord['courseid'] = $record->courseid;
         $datarecord['coursename'] = $record->coursename;
         $datarecord['percent'] = $datarecord['totalusers'] == 0 ? 0 : $totalpassed * 100 / $datarecord['totalusers'];
         $datarecord['lastaccess'] = empty($record->lastaccess) ? '-' : date('d/m/Y', $record->lastaccess);
@@ -1049,29 +1009,32 @@ function local_eudedashboard_get_data_coursestats_bycourse_teacher($catid, $user
  */
 function local_eudedashboard_get_detail_teacher_header ($catid, $userid) {
     $coursestats = local_eudedashboard_get_data_coursestats_bycourse_teacher($catid, $userid);
-    $approvedstudents = 0;
-    $totalstudents = 0;
-    $courses = core_course_category::get($catid)->get_courses();
+    $editionstudents = 0;
+    $category = core_course_category::get($catid);
+    $courses = $category->get_courses();
     foreach ($courses as $course) {
-        $users = local_eudedashboard_get_course_students($course->id, 'student');
-        $totalstudents += count($users);
-        foreach ($users as $user) {
+        $totalpassed = 0;
+        $totalstudents = 0;
+        $coursecontext = context_course::instance($course->id);
+        $students = get_role_users(5, $coursecontext);
+        foreach ($students as $student) {
             $cinfo = new \completion_info($course);
-            if ($cinfo->is_course_complete($user->id)) {
-                $approvedstudents++;
+            if ($cinfo->is_course_complete($student->id)) {
+                $totalpassed++;
             }
+            $totalstudents ++;
+            $editionstudents ++;
         }
+        $percentage = $totalstudents == 0 ? 0 : $totalpassed * 100 / $totalstudents;
+        $percentages[] = $percentage;
     }
-    if ($totalstudents > 0) {
-        $averageapproved = intval ($approvedstudents * 100 / $totalstudents);
-    } else {
-        $averageapproved = 0;
-    }
+    $total = array_sum($percentages) / count($percentages);
+    $totalstudents = 0;
     return array(
         'teacheractivitiesgraded' => $coursestats['teacheractivitiesgraded'],
         'teacheractivitiestotal' => $coursestats['teacheractivitiestotal'],
         'students' => $totalstudents,
-        'approved' => $averageapproved,
+        'approved' => number_format($total, 1),
         'modules' => count($courses)
     );
 }
@@ -1089,7 +1052,7 @@ function local_eudedashboard_convert_seconds($seconds) {
 
 /**
  * This function returns a list of course id's where the user has a specific rol.
- * @param int $category ESTA ES LA ID DE LA EDICION
+ * @param int $category
  * @param bool $unique
  * @return array $records
  */

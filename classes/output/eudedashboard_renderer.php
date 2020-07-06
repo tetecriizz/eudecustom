@@ -185,9 +185,9 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Print html for both students and teachers detail.
-     * @param type $coursestats
-     * @param type $view
-     * @return type
+     * @param array $coursestats
+     * @param string $view
+     * @return string
      */
     public function local_eudedashboard_print_data_html($coursestats, $view) {
         $index1 = '';
@@ -555,7 +555,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $html .= html_writer::start_div('bbbb', array('style' => 'float:left;margin-left: 20px;'));
         $html .= html_writer::tag('h4', $course->fullname);
-        $html .= html_writer::tag('h5', $course->shortname);
+        $html .= html_writer::tag('h5', local_eudedashboard_get_breadcrumb_from_category($category->catid).
+            ' / '.$course->shortname);
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
@@ -765,7 +766,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $html .= html_writer::start_tag('tr');
             $html .= html_writer::tag('td', $data['firstname']. ' '. $data['lastname']);
             $html .= html_writer::tag('td',  $data['totalactivitiesgradedcategory'] . '/' . $data['totalactivities']);
-            $html .= html_writer::tag('td', $data['percent'] .'%');
+            $html .= html_writer::tag('td', number_format($data['perc'], 1) .'%');
             $html .= html_writer::tag('td', $data['lastaccess']);
             $html .= html_writer::start_tag('td');
             $html .= html_writer::start_tag('a',
@@ -773,7 +774,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html .= html_writer::end_tag('a');
             $html .= html_writer::tag('div', '',
-                $this->local_eudedashboard_get_row_style('background-progression', $data['percent']));
+                $this->local_eudedashboard_get_row_style('background-progression', $data['perc']));
             $html .= html_writer::end_tag('div');
             $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
@@ -895,11 +896,11 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
     /**
      * Print main card on student detail.
-     * @param type $alu
-     * @param type $infodetail
-     * @param type $data
-     * @param type $dataconn
-     * @return type
+     * @param stdClass $alu
+     * @param array $infodetail
+     * @param array $data
+     * @param array $dataconn
+     * @return array
      */
     public function local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn) {
         $html = html_writer::start_div('dashboard-row');
@@ -1139,7 +1140,9 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         ));
         $html2 .= html_writer::start_tag('tbody');
 
+        $approvedsum = 0;
         foreach ($users as $id => $data) {
+            $approvedsum += $data['percent'];
             $totalcourses++;
             $totalactivitiescompleted += $data['totalactivitiesgradedcategory'];
             $totalactivitiescourse += $data['totalactivities'];
@@ -1153,7 +1156,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
             $html2 .= html_writer::tag('td', $data['lastaccess']);
             $html2 .= html_writer::start_tag('td');
             $html2 .= html_writer::start_tag('a',
-                        array('href' => 'eudedashboard.php?courseid='.$id.'&view=courses&catid='.$categoryid));
+                        array('href' => 'eudedashboard.php?courseid='.$data['courseid'].'&view=courses&catid='.$categoryid));
             $html2 .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
             $html2 .= html_writer::end_tag('a');
             $html2 .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('background-progression', $perc));
@@ -1180,6 +1183,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= local_eudedashboard_print_category_selector($categoryid, $selectparams);
 
         $perc = intval( $totalcourses == 0 ? 0 : $totalfinalgradeperc / $totalcourses);
+        $header['approved'] = count($users) == 0 ? 0 : number_format(($approvedsum / count($users)), 1);
 
         $html .= $this->local_eudedashboard_teacherinfo_card($tea, $header, $dataconn);
 

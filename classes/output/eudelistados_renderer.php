@@ -112,7 +112,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('program', 'local_eudedashboard')),
             array('th', get_string('enddate', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::start_tag('tbody');
 
@@ -129,12 +128,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
                 $html .= html_writer::tag('td', $v['info']->programname);
                 $html .= html_writer::tag('td', $v['info']->enddate);
                 $html .= html_writer::tag('td', number_format((float)$v['calculatedgrade'], 1));
-                $html .= html_writer::start_tag('td');
-                $html .= html_writer::start_tag('a',
-                            array('href' => '#'));
-                $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
-                $html .= html_writer::end_tag('a');
-                $html .= html_writer::end_tag('td');
             }
             $html .= html_writer::end_tag('tr');
 
@@ -148,7 +141,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('program', 'local_eudedashboard')),
             array('th', get_string('enddate', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');
@@ -189,24 +181,28 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         if ($fromform = $mform->get_data()) {
-            $data = local_eudedashboard_get_studentlists_data($fromform->studentname, $fromform->studentmail,
+            $data = local_eudedashboard_get_studentlists_data($fromform->studentname, $fromform->cohort, $fromform->studentmail,
                 $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to);
         } else {
             $data = local_eudedashboard_get_studentlists_data();
         }
 
-        $html .= html_writer::start_div('table-responsive-sm eude-generic-list');
+        $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist eude-table-categories'));
         $html .= $this->local_eudelistados_print_thead_and_tfoot('thead', array(
             array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('cohorttitle', 'local_eudedashboard')),
             array('th', get_string('mail', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
             array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('visitscount', 'local_eudedashboard')),
+            array('th', get_string('timeconnection', 'local_eudedashboard')),
+            array('th', get_string('firstaccess', 'local_eudedashboard')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
             array('th', get_string('statustitle', 'local_eudedashboard')),
             array('th', get_string('enddate', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::start_tag('tbody');
 
@@ -214,31 +210,34 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $values = (object) $values;
             $html .= html_writer::start_tag('tr');
             $html .= html_writer::tag('td', $values->fullname);
+            $html .= html_writer::tag('td', $values->cohorts);
             $html .= html_writer::tag('td', $values->email);
             $html .= html_writer::tag('td', $values->programname);
             $html .= html_writer::tag('td', $values->modulename);
+            $html .= html_writer::tag('td', $values->courseacceses);
+            $html .= html_writer::tag('td', $values->courseaveragetime);
+            $html .= html_writer::tag('td', $values->firstaccess);
+            $html .= html_writer::tag('td', $values->lastaccess);
             $html .= html_writer::tag('td', $values->state);
             $html .= html_writer::tag('td', $values->enddate);
             $html .= html_writer::tag('td', number_format((float)$values->grade, 1));
-            $html .= html_writer::start_tag('td');
-            $html .= html_writer::start_tag('a',
-                        array('href' => '#'));
-            $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
-            $html .= html_writer::end_tag('a');
-            $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
         }
 
         $html .= html_writer::end_tag('tbody');
         $html .= $this->local_eudelistados_print_thead_and_tfoot('tfoot', array(
             array('th', get_string('singularstudent', 'local_eudedashboard')),
+            array('th', get_string('cohorttitle', 'local_eudedashboard')),
             array('th', get_string('mail', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
             array('th', get_string('singularmodule', 'local_eudedashboard')),
+            array('th', get_string('visitscount', 'local_eudedashboard')),
+            array('th', get_string('timeconnection', 'local_eudedashboard')),
+            array('th', get_string('firstaccess', 'local_eudedashboard')),
+            array('th', get_string('lastaccess', 'local_eudedashboard')),
             array('th', get_string('statustitle', 'local_eudedashboard')),
             array('th', get_string('enddate', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');
@@ -285,7 +284,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
 
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
         $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist'));
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist eude-table-categories'));
         $html .= $this->local_eudelistados_print_thead_and_tfoot('thead', array(
             array('th', get_string('docent', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
@@ -295,7 +294,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('deliveried', 'local_eudedashboard')),
             array('th', get_string('correction', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled', 'style' => 'max-width: 40px')),
         ));
         $html .= html_writer::start_tag('tbody');
 
@@ -310,12 +308,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $html .= html_writer::tag('td', $values->submittedf);
             $html .= html_writer::tag('td', $values->gradedf);
             $html .= html_writer::tag('td', $values->grade);
-            $html .= html_writer::start_tag('td');
-            $html .= html_writer::start_tag('a',
-                        array('href' => '#'));
-            $html .= html_writer::tag('i', '', array('class' => 'fa fa-arrow-right'));
-            $html .= html_writer::end_tag('a');
-            $html .= html_writer::end_tag('td');
             $html .= html_writer::end_tag('tr');
         }
 
@@ -329,7 +321,6 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('deliveried', 'local_eudedashboard')),
             array('th', get_string('correction', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-            array('th', '', array('class' => 'sorting_disabled')),
         ));
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');

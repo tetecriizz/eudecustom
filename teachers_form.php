@@ -54,13 +54,6 @@ class local_eudedashboard_teachers extends moodleform {
         // Add the selection options.
         $sel->setOptions(array(local_eudedashboard_get_hierselectlist(1), local_eudedashboard_get_hierselectlist(2)));
 
-        // Status element.
-        $statusoptions = array(
-            '0' => get_string('statusoption1', 'local_eudedashboard'),
-            '1' => get_string('statusoption2', 'local_eudedashboard'),
-        );
-        $select = $mform->addElement('select', 'status', get_string('status', 'local_eudedashboard'), $statusoptions, $attributes);
-
         // Activity element.
         $mform->addElement('text', 'activity', get_string('singularactivity', 'local_eudedashboard'), $attributes);
         $mform->setType('activity', PARAM_TEXT);
