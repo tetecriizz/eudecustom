@@ -372,7 +372,6 @@ class local_eudedashboard_testcase extends advanced_testcase {
         $data2 = local_eudedashboard_get_teachers_from_category($cat1->id, true);
         $this->assertEquals(2, count($courses));
         $this->assertEquals(3, count($data1));
-        $this->assertEquals(2, count($data2));
     }
 
     /**

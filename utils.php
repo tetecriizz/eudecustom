@@ -435,9 +435,9 @@ function local_eudedashboard_get_dashboard_courseinfo_oncategory_data ($category
             'risk' => $risk,
             'activities' => $completedactivities.' / '.$totalactivities,
             'finalization' => $percentage,
-            'temporalnote' => $temporalnote == '-' ? '-' : number_format($temporalnote, 1),
-            'recoverynote' => $recoverynote == '-' ? '-' : number_format($recoverynote, 1),
-            'finalrecoverynote' => $finalrecoverynote == '-' ? '-' : number_format($finalrecoverynote, 1),
+            'temporalnote' => $temporalnote == '-' ? '-' : str_replace(',', '.', $temporalnote),
+            'recoverynote' => $recoverynote == '-' ? '-' : str_replace(',', '.', $recoverynote),
+            'finalrecoverynote' => $finalrecoverynote == '-' ? '-' : str_replace(',', '.', $finalrecoverynote),
             'finalgrade' => $coursegrade == '-' ? '-' : number_format($coursegrade, 1),
             'lastaccess' => $lastaccess,
         );
@@ -450,14 +450,18 @@ function local_eudedashboard_get_dashboard_courseinfo_oncategory_data ($category
  *
  * @param int $category
  * @param string $role
+ * @param string $studentid
  * @return array $records
  */
-function local_eudedashboard_get_dashboard_studentlist_oncategory_data ($category, $role = 'student') {
+function local_eudedashboard_get_dashboard_studentlist_oncategory_data ($category, $role = 'student', $studentid = "") {
     $data = array();
     $students = local_eudedashboard_get_students_from_category($category);
     $uniquestudents = array_unique(array_values(array_column($students, 'studentid')));
-    foreach ($uniquestudents as $studentid) {
-        $info = local_eudedashboard_get_category_data_student_info_detail($category, $studentid);
+    foreach ($uniquestudents as $uniquestudentid) {
+        if ($studentid != null && $studentid != $uniquestudentid) {
+            continue;
+        }
+        $info = local_eudedashboard_get_category_data_student_info_detail($category, $uniquestudentid);
         $data [] = $info;
     }
     return $data;
@@ -1058,11 +1062,15 @@ function local_eudedashboard_convert_seconds($seconds) {
  */
 function local_eudedashboard_get_teachers_from_category($category, $unique = false) {
     global $DB;
-    $clauseunique = "";
+    $clauseunique = '';
+    $selectraid = " RA.id, RA.userid teacherid, UL.timeaccess lastaccess, C.id courseid, C.fullname coursename ";
+    $orderby = " ORDER BY C.category, RA.userid, C.id ";
     if ( $unique ) {
+        $selectraid = " RA.userid teacherid ";
         $clauseunique = " GROUP BY RA.userid ";
+        $orderby = " ORDER BY RA.userid ";
     }
-    $sql = "SELECT RA.id, RA.userid teacherid, UL.timeaccess lastaccess, C.id courseid, C.fullname coursename
+    $sql = "SELECT $selectraid
               FROM {role_assignments} RA
               JOIN {role} R ON R.id = RA.roleid
               JOIN {context} CTX ON CTX.id = RA.contextid
@@ -1071,9 +1079,9 @@ function local_eudedashboard_get_teachers_from_category($category, $unique = fal
          LEFT JOIN {user_lastaccess} UL ON UL.userid = RA.userid AND UL.courseid = C.id
              WHERE CTX.contextlevel = :context
                    AND (R.shortname = :role1 OR R.shortname = :role2 OR R.shortname = :role3)
-                   AND C.category = :category
+                   AND C.category = :category 
                    $clauseunique
-                   ORDER BY C.category, RA.userid, C.id";
+                   $orderby";
 
     $records = $DB->get_records_sql($sql, array(
         'category' => $category,

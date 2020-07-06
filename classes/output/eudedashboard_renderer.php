@@ -663,7 +663,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      */
     public function local_eudedashboard_eude_dashboard_studentinfo_oncategory_page($categoryid, $data, $alu) {
         $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
-        $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
+        $infoheader = local_eudedashboard_get_dashboard_studentlist_oncategory_data ($categoryid, null, $alu->id);
+        $infoheader = reset($infoheader);
 
         $html2 = $this->local_eudedashboard_studentinfo_urls('modules');
 
@@ -724,10 +725,10 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $params = array('view' => 'students', 'aluid' => $alu->id, 'tab' => 'modules');
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
-        $html .= $this->local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn);
+        $html .= $this->local_eudedashboard_main_card_student($alu, $infoheader, $data, $dataconn);
 
         // Student data.
-        $html .= $this->local_eudedashboard_print_data_student($infodetail);
+        $html .= $this->local_eudedashboard_print_data_student($infoheader);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;
@@ -833,7 +834,8 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      */
     public function local_eudedashboard_eude_dashboard_studentinfo_oncategory_page_activities($categoryid, $data, $alu) {
         $dataconn = local_eudedashboard_get_times_from_user($alu->id, $categoryid, 'students');
-        $infodetail = local_eudedashboard_get_category_data_student_info_detail($categoryid, $alu->id);
+        $infoheader = local_eudedashboard_get_dashboard_studentlist_oncategory_data ($categoryid, null, $alu->id);
+        $infoheader = reset($infoheader);
 
         $html2 = $this->local_eudedashboard_studentinfo_urls('activities');
 
@@ -885,10 +887,10 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $params = array('view' => 'students', 'tab' => 'activities', 'aluid' => $alu->id);
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
-        $html .= $this->local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn);
+        $html .= $this->local_eudedashboard_main_card_student($alu, $infoheader, $data, $dataconn);
 
         // Student data.
-        $html .= $this->local_eudedashboard_print_data_student($infodetail);
+        $html .= $this->local_eudedashboard_print_data_student($infoheader);
 
         $response = $this->header().$html.$html2.$this->footer();
         return $response;
@@ -897,12 +899,12 @@ class eudedashboard_renderer extends \plugin_renderer_base {
     /**
      * Print main card on student detail.
      * @param stdClass $alu
-     * @param array $infodetail
+     * @param array $infoheader
      * @param array $data
      * @param array $dataconn
      * @return array
      */
-    public function local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn) {
+    public function local_eudedashboard_main_card_student($alu, $infoheader, $data, $dataconn) {
         $html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
         $html .= html_writer::start_div('report-header-box');
@@ -917,15 +919,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infodetail['totalactivitiescompleted'].'/'.
-            $infodetail['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infoheader['totalactivitiescompleted'].'/'.
+            $infoheader['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4',
-                $infodetail['risk'], get_string('risklevel', 'local_eudedashboard'));
+                $infoheader['risk'], get_string('risklevel', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
-            $infodetail['countaveragegrade'] / count($data), 1), get_string('averagegrade', 'local_eudedashboard'));
+            $infoheader['countaveragegrade'] / $infoheader['totalcourses'], 1), get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
         $html .= html_writer::tag('div', '',
-            $this->local_eudedashboard_get_row_style('eude-progress-bar', $infodetail['perctotal']));
+            $this->local_eudedashboard_get_row_style('eude-progress-bar', $infoheader['perctotal']));
         $html .= html_writer::end_div();
 
         // Cards.
