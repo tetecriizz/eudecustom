@@ -2548,3 +2548,25 @@ function local_eudedashboard_print_category_selector($categoryid, $params = arra
 
     return $html;
 }
+
+/**
+ * Avoid duplication code by setting this out and call function on eudedashboard and eudelistados
+ * @param string $url
+ * @return void
+ */
+function local_eudedashboard_init_jquery_css($url) {
+    global $PAGE, $CFG;
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url($url);
+    $PAGE->set_pagelayout('standard');
+    $PAGE->requires->jquery();
+    $PAGE->requires->jquery_plugin('ui');
+    $PAGE->requires->jquery_plugin('ui-css');
+    $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.min.js'), true);
+    $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/datatables.buttons.min.js'), true);
+    $PAGE->requires->js(new \moodle_url($CFG->wwwroot . '/local/eudedashboard/js/datatable/my_datatables.js'));
+    $PAGE->requires->js_call_amd("local_eudedashboard/eude", "dashboard");
+    $PAGE->requires->css('/local/eudedashboard/style/datatables.css', true);
+    $PAGE->requires->css('/local/eudedashboard/style/datatables.min.css', true);
+    $PAGE->requires->css("/local/eudedashboard/style/eudedashboard_style.css");
+}

@@ -183,6 +183,12 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * Print html for both students and teachers detail.
+     * @param type $coursestats
+     * @param type $view
+     * @return type
+     */
     public function local_eudedashboard_print_data_html($coursestats, $view) {
         $index1 = '';
         $index2 = '';
@@ -717,7 +723,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $params = array('view' => 'students', 'aluid' => $alu->id, 'tab' => 'modules');
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
-        $html .= $this->local_eudedashboard_main_card_student($html, $alu, $infodetail, $data, $dataconn);
+        $html .= $this->local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn);
 
         // Student data.
         $html .= $this->local_eudedashboard_print_data_student($infodetail);
@@ -878,7 +884,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $params = array('view' => 'students', 'tab' => 'activities', 'aluid' => $alu->id);
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
-        $html .= $this->local_eudedashboard_main_card_student($html, $alu, $infodetail, $data, $dataconn);
+        $html .= $this->local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn);
 
         // Student data.
         $html .= $this->local_eudedashboard_print_data_student($infodetail);
@@ -887,7 +893,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         return $response;
     }
 
-    public function local_eudedashboard_main_card_student($html, $alu, $infodetail, $data, $dataconn) {
+    /**
+     * Print main card on student detail.
+     * @param type $alu
+     * @param type $infodetail
+     * @param type $data
+     * @param type $dataconn
+     * @return type
+     */
+    public function local_eudedashboard_main_card_student($alu, $infodetail, $data, $dataconn) {
         $html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
         $html .= html_writer::start_div('report-header-box');
@@ -1177,7 +1191,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $response = $this->header().$html.$html2.$this->footer();
         return $response;
     }
-    
+
+    /**
+     * Print main card on teacher detail.
+     * @param stdClass $tea
+     * @param array $header
+     * @param array $dataconn
+     * @return string
+     */
     public function local_eudedashboard_teacherinfo_card($tea, $header, $dataconn) {
         $html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
