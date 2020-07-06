@@ -782,7 +782,11 @@ function local_eudedashboard_get_dashboard_teacherinfo_oncategory_data_modules (
         $data [$teacherid][] = $datarecord;
     }
     if ($teacherid != null) {
-            return $data[$teacherid];
+		if (isset($data[$teacherid])) {
+			return $data[$teacherid];
+		} else {
+			return array();
+		}
     }
     return $data;
 }

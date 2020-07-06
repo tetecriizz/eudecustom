@@ -905,7 +905,14 @@ class eudedashboard_renderer extends \plugin_renderer_base {
      * @return array
      */
     public function local_eudedashboard_main_card_student($alu, $infoheader, $data, $dataconn) {
-        $html = html_writer::start_div('dashboard-row');
+        $totalactivitiescompleted = isset($infoheader['totalactivitiescompleted']) ? $infoheader['totalactivitiescompleted'] : 0;
+		$totalactivitiescourse = isset($infoheader['totalactivitiescourse']) ? $infoheader['totalactivitiescourse'] : 0;
+		$risk = isset($infoheader['risk']) ? $infoheader['risk'] : 4;
+		$countaveragegrade = isset($infoheader['countaveragegrade']) ? $infoheader['countaveragegrade'] : 0;
+		$totalcourses = isset($infoheader['totalcourses']) ? $infoheader['totalcourses'] : 0;
+		$perctotal = isset($infoheader['perctotal']) ? $infoheader['perctotal'] : 0;
+		
+		$html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
         $html .= html_writer::start_div('report-header-box');
         $html .= html_writer::start_div('box-header-title');
@@ -919,15 +926,15 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
         $html .= html_writer::end_div();
         $html .= html_writer::start_div('box-header-values');
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $infoheader['totalactivitiescompleted'].'/'.
-            $infoheader['totalactivitiescourse'], get_string('activities', 'local_eudedashboard'));
+        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $totalactivitiescompleted.'/'.
+            $totalactivitiescourse, get_string('activities', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4',
-                $infoheader['risk'], get_string('risklevel', 'local_eudedashboard'));
+                $risk, get_string('risklevel', 'local_eudedashboard'));
         $html .= local_eudedashboard_print_divcard_eude_header('col-4', number_format( count($data) == 0 ? 0 :
-            $infoheader['countaveragegrade'] / $infoheader['totalcourses'], 1), get_string('averagegrade', 'local_eudedashboard'));
+            $countaveragegrade / $totalcourses, 1), get_string('averagegrade', 'local_eudedashboard'));
         $html .= html_writer::end_div();
         $html .= html_writer::tag('div', '',
-            $this->local_eudedashboard_get_row_style('eude-progress-bar', $infoheader['perctotal']));
+            $this->local_eudedashboard_get_row_style('eude-progress-bar', $perctotal));
         $html .= html_writer::end_div();
 
         // Cards.
