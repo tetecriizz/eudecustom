@@ -1074,31 +1074,7 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= local_eudedashboard_print_category_selector($categoryid, $params);
 
         $html .= html_writer::start_div('box-header-values');
-        $html .= html_writer::start_div('dashboard-row');
-        $html .= html_writer::start_div('eude-block-header');
-        $html .= html_writer::start_div('report-header-box');
-        $html .= html_writer::start_div('box-header-title');
-        $html .= html_writer::start_div('course-img', array('style' => 'float:left'));
-        $html .= $this->output->user_picture($tea, array('size' => '70px'));
-        $html .= html_writer::end_div();
-
-        $html .= html_writer::start_div('bbbb', array('style' => 'float:left;margin-left: 20px;'));
-        $html .= html_writer::tag('h4', $tea->firstname. ' ' . $tea->lastname);
-        $html .= html_writer::tag('h5', $tea->email);
-        $html .= html_writer::end_div();
-        $html .= html_writer::end_div();
-        $html .= html_writer::start_div('box-header-values');
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['teacheractivitiesgraded'].'/'.
-                $header['teacheractivitiestotal'], get_string('activitiesgraded', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4',
-                $header['modules'], get_string('courses', 'local_eudedashboard'));
-        $html .= local_eudedashboard_print_divcard_eude_header('col-4', $header['approved'].'%',
-                    get_string('passedstudents', 'local_eudedashboard'));
-        $html .= html_writer::end_div();
-        $html .= html_writer::tag('div', '', $this->local_eudedashboard_get_row_style('eude-progress-bar', $header['approved']));
-        $html .= html_writer::end_div();
-
-        $html .= $this->local_eudedashboard_print_card($dataconn, 'teacher');
+        $html .= $this->local_eudedashboard_teacherinfo_card($tea, $header, $dataconn);
 
         // Cards data.
         $html .= $this->local_eudedashboard_print_data_teacher($coursestats);
@@ -1191,7 +1167,19 @@ class eudedashboard_renderer extends \plugin_renderer_base {
 
         $perc = intval( $totalcourses == 0 ? 0 : $totalfinalgradeperc / $totalcourses);
 
-        $html .= html_writer::start_div('dashboard-row');
+        $html .= $this->local_eudedashboard_teacherinfo_card($tea, $header, $dataconn);
+
+        // Student data.
+        $cms['completed'] = $totalactivitiescompleted;
+        $cms['total'] = $totalactivitiescourse;
+        $html .= $this->local_eudedashboard_print_data_teacher($coursestats);
+
+        $response = $this->header().$html.$html2.$this->footer();
+        return $response;
+    }
+    
+    public function local_eudedashboard_teacherinfo_card($tea, $header, $dataconn) {
+        $html = html_writer::start_div('dashboard-row');
         $html .= html_writer::start_div('eude-block-header');
         $html .= html_writer::start_div('report-header-box');
         $html .= html_writer::start_div('box-header-title');
@@ -1216,13 +1204,6 @@ class eudedashboard_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         $html .= $this->local_eudedashboard_print_card($dataconn, 'teacher');
-
-        // Student data.
-        $cms['completed'] = $totalactivitiescompleted;
-        $cms['total'] = $totalactivitiescourse;
-        $html .= $this->local_eudedashboard_print_data_teacher($coursestats);
-
-        $response = $this->header().$html.$html2.$this->footer();
-        return $response;
+        return $html;
     }
 }
