@@ -97,7 +97,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
 
         if ($fromform = $mform->get_data()) {
             $data = local_eudedashboard_get_finalization_data($fromform->category, $fromform->cohort,
-                $fromform->from, $fromform->to);
+                $fromform->from, $fromform->to, $fromform->enabledfrom, $fromform->enabledto);
         } else {
             $data = local_eudedashboard_get_finalization_data();
         }
@@ -182,7 +182,8 @@ class eudelistados_renderer extends \plugin_renderer_base {
 
         if ($fromform = $mform->get_data()) {
             $data = local_eudedashboard_get_studentlists_data($fromform->studentname, $fromform->cohort, $fromform->studentmail,
-                $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to);
+                $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to,
+                $fromform->enabledfrom, $fromform->enabledto);
         } else {
             $data = local_eudedashboard_get_studentlists_data();
         }
@@ -195,6 +196,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('cohorttitle', 'local_eudedashboard')),
             array('th', get_string('mail', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
+            array('th', get_string('edition', 'local_eudedashboard')),
             array('th', get_string('singularmodule', 'local_eudedashboard')),
             array('th', get_string('visitscount', 'local_eudedashboard')),
             array('th', get_string('timeconnection', 'local_eudedashboard')),
@@ -213,6 +215,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $html .= html_writer::tag('td', $values->cohorts);
             $html .= html_writer::tag('td', $values->email);
             $html .= html_writer::tag('td', $values->programname);
+            $html .= html_writer::tag('td', $values->editionname);
             $html .= html_writer::tag('td', $values->modulename);
             $html .= html_writer::tag('td', $values->courseacceses);
             $html .= html_writer::tag('td', $values->courseaveragetime);
@@ -230,6 +233,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('cohorttitle', 'local_eudedashboard')),
             array('th', get_string('mail', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
+            array('th', get_string('edition', 'local_eudedashboard')),
             array('th', get_string('singularmodule', 'local_eudedashboard')),
             array('th', get_string('visitscount', 'local_eudedashboard')),
             array('th', get_string('timeconnection', 'local_eudedashboard')),
@@ -288,6 +292,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= $this->local_eudelistados_print_thead_and_tfoot('thead', array(
             array('th', get_string('docent', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
+            array('th', get_string('edition', 'local_eudedashboard')),
             array('th', get_string('singularcourse', 'local_eudedashboard')),
             array('th', get_string('singularactivity', 'local_eudedashboard')),
             array('th', get_string('singularstudent', 'local_eudedashboard')),
@@ -302,6 +307,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $html .= html_writer::start_tag('tr');
             $html .= html_writer::tag('td', $values->gradername);
             $html .= html_writer::tag('td', $values->programname);
+            $html .= html_writer::tag('td', $values->editionname);
             $html .= html_writer::tag('td', $values->modulename);
             $html .= html_writer::tag('td', $values->assignname);
             $html .= html_writer::tag('td', $values->studentname);
@@ -315,6 +321,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= $this->local_eudelistados_print_thead_and_tfoot('tfoot', array(
             array('th', get_string('docent', 'local_eudedashboard')),
             array('th', get_string('program', 'local_eudedashboard')),
+            array('th', get_string('edition', 'local_eudedashboard')),
             array('th', get_string('singularcourse', 'local_eudedashboard')),
             array('th', get_string('singularactivity', 'local_eudedashboard')),
             array('th', get_string('singularstudent', 'local_eudedashboard')),

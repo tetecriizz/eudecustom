@@ -42,7 +42,8 @@ require_once($CFG->libdir .'/completionlib.php');
  * @param string $to
  * @return array
  */
-function local_eudedashboard_get_finalization_data ($filteredprogram = array(), $cohort = '', $from = '', $to = '') {
+function local_eudedashboard_get_finalization_data ($filteredprogram = array(), $cohort = '', $from = '',
+        $to = '', $enabledfrom = 0, $enabledto = 0) {
     $return = array();
     $records = local_euddedashboard_student_get_results();
     $filteredprogram = reset($filteredprogram);
@@ -63,20 +64,20 @@ function local_eudedashboard_get_finalization_data ($filteredprogram = array(), 
             }
         }
         if ($from != '' || $to != '') {
-            if ($from != '' && $to != '') {
+            if ($from != '' && $to != '' && $enabledfrom && $enabledto) {
                 // Filtering by date.
                 if ($from > $record->enddatetimestamp || $to < $record->enddatetimestamp) {
                     continue;
                 }
             } else {
                 // Independent filter (can filter by one).
-                if ($from != '') {
-                    if ($from < $record->enddatetimestamp) {
+                if ($from != '' && $enabledfrom) {
+                    if ($from > $record->enddatetimestamp) {
                         continue;
                     }
                 }
-                if ($to != '') {
-                    if ($to > $record->enddatetimestamp) {
+                if ($to != '' && $enabledto) {
+                    if ($to < $record->enddatetimestamp) {
                         continue;
                     }
                 }
@@ -126,10 +127,12 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
     $record = (object) $record;
     if (empty($formdata->program_and_module)) {
         $program = 0;
+        $edition = 0;
         $module = 0;
     } else {
-        $program = $formdata->program_and_module[0];
-        $module = $formdata->program_and_module[1];
+        $program = isset($formdata->program_and_module[0]) ? $formdata->program_and_module[0] : 0;
+        $edition = isset($formdata->program_and_module[1]) ? $formdata->program_and_module[1] : 0;
+        $module = isset($formdata->program_and_module[2]) ? $formdata->program_and_module[2] : 0;
     }
 
     if ($formdata->teachername != '') {
@@ -139,6 +142,11 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
     }
     if ($program != '' && $program > 0) {
         if ($record->programid != $program) {
+            $return = false;
+        }
+    }
+    if ($edition != '' && $edition > 0) {
+        if ($record->editionid != $edition) {
             $return = false;
         }
     }
@@ -209,20 +217,24 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
  * @param string $state
  * @param string $from
  * @param string $to
+ * @param boolean $enabledfrom
+ * @param boolean $enabledto
  * @return array
  */
 function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $email = '', $programandmodule = array(),
-        $state = '', $from = '', $to = '') {
+        $state = '', $from = '', $to = '', $enabledfrom = 0, $enabledto = 0) {
     $return = array();
     $records = local_euddedashboard_student_get_results();
     foreach ($records as $record) {
         $record = (object) $record;
         if (empty($programandmodule)) {
             $filteredprogram = 0;
+            $filterededition = 0;
             $filteredmodule = 0;
         } else {
-            $filteredprogram = $programandmodule[0];
-            $filteredmodule = $programandmodule[1];
+            $filteredprogram = isset($programandmodule[0]) ? $programandmodule[0] : 0;
+            $filterededition = isset($programandmodule[1]) ? $programandmodule[1] : 0;
+            $filteredmodule = isset($programandmodule[2]) ? $programandmodule[2] : 0;
         }
         if ($name != '') {
             if (strpos(strtolower($record->fullname), strtolower($name)) === false) {
@@ -245,6 +257,11 @@ function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $e
                 continue;
             }
         }
+        if ($filterededition != '' && $filterededition > 0) {
+            if ($record->editionid != $filterededition) {
+                continue;
+            }
+        }
         if ($filteredmodule != '' && $filteredmodule > 0) {
             if ($record->moduleid != $filteredmodule) {
                 continue;
@@ -256,26 +273,25 @@ function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $e
             }
         }
         if ($from != '' || $to != '') {
-            if ($from != '' && $to != '') {
+            if ($from != '' && $to != '' && $enabledfrom == 1 && $enabledto == 1) {
                 // Filtering by date.
                 if ($from > $record->enddatetimestamp || $to < $record->enddatetimestamp) {
                     continue;
                 }
             } else {
                 // Independent filter (can filter by one).
-                if ($from != '') {
-                    if ($from < $record->enddatetimestamp) {
+                if ($from != '' && $enabledfrom) {
+                    if ($from > $record->enddatetimestamp) {
                         continue;
                     }
                 }
-                if ($to != '') {
-                    if ($to > $record->enddatetimestamp) {
+                if ($to != '' && $enabledto) {
+                    if ($to < $record->enddatetimestamp) {
                         continue;
                     }
                 }
             }
         }
-
         $return[] = $record;
     }
     return $return;
@@ -329,12 +345,15 @@ function local_euddedashboard_student_get_results ($filteredprogram = '') {
                     $user = core_user::get_user($record->userid);
                     $cohortsname = array_column(cohort_get_user_cohorts($user->id), 'name');
                     $cohortsid = array_column(cohort_get_user_cohorts($user->id), 'id');
+                    $edition = core_course_category::get($courses[$record->course]->category);
                     $temp = array();
                     $temp ['userid'] = $user->id;
                     $temp ['fullname'] = $user->firstname . ' '. $user->lastname;
                     $temp ['email'] = $user->email;
                     $temp ['programid'] = $program->id;
                     $temp ['programname'] = $program->name;
+                    $temp ['editionid'] = $edition->id;
+                    $temp ['editionname'] = $edition->name;
                     $temp ['moduleid'] = $courses[$record->course]->id;
                     $temp ['modulename'] = $courses[$record->course]->fullname;
                     $temp ['internalstatevalue'] = ($record->timecompleted != '') ? 1 : 2; // 1 = finished, 2 = not finished.
@@ -383,6 +402,7 @@ function local_euddedashboard_student_get_results ($filteredprogram = '') {
     return $return;
 }
 
+
 /**
  * Hier selects used on reports.
  * @param int $level
@@ -394,24 +414,29 @@ function local_eudedashboard_get_hierselectlist ($level = 1) {
     $options = array();
     $categories = array_values(explode(',', $CFG->local_eudedashboard_category));
 
-    $options[0] = get_string('allprograms', 'local_eudedashboard');
+    $select1[0] = get_string('allprograms', 'local_eudedashboard');
+
     foreach ($categories as $categoryid) {
-        $subcategories = local_eudedashboard_get_subcategories($categoryid);
-        foreach ($subcategories as $subcategory) {
-            if ($level == 1) {
-                $options[$subcategory->id] = $subcategory->name;
-            }
-            if ($level > 1) {
-                $options[0] = array(get_string('allmodules', 'local_eudedashboard'));
-                $options[$subcategory->id][0] = get_string('allmodules', 'local_eudedashboard');
+        $programs = local_eudedashboard_get_subcategories($categoryid);
+        foreach ($programs as $program) {
+            $subcategories = local_eudedashboard_get_subcategories($program->id);
+            $select1 [$program->id] = $program->name;
+            $select2[$program->id][0] = get_string('alleditions', 'local_eudedashboard');
+            foreach ($subcategories as $subcategory) {
+                $select2[$program->id][$subcategory->id] = $subcategory->name;
                 $courses = $subcategory->get_courses(array('recursive' => true));
+                $select3[$program->id][$subcategory->id][0] = get_string('allmodules', 'local_eudedashboard');
                 foreach ($courses as $course) {
-                    $options[$subcategory->id][$course->id] = $course->fullname;
+                    $select3[$program->id][$subcategory->id][$course->id] = $course->fullname;
                 }
             }
         }
     }
-    return $options;
+
+    if ($level == 1) {
+        $result = array($select1);
+    } else if ($level > 1) {
+        $result = array($select1, $select2, $select3);
+    }
+    return $result;
 }
-
-

@@ -46,34 +46,41 @@ class local_eudedashboard_finalization extends \moodleform {
         $mform->setType('view', PARAM_TEXT);
 
         $sel =& $mform->addElement('hierselect', 'category', get_string('program', 'local_eudedashboard'));
-        $sel->setOptions(array(local_eudedashboard_get_hierselectlist(1)));
+        $sel->setOptions(local_eudedashboard_get_hierselectlist(1));
 
         // Merge would lose keys, then add arrays, keys will not overlap.
         $cohorts = array(0 => get_string('allcohorts', 'local_eudedashboard')) + local_eudedashboard_get_cohorts_for_settings();
         $mform->addElement('select', 'cohort', get_string('cohorttitle', 'local_eudedashboard'), $cohorts, array());
 
         // From end.
+        $mform->addElement('advcheckbox', 'enabledfrom', get_string('enablefilter', 'local_eudedashboard'), '',
+                array('class' => 'enablefrom'), array(0, 1));
         $mform->addElement('date_selector', 'from', get_string('finishedfrom', 'local_eudedashboard'));
+        $mform->disabledIf('from', 'enabledfrom', 'notchecked');
         $january = strtotime(date('Y-01-01'));
         $mform->setDefault('from',  $january);
 
         // To end.
+        $mform->addElement('advcheckbox', 'enabledto', get_string('enablefilter', 'local_eudedashboard'), '',
+                array('class' => 'enableto'), array(0, 1));
         $mform->addElement('date_selector', 'to', get_string('finishedto', 'local_eudedashboard'));
         $tomorrow = strtotime(date('Y-m-d', strtotime('+1 day')));
         $mform->setDefault('to',  $tomorrow);
+        $mform->disabledIf('to', 'enabledto', 'notchecked');
 
-        $this->add_action_buttons(false, get_string('search', 'local_eudedashboard'));
+        $this->add_action_buttons();
     }
 
     /**
      * Submit form buttons.
      * @param MoodleQuickForm $mform
      */
-    public function add_submit_buttons($mform) {
+    public function add_action_buttons($cancel = true, $submitlabel = null) {
         $buttons = array();
-        $buttons[] = &$mform->createElement('submit', 'submitbutton', get_string('filter', 'local_mr'));
-        $buttons[] = &$mform->createElement('submit', 'resetbutton', get_string('reset', 'local_mr'));
-        $mform->addGroup($buttons, 'buttons', '', array(' '), false);
+        $mform =& $this->_form;
+        $buttons[] = &$mform->createElement('reset', 'resetbutton', get_string('revert'), array('class' => 'btn btn-secondary'));
+        $buttons[] = &$mform->createElement('submit', 'submitbutton', get_string('search', 'local_eudedashboard'));
+        $mform->addGroup($buttons, 'buttons', '', '' , false);
 
         $mform->registerNoSubmitButton('reset');
     }

@@ -1123,12 +1123,15 @@ function local_eudedashboard_get_teachers_from_configured_categories($fromform =
             }
             $user = core_user::get_user($record->userid);
             $course = get_course($record->course);
+            $editionobj = core_course_category::get($course->category);
             $edition = $course->category;
             $programid = core_course_category::get($course->category)->parent;
             $programname = core_course_category::get($programid)->name;
             $datarecord = array (
                 'graderid' => $grader->id,
                 'gradername' => fullname($grader),
+                'editionid' => $editionobj->id,
+                'editionname' => $editionobj->name,
                 'edition' => $edition,
                 'programid' => $programid,
                 'programname' => $programname,

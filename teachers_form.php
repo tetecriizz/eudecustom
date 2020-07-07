@@ -52,7 +52,7 @@ class local_eudedashboard_teachers extends moodleform {
         // Create the Element.
         $sel =& $mform->addElement('hierselect', 'program_and_module', get_string('programmodule', 'local_eudedashboard'));
         // Add the selection options.
-        $sel->setOptions(array(local_eudedashboard_get_hierselectlist(1), local_eudedashboard_get_hierselectlist(2)));
+        $sel->setOptions(local_eudedashboard_get_hierselectlist(3));
 
         // Activity element.
         $mform->addElement('text', 'activity', get_string('singularactivity', 'local_eudedashboard'), $attributes);
@@ -78,18 +78,19 @@ class local_eudedashboard_teachers extends moodleform {
         $mform->addElement('date_selector', 'to2', get_string('gradedto', 'local_eudedashboard'));
 
         // Submit.
-        $this->add_action_buttons(false, get_string('search', 'local_eudedashboard'));
+        $this->add_action_buttons();
     }
 
     /**
      * Submit form buttons.
      * @param MoodleQuickForm $mform
      */
-    public function add_submit_buttons($mform) {
+    public function add_action_buttons($cancel = true, $submitlabel = null) {
         $buttons = array();
-        $buttons[] = &$mform->createElement('submit', 'submitbutton', get_string('filter', 'local_mr'));
-        $buttons[] = &$mform->createElement('submit', 'resetbutton', get_string('reset', 'local_mr'));
-        $mform->addGroup($buttons, 'buttons', '', array(' '), false);
+        $mform =& $this->_form;
+        $buttons[] = &$mform->createElement('reset', 'resetbutton', get_string('revert'), array('class' => 'btn btn-secondary'));
+        $buttons[] = &$mform->createElement('submit', 'submitbutton', get_string('search', 'local_eudedashboard'));
+        $mform->addGroup($buttons, 'buttons', '', '' , false);
 
         $mform->registerNoSubmitButton('reset');
     }
