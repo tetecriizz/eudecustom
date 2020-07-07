@@ -188,10 +188,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $data = local_eudedashboard_get_studentlists_data();
         }
 
-        $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
-        $html .= html_writer::start_tag('table',
-            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist eude-table-categories'));
-        $html .= $this->local_eudelistados_print_thead_and_tfoot('thead', array(
+        $tableheaderfooter = array(
             array('th', get_string('singularstudent', 'local_eudedashboard')),
             array('th', get_string('cohorttitle', 'local_eudedashboard')),
             array('th', get_string('mail', 'local_eudedashboard')),
@@ -205,7 +202,11 @@ class eudelistados_renderer extends \plugin_renderer_base {
             array('th', get_string('statustitle', 'local_eudedashboard')),
             array('th', get_string('enddate', 'local_eudedashboard')),
             array('th', get_string('finalgrade', 'local_eudedashboard')),
-        ));
+        );
+        $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
+        $html .= html_writer::start_tag('table',
+            array('id' => 'local_eudedashboard_datatable', 'class' => 'table eudedashboard-studentlist eude-table-categories'));
+        $html .= $this->local_eudelistados_print_thead_and_tfoot('thead', $tableheaderfooter);
         $html .= html_writer::start_tag('tbody');
 
         foreach ($data as $key => $values) {
@@ -228,21 +229,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
         }
 
         $html .= html_writer::end_tag('tbody');
-        $html .= $this->local_eudelistados_print_thead_and_tfoot('tfoot', array(
-            array('th', get_string('singularstudent', 'local_eudedashboard')),
-            array('th', get_string('cohorttitle', 'local_eudedashboard')),
-            array('th', get_string('mail', 'local_eudedashboard')),
-            array('th', get_string('program', 'local_eudedashboard')),
-            array('th', get_string('edition', 'local_eudedashboard')),
-            array('th', get_string('singularmodule', 'local_eudedashboard')),
-            array('th', get_string('visitscount', 'local_eudedashboard')),
-            array('th', get_string('timeconnection', 'local_eudedashboard')),
-            array('th', get_string('firstaccess', 'local_eudedashboard')),
-            array('th', get_string('lastaccess', 'local_eudedashboard')),
-            array('th', get_string('statustitle', 'local_eudedashboard')),
-            array('th', get_string('enddate', 'local_eudedashboard')),
-            array('th', get_string('finalgrade', 'local_eudedashboard')),
-        ));
+        $html .= $this->local_eudelistados_print_thead_and_tfoot('tfoot', $tableheaderfooter);
         $html .= html_writer::end_tag('table');
         $html .= html_writer::end_tag('div');
 
