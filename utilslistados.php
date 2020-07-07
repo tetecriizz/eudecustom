@@ -123,7 +123,6 @@ function local_eudedashboard_get_finalization_data ($filteredprogram = array(), 
  */
 function local_eudedashboard_report_teacher_checkvalidations($formdata, $record) {
     $return = true;
-//    echo '<pre>';var_dump($formdata);die;
     $record = (object) $record;
     if (empty($formdata->program_and_module)) {
         $program = 0;
