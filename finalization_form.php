@@ -53,20 +53,24 @@ class local_eudedashboard_finalization extends \moodleform {
         $mform->addElement('select', 'cohort', get_string('cohorttitle', 'local_eudedashboard'), $cohorts, array());
 
         // From end.
-        $mform->addElement('advcheckbox', 'enabledfrom', get_string('enablefilter', 'local_eudedashboard'), '',
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'enabledfrom', '', '',
                 array('class' => 'enablefrom'), array(0, 1));
         $mform->addElement('date_selector', 'from', get_string('finishedfrom', 'local_eudedashboard'));
         $mform->disabledIf('from', 'enabledfrom', 'notchecked');
         $january = strtotime(date('Y-01-01'));
         $mform->setDefault('from',  $january);
+        $mform->addElement('html', '</div>');
 
         // To end.
-        $mform->addElement('advcheckbox', 'enabledto', get_string('enablefilter', 'local_eudedashboard'), '',
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'enabledto', '', '',
                 array('class' => 'enableto'), array(0, 1));
         $mform->addElement('date_selector', 'to', get_string('finishedto', 'local_eudedashboard'));
         $tomorrow = strtotime(date('Y-m-d', strtotime('+1 day')));
         $mform->setDefault('to',  $tomorrow);
         $mform->disabledIf('to', 'enabledto', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         $this->add_action_buttons();
     }

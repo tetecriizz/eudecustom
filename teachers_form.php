@@ -63,19 +63,39 @@ class local_eudedashboard_teachers extends moodleform {
         $mform->setType('student', PARAM_TEXT);
 
         // Submitted From.
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'submittedfrom', '', '',
+                array('class' => 'submittedfrom'), array(0, 1));
         $mform->addElement('date_selector', 'from1', get_string('submittedfrom', 'local_eudedashboard'));
         $january = strtotime(date('Y-01-01'));
         $mform->setDefault('from1',  $january);
+        $mform->disabledIf('from1', 'submittedfrom', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         // Submitted end.
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'submittedto', '', '',
+                array('class' => 'submittedto'), array(0, 1));
         $mform->addElement('date_selector', 'to1', get_string('submittedto', 'local_eudedashboard'));
+        $mform->disabledIf('to1', 'submittedto', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         // Graded from.
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'gradedfrom', '', '',
+                array('class' => 'gradedfrom'), array(0, 1));
         $mform->addElement('date_selector', 'from2', get_string('gradedfrom', 'local_eudedashboard'));
         $mform->setDefault('from2',  $january);
+        $mform->disabledIf('from2', 'gradedfrom', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         // Graded end.
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'gradedto', '', '',
+                array('class' => 'gradedto'), array(0, 1));
         $mform->addElement('date_selector', 'to2', get_string('gradedto', 'local_eudedashboard'));
+        $mform->disabledIf('to2', 'gradedto', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         // Submit.
         $this->add_action_buttons();

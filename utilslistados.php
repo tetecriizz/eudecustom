@@ -123,7 +123,7 @@ function local_eudedashboard_get_finalization_data ($filteredprogram = array(), 
  */
 function local_eudedashboard_report_teacher_checkvalidations($formdata, $record) {
     $return = true;
-
+//    echo '<pre>';var_dump($formdata);die;
     $record = (object) $record;
     if (empty($formdata->program_and_module)) {
         $program = 0;
@@ -166,40 +166,40 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
         }
     }
     if ($formdata->from1 != '' || $formdata->to1 != '') {
-        if ($formdata->from1 != '' && $formdata->to1 != '') {
+        if ($formdata->from1 != '' && $formdata->to1 != '' && $formdata->submittedfrom && $formdata->submittedto) {
             // Filtering by date.
             if ($formdata->from1 > $record->submitted || $formdata->to1 < $record->submitted) {
                 $return = false;
             }
         } else {
             // Independent filter (can filter by one).
-            if ($formdata->from1 != '') {
-                if ($formdata->from1 < $record->submitted) {
+            if ($formdata->from1 != '' && $formdata->submittedfrom) {
+                if ($formdata->from1 > $record->submitted) {
                     $return = false;
                 }
             }
-            if ($formdata->to1 != '') {
-                if ($formdata->to1 > $record->submitted) {
+            if ($formdata->to1 != '' && $formdata->submittedto) {
+                if ($formdata->to1 < $record->submitted) {
                     $return = false;
                 }
             }
         }
     }
     if ($formdata->from2 != '' || $formdata->to2 != '') {
-        if ($formdata->from2 != '' && $formdata->to2 != '') {
+        if ($formdata->from2 != '' && $formdata->to2 != '' && $formdata->gradedfrom && $formdata->gradedto) {
             // Filtering by date.
             if ($formdata->from2 > $record->graded || $formdata->to2 < $record->graded) {
                 $return = false;
             }
         } else {
             // Independent filter (can filter by one).
-            if ($formdata->from2 != '') {
-                if ($formdata->from2 < $record->graded) {
+            if ($formdata->from2 != '' && $formdata->gradedfrom) {
+                if ($formdata->from2 > $record->graded) {
                     $return = false;
                 }
             }
             if ($formdata->to2 != '') {
-                if ($formdata->to2 > $record->graded) {
+                if ($formdata->to2 < $record->graded && $formdata->gradedto) {
                     $return = false;
                 }
             }
@@ -267,8 +267,10 @@ function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $e
                 continue;
             }
         }
-        if ($state != '' && $state > 0) {
-            if ($state == $record->state) {
+        if ($state > 0) {
+            if ($record->state == 'FIN' && $state != 1) {
+                continue;
+            } else if ($record->state == '-' && $state != 2) {
                 continue;
             }
         }

@@ -69,20 +69,24 @@ class local_eudedashboard_students extends moodleform {
         $mform->addElement('select', 'status', get_string('status', 'local_eudedashboard'), $statusoptions, $attributes);
 
         // From end.
+        $mform->addElement('html', '<div class="eude-enableddiv">');
         $january = strtotime(date('Y-01-01'));
-        $mform->addElement('advcheckbox', 'enabledfrom', get_string('enablefilter', 'local_eudedashboard'), '',
+        $mform->addElement('advcheckbox', 'enabledfrom', '', '',
                 array('class' => 'enablefrom'), array(0, 1));
         $mform->addElement('date_selector', 'from', get_string('finishedfrom', 'local_eudedashboard'),
                 array('class' => 'datefrom'));
         $mform->disabledIf('from', 'enabledfrom', 'notchecked');
         $mform->setDefault('from',  $january);
+        $mform->addElement('html', '</div>');
 
         // To end.
-        $mform->addElement('advcheckbox', 'enabledto', get_string('enablefilter', 'local_eudedashboard'), '',
+        $mform->addElement('html', '<div class="eude-enableddiv">');
+        $mform->addElement('advcheckbox', 'enabledto', '', '',
                 array('class' => 'enableto'), array(0, 1));
         $mform->addElement('date_selector', 'to', get_string('finishedto', 'local_eudedashboard'),
                 array('class' => 'dateto'));
         $mform->disabledIf('to', 'enabledto', 'notchecked');
+        $mform->addElement('html', '</div>');
 
         // Submit.
         $this->add_action_buttons();
