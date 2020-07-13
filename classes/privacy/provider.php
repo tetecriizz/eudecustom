@@ -238,6 +238,10 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
         }
     }
 
+    /**
+     * Delete data for users.
+     * @param \core_privacy\local\request\approved_userlist $userlist
+     */
     public static function delete_data_for_users (\core_privacy\local\request\approved_userlist $userlist) {
         global $DB;
 
@@ -248,6 +252,11 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
         $DB->delete_records_select('local_eudedashboard_notifs', $deletewhere, $userinparams);
     }
 
+    /**
+     * Get users in context.
+     * @param \core_privacy\local\request\userlist $userlist
+     * @return type
+     */
     public static function get_users_in_context (\core_privacy\local\request\userlist $userlist) {
         $context = $userlist->get_context();
 
