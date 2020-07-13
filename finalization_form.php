@@ -77,7 +77,8 @@ class local_eudedashboard_finalization extends \moodleform {
 
     /**
      * Submit form buttons.
-     * @param MoodleQuickForm $mform
+     * @param boolean $cancel
+     * @param string $submitlabel
      */
     public function add_action_buttons($cancel = true, $submitlabel = null) {
         $buttons = array();

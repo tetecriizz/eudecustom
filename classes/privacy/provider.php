@@ -255,7 +255,7 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
     /**
      * Get users in context.
      * @param \core_privacy\local\request\userlist $userlist
-     * @return type
+     * @return void
      */
     public static function get_users_in_context (\core_privacy\local\request\userlist $userlist) {
         $context = $userlist->get_context();
