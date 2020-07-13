@@ -518,10 +518,17 @@ class local_eudedashboard_testcase extends advanced_testcase {
 
         $this->assertEquals(2, $data1['completed']);
         $this->assertEquals(4, $data1['total']);
+    }
 
-        // Reset data and create data with completion for all students.
-        $this->resetAllData();
+    /**
+     * Tests for phpunit.
+     */
+    public function test_local_eudedashboard_get_cmcompletion_course_all_completeds() {
+        global $DB;
+        $this->resetAfterTest(true);
+
         $this->create_testdata(true);
+        $module1 = $DB->get_record('course', array('idnumber' => 'IDNUMBERMODULE1'));
         $data2 = local_eudedashboard_get_cmcompletion_course($module1);
 
         // With create_testdata(true) completed should be 2,

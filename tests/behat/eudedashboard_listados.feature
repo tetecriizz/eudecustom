@@ -69,7 +69,7 @@ Feature: Custom reports for dashboard
     # Enable coursecreator as authorized role to see manager dashboard
     And I click on "//select[@id='id_s__local_eudedashboard_role']/option[5]" "xpath_element"
     And I click on "//form[@id='adminsettings']//button[@type='submit']" "xpath_element"
-    And I go to eudedashboard
+    And I go to eudedashboard main
 
     And I click on "//div[@class='eudedashboard-toplinks']/span[2]/a" "xpath_element"
     And I click on "//div[@class='list-tabs']/a[2]" "xpath_element"

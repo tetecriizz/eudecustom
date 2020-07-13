@@ -27,6 +27,7 @@ use \core_privacy\local\metadata\collection;
 use \core_privacy\local\metadata\provider as metadataprovider;
 use \core_privacy\local\request\contextlist;
 use \core_privacy\local\request\plugin\provider as pluginprovider;
+use \core_privacy\local\request\core_userlist_provider as userlistprovider;
 use core_privacy\local\request\transform;
 use \core_privacy\local\request\writer;
 use \core_privacy\local\request\approved_contextlist;
@@ -39,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Planificacion de Entornos Tecnologicos SL
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements metadataprovider, pluginprovider {
+class provider implements metadataprovider, pluginprovider, userlistprovider {
 
     /**
      * Returns meta data about this system.
@@ -48,6 +49,17 @@ class provider implements metadataprovider, pluginprovider {
      * @return  collection     A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection) : collection {
+        $collection->add_database_table(
+            'local_eudedashboard_notifs',
+            [
+                'id' => 'privacy:metadata:local_eudedashboard_notifs:id',
+                'userid' => 'privacy:metadata:local_eudedashboard_notifs:userid',
+                'category_id' => 'privacy:metadata:local_eudedashboard_notifs:category_id',
+                'timenotification' => 'privacy:metadata:local_eudedashboard_notifs:timenotification',
+            ],
+            'privacy:metadata:local_eudedashboard_notifs'
+        );
+
         $collection->add_database_table(
             'local_eudedashboard_invtimes',
             [
@@ -78,6 +90,17 @@ class provider implements metadataprovider, pluginprovider {
      */
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new contextlist();
+
+        // Get contexts for local_eudecustom_mat_int table.
+        $sqlnotifs = "SELECT DISTINCT(cx.id) cxid
+                        FROM {local_eudedashboard_notifs} notifs
+                        JOIN {user} u ON u.id = notifs.userid
+                        JOIN {context} cx ON cx.instanceid = u.id
+                       WHERE CX.contextlevel = :usercontext
+                             AND cx.instanceid = :userid
+                    GROUP BY cx.id";
+        $paramsnotif = array('userid' => $userid, 'usercontext' => CONTEXT_USER);
+        $contextlist->add_from_sql($sqlnotifs, $paramsnotif);
 
         // Get contexts for local_eudedashboard_invtimes table.
         $sqlinvtimes = "SELECT DISTINCT cx.id cxid
@@ -110,6 +133,7 @@ class provider implements metadataprovider, pluginprovider {
 
         // Call to functions that write records to export data.
         self::export_user_data_invtimes($context);
+        self::export_user_data_notifs($context);
     }
 
     /**
@@ -129,9 +153,8 @@ class provider implements metadataprovider, pluginprovider {
         $userid = $context->instanceid;
 
         // Delete the eudedashboard records created for the userid.
-        $params = array('id' => $userid);
-        $usersselect = "IN (SELECT u.email FROM {user} u WHERE u.id = :id)";
         $DB->delete_records('local_eudedashboard_invtimes', array('userid' => $userid));
+        $DB->delete_records('local_eudedashboard_notifs', array('userid' => $userid));
     }
 
     /**
@@ -154,9 +177,29 @@ class provider implements metadataprovider, pluginprovider {
         }
 
         // Delete the eudedashboard records created for the userid.
-        $params = array('id' => $user->id);
-        $usersselect = "IN (SELECT u.email FROM {user} u WHERE u.id = :id)";
         $DB->delete_records('local_eudedashboard_invtimes', array('userid' => $user->id));
+        $DB->delete_records('local_eudedashboard_notifs', array('userid' => $user->id));
+    }
+
+    /**
+     * Export user data of matint table
+     * @param stdClass $context
+     */
+    public static function export_user_data_notifs($context) {
+        global $DB;
+        $records = $DB->get_records('local_eudedashboard_notifs', array('userid' => $context->instanceid));
+        $subcontext = ['eudecustom-notifs'];
+
+        foreach ($records as $record) {
+            $data = (object) [
+                'id' => $record->id,
+                'userid' => $record->userid,
+                'categoryid' => $record->categoryid,
+                'timenotification' => $record->timenotification
+            ];
+
+            writer::with_context($context)->export_data($subcontext, $data);
+        }
     }
 
     /**
@@ -194,4 +237,36 @@ class provider implements metadataprovider, pluginprovider {
             writer::with_context($context)->export_data($subcontext, $data);
         }
     }
+
+    public static function delete_data_for_users (\core_privacy\local\request\approved_userlist $userlist) {
+        global $DB;
+
+        $userids = $userlist->get_userids();
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+
+        $deletewhere = "userid {$userinsql}";
+        $DB->delete_records_select('local_eudedashboard_notifs', $deletewhere, $userinparams);
+    }
+
+    public static function get_users_in_context (\core_privacy\local\request\userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!is_a($context, \context_user::class)) {
+            return;
+        }
+
+        // Find users with attempts.
+        $sql = "SELECT notif.userid
+                  FROM {context} c
+                  JOIN {local_eudedashboard_notifs} notif ON notif.userid = c.instanceid
+                 WHERE c.id = :contextid";
+
+        $params = [
+            'contextid' => $context->id,
+            'contextlevel' => CONTEXT_USER,
+        ];
+
+        $userlist->add_from_sql('userid', $sql, $params);
+    }
+
 }

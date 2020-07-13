@@ -29,7 +29,7 @@ if (is_callable('mr_off') && mr_off('eudedashboard', '_MR_LOCAL')) {
 }
 
 require_once($CFG->libdir . '/pagelib.php');
-require_once(__DIR__ . '/utils.php');
+require_once($CFG->dirroot . '/local/eudedashboard/utils.php');
 
 require_login(null, false, null, false, true);
 

@@ -154,6 +154,12 @@ $string['privacy:metadata:local_eudedashboard_invtimes:day7'] = 'Day 7 of week (
 $string['privacy:metadata:local_eudedashboard_invtimes:totaltime'] = 'Total time spent (in seconds) of an user in module';
 $string['privacy:metadata:local_eudedashboard_invtimes:timecreated'] = 'Timestamp creation of record';
 $string['privacy:metadata:local_eudedashboard_invtimes:timemodified'] = 'Timestamp last modification of record';
+$string['privacy:metadata:local_eudedashboard_notifs:id'] = 'Record id';
+$string['privacy:metadata:local_eudedashboard_notifs:userid'] = 'User id';
+$string['privacy:metadata:local_eudedashboard_notifs:category_id'] = 'Program id';
+$string['privacy:metadata:local_eudedashboard_notifs:timenotification'] = 'Timestamp creation of record';
+$string['privacy:metadata:local_eudedashboard_notifs'] = 'Notifications';
+
 $string['studentsinrisk'] = 'Students in risk';
 $string['usermailerbcc'] = 'Mail to BCC';
 $string['usermailerbcc_desc'] = 'Mail that will be included as BCC in mails';

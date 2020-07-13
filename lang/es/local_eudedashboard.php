@@ -154,6 +154,12 @@ $string['privacy:metadata:local_eudedashboard_invtimes:day7'] = 'Día 7 de la se
 $string['privacy:metadata:local_eudedashboard_invtimes:totaltime'] = 'Tiempo invertido (en segundos) de un usuario en el módulo';
 $string['privacy:metadata:local_eudedashboard_invtimes:timecreated'] = 'Fecha de creación del registro';
 $string['privacy:metadata:local_eudedashboard_invtimes:timemodified'] = 'Última modificación del registro';
+$string['privacy:metadata:local_eudedashboard_notifs:id'] = 'Id del registro';
+$string['privacy:metadata:local_eudedashboard_notifs:userid'] = 'Id del usuario';
+$string['privacy:metadata:local_eudedashboard_notifs:category_id'] = 'Id del programa';
+$string['privacy:metadata:local_eudedashboard_notifs:timenotification'] = 'Fecha de creación del registro';
+$string['privacy:metadata:local_eudedashboard_notifs'] = 'Notificaciones';
+
 $string['studentsinrisk'] = 'Alumnos en riesgo';
 $string['usermailerbcc'] = 'Correo para BCC';
 $string['usermailerbcc_desc'] = 'Correo que será incluido como BCC en el envío de correos';

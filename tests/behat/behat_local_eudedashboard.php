@@ -41,9 +41,9 @@ class behat_local_eudedashboard extends behat_base {
     /**
      * Opens Eude dashboard page.
      *
-     * @Given /^I go to eudedashboard$/
+     * @Given /^I go to eudedashboard main$/
      */
-    public function i_go_to_eudedashboard() {
+    public function i_go_to_eudedashboard_main() {
         $this->getSession()->visit($this->locate_path("/local/eudedashboard/eudedashboard.php"));
     }
 

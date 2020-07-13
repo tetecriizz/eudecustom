@@ -24,28 +24,28 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-define('LOCAL_EUDE_DASHBOARD_SESSION_MAXTIME', 7200); // 3600 seconds = 1 hour, 7200 seconds = 2 hours.
-define('LOCAL_EUDE_DASHBOARD_ONE_HOUR', 3600); // 3600 seconds = 1 hour.
-define('LOCAL_EUDE_DASHBOARD_DAYS_BEFORE', 7); // Get data since seven days before.
-define('LOCAL_EUDE_NUMDAYS', 7); // Get data since seven days before.
-define('LOCAL_EUDE_RISKLEVEL0_MINDAYS', 0);
-define('LOCAL_EUDE_RISKLEVEL0_MAXDAYS', 10);
-define('LOCAL_EUDE_RISKLEVEL1_MINDAYS', 11);
-define('LOCAL_EUDE_RISKLEVEL1_MAXDAYS', 15);
-define('LOCAL_EUDE_RISKLEVEL2_MINDAYS', 16);
-define('LOCAL_EUDE_RISKLEVEL2_MAXDAYS', 30);
-define('LOCAL_EUDE_RISKLEVEL3_MINDAYS', 16);
-define('LOCAL_EUDE_RISKLEVEL3_MAXDAYS', 30);
-define('LOCAL_EUDE_RISKLEVEL4_MINDAYS', 31);
-define('LOCAL_EUDE_MODULE_RISKLEVEL0_MINDAYS', 0);
-define('LOCAL_EUDE_MODULE_RISKLEVEL0_MAXDAYS', 1);
-define('LOCAL_EUDE_MODULE_RISKLEVEL1_MINDAYS', 2);
-define('LOCAL_EUDE_MODULE_RISKLEVEL1_MAXDAYS', 4);
-define('LOCAL_EUDE_MODULE_RISKLEVEL2_MINDAYS', 5);
-define('LOCAL_EUDE_MODULE_RISKLEVEL2_MAXDAYS', 7);
-define('LOCAL_EUDE_MODULE_RISKLEVEL3_MINDAYS', 8);
-define('LOCAL_EUDE_MODULE_RISKLEVEL3_MAXDAYS', 10);
-define('LOCAL_EUDE_MODULE_RISKLEVEL4_MINDAYS', 11);
+define('LOCAL_EUDEDASHBOARD_SESSION_MAXTIME', 7200); // 3600 seconds = 1 hour, 7200 seconds = 2 hours.
+define('LOCAL_EUDEDASHBOARD_ONE_HOUR', 3600); // 3600 seconds = 1 hour.
+define('LOCAL_EUDEDASHBOARD_DAYS_BEFORE', 7); // Get data since seven days before.
+define('LOCAL_EUDEDASHBOARD_NUMDAYS', 7); // Get data since seven days before.
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL0_MINDAYS', 0);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL0_MAXDAYS', 10);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL1_MINDAYS', 11);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL1_MAXDAYS', 15);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL2_MINDAYS', 16);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL2_MAXDAYS', 30);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL3_MINDAYS', 16);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL3_MAXDAYS', 30);
+define('LOCAL_EUDEDASHBOARD_RISKLEVEL4_MINDAYS', 31);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL0_MINDAYS', 0);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL0_MAXDAYS', 1);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL1_MINDAYS', 2);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL1_MAXDAYS', 4);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL2_MINDAYS', 5);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL2_MAXDAYS', 7);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL3_MINDAYS', 8);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL3_MAXDAYS', 10);
+define('LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL4_MINDAYS', 11);
 
 require_once($CFG->dirroot . '/lib/moodlelib.php');
 require_once($CFG->dirroot . '/grade/querylib.php');
@@ -810,7 +810,7 @@ function local_eudedashboard_get_usertime_incourse ($userid, $courseid, $date = 
             $datesincedays = $fromdate;
             $clausedate .= " AND timecreated > :timebeggining";
         } else {
-            $datesincedays = date('Y-m-d', strtotime('-'.LOCAL_EUDE_DASHBOARD_DAYS_BEFORE.' days')) . ' 00:00:00';
+            $datesincedays = date('Y-m-d', strtotime('-'.LOCAL_EUDEDASHBOARD_DAYS_BEFORE.' days')) . ' 00:00:00';
             $clausedate .= " AND timecreated >  UNIX_TIMESTAMP(:timebeggining)";
         }
     }
@@ -835,7 +835,7 @@ function local_eudedashboard_get_usertime_incourse ($userid, $courseid, $date = 
     $params = array ('courseid' => $courseid,
                      'userid' => $userid,
                      'timebeggining' => $datesincedays,
-                     'maxsessiontime' => LOCAL_EUDE_DASHBOARD_SESSION_MAXTIME);
+                     'maxsessiontime' => LOCAL_EUDEDASHBOARD_SESSION_MAXTIME);
 
     return $DB->get_records_sql($sql, $params);
 }
@@ -1393,14 +1393,14 @@ function local_eudedashboard_get_risk_level ($lasttimeaccess, $suspended) {
     $datediff = time() - $lasttimeaccess;
     $diff = round($datediff / (60 * 60 * 24));
 
-    if ( ($diff >= LOCAL_EUDE_RISKLEVEL0_MINDAYS && $diff <= LOCAL_EUDE_RISKLEVEL0_MAXDAYS) || $suspended == 0) {
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_RISKLEVEL0_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_RISKLEVEL0_MAXDAYS) || $suspended == 0) {
         return 0;
     }
-    if ( ($diff >= LOCAL_EUDE_RISKLEVEL1_MINDAYS && $diff <= LOCAL_EUDE_RISKLEVEL1_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_RISKLEVEL1_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_RISKLEVEL1_MAXDAYS)
         || ($suspended >= 0 && $suspended <= 2) ) {
         return 1;
     }
-    if ( ($diff >= LOCAL_EUDE_RISKLEVEL2_MINDAYS && $diff <= LOCAL_EUDE_RISKLEVEL2_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_RISKLEVEL2_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_RISKLEVEL2_MAXDAYS)
         || (($suspended >= 3 && $suspended <= 5) || $suspended == 6) ) {
         if ( $suspended == 6 ) {
             return 3;
@@ -1408,7 +1408,7 @@ function local_eudedashboard_get_risk_level ($lasttimeaccess, $suspended) {
             return 2;
         }
     }
-    if ( $diff >= LOCAL_EUDE_RISKLEVEL4_MINDAYS || $suspended > 6) {
+    if ( $diff >= LOCAL_EUDEDASHBOARD_RISKLEVEL4_MINDAYS || $suspended > 6) {
         return 4;
     }
 
@@ -1435,23 +1435,23 @@ function local_eudedashboard_get_risk_level_module ($lasttimeaccess, $activities
     $datediff = time() - $lasttimeaccess;
     $diff = round($datediff / (60 * 60 * 24));
 
-    if ( ($diff >= LOCAL_EUDE_MODULE_RISKLEVEL0_MINDAYS && $diff <= LOCAL_EUDE_MODULE_RISKLEVEL0_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL0_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL0_MAXDAYS)
         || $activitiespercent == 100) {
         return 0;
     }
-    if ( ($diff >= LOCAL_EUDE_MODULE_RISKLEVEL1_MINDAYS && $diff <= LOCAL_EUDE_MODULE_RISKLEVEL1_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL1_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL1_MAXDAYS)
         || $activitiespercent >= 75 ) {
         return 1;
     }
-    if ( ($diff >= LOCAL_EUDE_MODULE_RISKLEVEL2_MINDAYS && $diff <= LOCAL_EUDE_MODULE_RISKLEVEL2_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL2_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL2_MAXDAYS)
         || $activitiespercent >= 50 ) {
         return 2;
     }
-    if ( ($diff >= LOCAL_EUDE_MODULE_RISKLEVEL3_MINDAYS && $diff <= LOCAL_EUDE_MODULE_RISKLEVEL3_MAXDAYS)
+    if ( ($diff >= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL3_MINDAYS && $diff <= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL3_MAXDAYS)
         || $activitiespercent >= 25) {
         return 3;
     }
-    if ( $diff >= LOCAL_EUDE_MODULE_RISKLEVEL4_MINDAYS) {
+    if ( $diff >= LOCAL_EUDEDASHBOARD_MODULE_RISKLEVEL4_MINDAYS) {
         return 4;
     }
     return $risklevel;
@@ -1876,11 +1876,11 @@ function local_eudedashboard_get_times_from_user($userid, $catid, $role) {
 
     $data ['students']['totaltime'] = $totaltimestudents;
     $data ['students']['averagetime'] = $timeaveragestudent;
-    $data ['students']['averagetimelastdays'] = $timeaveragelastdaysstudent / LOCAL_EUDE_DASHBOARD_DAYS_BEFORE;
+    $data ['students']['averagetimelastdays'] = $timeaveragelastdaysstudent / LOCAL_EUDEDASHBOARD_DAYS_BEFORE;
     $data ['students'] += local_eudedashboard_get_percent_of_days($data['students']);
     $data ['teachers']['totaltime'] = $totaltimeteachers;
     $data ['teachers']['averagetime'] = $timeaverageteacher;
-    $data ['teachers']['averagetimelastdays'] = $timeaveragelastdaysteacher / LOCAL_EUDE_DASHBOARD_DAYS_BEFORE;
+    $data ['teachers']['averagetimelastdays'] = $timeaveragelastdaysteacher / LOCAL_EUDEDASHBOARD_DAYS_BEFORE;
     $data ['teachers'] += local_eudedashboard_get_percent_of_days($data['teachers']);
 
     // Free up memory space.
@@ -1912,7 +1912,7 @@ function local_eudedashboard_get_accesses_from_course($courseid, $role, $date = 
         $params['rolestudent'] = 'student';
     }
     if ( $date ) {
-        $datesincedays = date('Y-m-d', strtotime('-'.LOCAL_EUDE_DASHBOARD_DAYS_BEFORE.' days')) . ' 00:00:00';
+        $datesincedays = date('Y-m-d', strtotime('-'.LOCAL_EUDEDASHBOARD_DAYS_BEFORE.' days')) . ' 00:00:00';
         $params['timebeggining'] = $datesincedays;
         $clauses .= " AND L.timecreated >  UNIX_TIMESTAMP(:timebeggining)";
     }

@@ -64,7 +64,7 @@ Feature: View my custom dashboard
     # coursecreator has not an authorized access to
     # manager dashboard and will be redirected to home page
     And I log in as "user3"
-    And I go to eudedashboard
+    And I go to eudedashboard main
     And I wait to be redirected
     Then I log out
 
@@ -76,7 +76,7 @@ Feature: View my custom dashboard
     # Enable coursecreator as authorized role to see manager dashboard
     And I click on "//select[@id='id_s__local_eudedashboard_role']/option[5]" "xpath_element"
     And I click on "//form[@id='adminsettings']//button[@type='submit']" "xpath_element"
-    And I go to eudedashboard
+    And I go to eudedashboard main
 
     #Check that have 1 teacher, 2 students and 9 modules in programs row
     And I should see "1" in the "//table[@id='local_eudedashboard_datatable']/tbody/tr[2]/td[3]" "xpath_element"
@@ -107,7 +107,7 @@ Feature: View my custom dashboard
     And I click on "//table[@id='local_eudedashboard_datatable']/tbody/tr[1]/td[1]" "xpath_element"
 
     #Go to de studentinfo
-    And I go to eudedashboard
+    And I go to eudedashboard main
     And I click on "//table[@id='local_eudedashboard_datatable']/tbody/tr[2]/td[1]" "xpath_element"
     And I click on "//tr[@class='eude-trsubrows'][1]/td[4]/a" "xpath_element"
     And I wait to be redirected
@@ -116,7 +116,7 @@ Feature: View my custom dashboard
     And I click on "//div[@class='dashboard-row']//div[@class='list-tabs']/a[2]" "xpath_element"
 
     #Go to the teacherinfo
-    And I go to eudedashboard
+    And I go to eudedashboard main
     And I click on "//table[@id='local_eudedashboard_datatable']/tbody/tr[2]/td[1]" "xpath_element"
     And I click on "//tr[@class='eude-trsubrows'][1]/td[3]/a" "xpath_element"
     And I wait to be redirected
