@@ -1,6 +1,6 @@
 @local @local_eudedashboard @local_eudedashboard_manager @javascript
-Feature: View my custom dashboard
-    In order to see my custom dashboard
+Feature: View my Eudedashboard custom dashboard
+    In order to see my Eudedashboard custom dashboard
     As an admin
     I need to be able to view dashboard
 

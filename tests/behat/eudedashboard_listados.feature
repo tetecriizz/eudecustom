@@ -1,6 +1,6 @@
 @local @local_eudedashboard @local_eudedashboard_listados @javascript
-Feature: Custom reports for dashboard
-    In order to see my custom reports for dashboard
+Feature: View my Eudedashboard custom reports
+    In order to see my Eudedashboard custom reports
     As an admin
     I need to be able to view custom reports for dashboard
 
