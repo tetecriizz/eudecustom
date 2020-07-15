@@ -26,9 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
-require_once('../../config.php');
-
 require_login();
 
 require_once('utils.php');
@@ -415,9 +412,14 @@ function local_eudedashboard_get_hierselectlist ($level = 1) {
     global $CFG;
 
     $options = array();
+    $select1 = array();
+    $select2 = array();
+    $select3 = array();
     $categories = array_values(explode(',', $CFG->local_eudedashboard_category));
 
     $select1[0] = get_string('allprograms', 'local_eudedashboard');
+    $select2[0][0] = get_string('alleditions', 'local_eudedashboard');
+    $select3[0][0][0] = get_string('allmodules', 'local_eudedashboard');
 
     foreach ($categories as $categoryid) {
         $programs = local_eudedashboard_get_subcategories($categoryid);

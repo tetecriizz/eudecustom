@@ -1672,12 +1672,18 @@ function local_eudedashboard_user_has_approved_program($userid, $programid) {
     $programcat = \core_course_category::get($programid);
     $programcourses = count($programcat->get_courses(array('recursive' => true)));
     $incategories = array_column($DB->get_records('course_categories', array('parent' => $programid), '', 'id'), 'id');
+    if (empty($incategories)) {
+        return false;
+    }
     list($insql, $inparams) = $DB->get_in_or_equal($incategories);
     $sql = "SELECT id
               FROM {course}
              WHERE category $insql";
 
     $coursesid = array_column($DB->get_records_sql($sql, $inparams), 'id');
+    if (empty($coursesid)) {
+        return false;
+    }
     list($insql2, $inparams) = $DB->get_in_or_equal($coursesid, SQL_PARAMS_NAMED);
     $sql = "SELECT COUNT(CO.id) completions
               FROM {course_completions} CO
