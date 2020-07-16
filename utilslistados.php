@@ -26,19 +26,17 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_login();
-
 require_once('utils.php');
 require_once($CFG->libdir .'/completionlib.php');
 
 /**
  * Return matching results from finalization report.
- * @param type $filteredprogram
- * @param type $cohort
- * @param type $from
- * @param type $to
- * @param type $enabledfrom
- * @param type $enabledto
+ * @param array $filteredprogram
+ * @param string $cohort
+ * @param string $from
+ * @param string $to
+ * @param int $enabledfrom
+ * @param int $enabledto
  * @return array
  */
 function local_eudedashboard_get_finalization_data ($filteredprogram = array(), $cohort = '', $from = '',

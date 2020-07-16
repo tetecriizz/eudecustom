@@ -92,22 +92,23 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
         $contextlist = new contextlist();
 
         // Get contexts for local_eudecustom_mat_int table.
-        $sqlnotifs = "SELECT DISTINCT(cx.id) cxid
-                        FROM {local_eudedashboard_notifs} notifs
-                        JOIN {user} u ON u.id = notifs.userid
-                        JOIN {context} cx ON cx.instanceid = u.id
+        $sqlnotifs = "SELECT DISTINCT(CX.id) cxid
+                        FROM {local_eudedashboard_notifs} NOTIFS
+                        JOIN {user} U ON U.id = NOTIFS.userid
+                        JOIN {context} CX ON CX.instanceid = U.id
                        WHERE CX.contextlevel = :usercontext
-                             AND cx.instanceid = :userid
-                    GROUP BY cx.id";
+                             AND CX.instanceid = :userid
+                    GROUP BY CX.id";
         $paramsnotif = array('userid' => $userid, 'usercontext' => CONTEXT_USER);
         $contextlist->add_from_sql($sqlnotifs, $paramsnotif);
 
         // Get contexts for local_eudedashboard_invtimes table.
-        $sqlinvtimes = "SELECT DISTINCT cx.id cxid
-                          FROM {context} cx
-                          JOIN {local_eudedashboard_invtimes} invtimes ON invtimes.userid = cx.instanceid
-                         WHERE cx.instanceid = :userid and cx.contextlevel = :usercontext
-                      GROUP BY cx.id";
+        $sqlinvtimes = "SELECT DISTINCT CX.id cxid
+                          FROM {context} CX
+                          JOIN {local_eudedashboard_invtimes} INVTIMES ON INVTIMES.userid = CX.instanceid
+                         WHERE CX.instanceid = :userid
+                               AND CX.contextlevel = :usercontext
+                      GROUP BY CX.id";
         $paramsinvtimes = array ('userid' => $userid, 'usercontext' => CONTEXT_USER);
         $contextlist->add_from_sql($sqlinvtimes, $paramsinvtimes);
         return $contextlist;
@@ -209,9 +210,9 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
     public static function export_user_data_invtimes($context) {
         global $DB;
         $userid = $context->instanceid;
-        $sql = 'SELECT invtimes.*
-                  FROM {local_eudedashboard_invtimes} invtimes
-                 WHERE invtimes.userid = :userid';
+        $sql = 'SELECT INVTIMES.*
+                  FROM {local_eudedashboard_invtimes} INVTIMES
+                 WHERE INVTIMES.userid = :userid';
 
         $params = array('userid' => $userid);
         $records = $DB->get_records_sql($sql, $params);
@@ -265,10 +266,10 @@ class provider implements metadataprovider, pluginprovider, userlistprovider {
         }
 
         // Find users with attempts.
-        $sql = "SELECT notif.userid
-                  FROM {context} c
-                  JOIN {local_eudedashboard_notifs} notif ON notif.userid = c.instanceid
-                 WHERE c.id = :contextid";
+        $sql = "SELECT NOTIF.userid
+                  FROM {context} C
+                  JOIN {local_eudedashboard_notifs} NOTIF ON NOTIF.userid = C.instanceid
+                 WHERE C.id = :contextid";
 
         $params = [
             'contextid' => $context->id,
