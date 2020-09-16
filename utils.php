@@ -888,7 +888,7 @@ function local_eudedashboard_get_data_coursestats_incourse($courseid) {
  */
 function local_eudedashboard_get_data_coursestats_bycourse($catid, $aluid) {
     global $DB;
-    $sql = "SELECT DISTINCT CM.id, CMC.userid,
+    $sql = "SELECT DISTINCT CMC.userid,
 		   ( SELECT COUNT(id)
                        FROM {course_modules}
                       WHERE course = C.id
@@ -919,7 +919,8 @@ function local_eudedashboard_get_data_coursestats_bycourse($catid, $aluid) {
          LEFT JOIN {course} C ON C.id = CM.course
              WHERE C.category = :categoryid
                    AND CMC.userid = :userid
-          GROUP BY CM.id, CMC.userid, CM.course, C.id";
+                   AND CMC.userid IS NOT NULL
+          GROUP BY CMC.userid, CM.course, C.id";
 
     return $DB->get_record_sql($sql, array('categoryid' => $catid, 'userid' => $aluid, 'type' => 'news'));
 }
