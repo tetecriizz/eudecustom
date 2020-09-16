@@ -30,5 +30,5 @@ $plugin->component = 'local_eudedashboard'; // Full name of the plugin (used for
 $plugin->maturity = MATURITY_STABLE; // This is considered as ready for production sites.
 $plugin->release = 'v1.1.0'; // This is the current version.
 $plugin->dependencies = array(
-    'theme_snap' => ANY_VERSION // The theme SNAP must be present (any version).
+    'theme_snap' => ANY_VERSION // The theme SNAP must be present(any version).
 );
