@@ -638,12 +638,15 @@ function local_eudedashboard_get_dashboard_studentinfo_oncategory_data_activitie
                     $ctxcmmodule = context_module::instance($cm->id);
                     // Assignment dates can be retrieved, but not in another resource module as page, url, etc.
                     if ($cdata->completionstate != COMPLETION_INCOMPLETE) {
-                        $assign = new \assign($ctxcmmodule, $cm, $course);
+                        $stdcourse = get_course($course->id);
+                        $assign = new \assign($ctxcmmodule, $cm, $stdcourse);
                         $assignssubmissions = $assign->get_all_submissions($user->id);
                         $gradeobj = $assign->get_user_grade($user->id, false);
-                        $feedbacks = $DB->get_records('assignfeedback_comments', array('assignment' => $gradeobj->assignment,
-                            'grade' => $gradeobj->id));
-                        $feedback = end($feedbacks)->commenttext;
+                        if ($gradeobj != null) {
+                            $feedbacks = $DB->get_records('assignfeedback_comments', array('assignment' => $gradeobj->assignment,
+                                'grade' => $gradeobj->id));
+                            $feedback = end($feedbacks)->commenttext;
+                        }
                         if (count($assignssubmissions) > 0) {
                             $datedeliveried = date("d/m/Y", end($assignssubmissions)->timemodified);
                         }
@@ -885,7 +888,7 @@ function local_eudedashboard_get_data_coursestats_incourse($courseid) {
  */
 function local_eudedashboard_get_data_coursestats_bycourse($catid, $aluid) {
     global $DB;
-    $sql = "SELECT DISTINCT(CMC.userid),
+    $sql = "SELECT CM.id, DISTINCT(CMC.userid),
 		   ( SELECT COUNT(id)
                        FROM {course_modules}
                       WHERE course = C.id

@@ -99,7 +99,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
             $data = local_eudedashboard_get_finalization_data($fromform->category, $fromform->cohort,
                 $fromform->from, $fromform->to, $fromform->enabledfrom, $fromform->enabledto);
         } else {
-            $data = local_eudedashboard_get_finalization_data();
+            $data = array();
         }
 
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
@@ -185,7 +185,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
                 $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to,
                 $fromform->enabledfrom, $fromform->enabledto);
         } else {
-            $data = local_eudedashboard_get_studentlists_data();
+            $data = array();
         }
 
         $tableheaderfooter = array(
@@ -270,7 +270,7 @@ class eudelistados_renderer extends \plugin_renderer_base {
         if ($fromform = $mform->get_data()) {
             $data = local_eudedashboard_get_teachers_from_configured_categories($fromform);
         } else {
-            $data = local_eudedashboard_get_teachers_from_configured_categories();
+            $data = array();
         }
 
         $html .= html_writer::start_div('table-responsive-sm eude-generic-list mt-0');
