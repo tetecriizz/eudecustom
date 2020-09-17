@@ -127,6 +127,8 @@ $string['alleditions'] = '-- All editions --';
 $string['allmodules'] = '-- All modules --';
 $string['allcohorts'] = '-- All cohorts --';
 $string['enablefilter'] = 'Enable';
+$string['timedifference'] = 'Months';
+$string['timedifference_desc'] = 'Maximum number of months between dates';
 
 $string['privacy:metadata:local_eudedashboard_mat_int'] = 'Number of times a user has enroled in a module';
 $string['privacy:metadata:local_eudedashboard_mat_int:id'] = 'The ID of the record';

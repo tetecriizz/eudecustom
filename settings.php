@@ -49,6 +49,10 @@ if ($hassiteconfig) {
         $settings->add(new admin_setting_configtext('local_eudedashboard_usermailerbcc',
             new lang_string('usermailerbcc', 'local_eudedashboard'), new lang_string('usermailerbcc_desc', 'local_eudedashboard'),
             'altacv@eude.es', PARAM_TEXT, null));
+
+        $settings->add(new admin_setting_configtext('local_eudedashboard_timedifference',
+            new lang_string('timedifference', 'local_eudedashboard'), new lang_string('timedifference_desc', 'local_eudedashboard'),
+            '6', PARAM_INT, null));
     }
     $ADMIN->add('localplugins', $settings);
 }

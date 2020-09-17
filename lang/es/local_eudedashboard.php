@@ -127,6 +127,8 @@ $string['alleditions'] = '-- Todas las ediciones --';
 $string['allmodules'] = '-- Todos los módulos --';
 $string['allcohorts'] = '-- Todas las cohortes --';
 $string['enablefilter'] = 'Habilitar';
+$string['timedifference'] = 'Diferencia de tiempo (meses)';
+$string['timedifference_desc'] = 'Número máximo de meses entre fechas';
 
 $string['privacy:metadata:local_eudedashboard_mat_int'] = 'Numero de veces que ha sido matriculado en un módulo';
 $string['privacy:metadata:local_eudedashboard_mat_int:id'] = 'La ID del registro';

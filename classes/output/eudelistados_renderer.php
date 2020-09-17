@@ -96,8 +96,14 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         if ($fromform = $mform->get_data()) {
-            $data = local_eudedashboard_get_finalization_data($fromform->category, $fromform->cohort,
-                $fromform->from, $fromform->to, $fromform->enabledfrom, $fromform->enabledto);
+            $validationfailed = local_eudedashboard_filters_are_invalid_dates($fromform->from, $fromform->to,
+                    $fromform->enabledfrom, $fromform->enabledto);
+            if ( $validationfailed ) {
+                $data = array();
+            } else {
+                $data = local_eudedashboard_get_finalization_data($fromform->category, $fromform->cohort,
+                    $fromform->from, $fromform->to, $fromform->enabledfrom, $fromform->enabledto);
+            }
         } else {
             $data = array();
         }
@@ -181,9 +187,15 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         if ($fromform = $mform->get_data()) {
-            $data = local_eudedashboard_get_studentlists_data($fromform->studentname, $fromform->cohort, $fromform->studentmail,
-                $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to,
-                $fromform->enabledfrom, $fromform->enabledto);
+            $validationfailed = local_eudedashboard_filters_are_invalid_dates($fromform->from, $fromform->to,
+                    $fromform->enabledfrom, $fromform->enabledto);
+            if ( $validationfailed ) {
+                $data = array();
+            } else {
+                $data = local_eudedashboard_get_studentlists_data($fromform->studentname, $fromform->cohort, $fromform->studentmail,
+                    $fromform->program_and_module, $fromform->status, $fromform->from, $fromform->to,
+                    $fromform->enabledfrom, $fromform->enabledto);
+            }
         } else {
             $data = array();
         }
@@ -268,7 +280,17 @@ class eudelistados_renderer extends \plugin_renderer_base {
         $html .= html_writer::end_div();
 
         if ($fromform = $mform->get_data()) {
-            $data = local_eudedashboard_get_teachers_from_configured_categories($fromform);
+            $validationfailedsubmitted = local_eudedashboard_filters_are_invalid_dates($fromform->from1, $fromform->to1,
+                    $fromform->submittedfrom, $fromform->submittedto);
+            $validationfailedgraded = local_eudedashboard_filters_are_invalid_dates($fromform->from2, $fromform->to2,
+                    $fromform->gradedfrom, $fromform->gradedto);
+
+            // If both validation fails, must retun empty array, cannot get data.
+            if ( $validationfailedsubmitted && $validationfailedgraded) {
+                $data = array();
+            } else {
+                $data = local_eudedashboard_get_teachers_from_configured_categories($fromform);
+            }
         } else {
             $data = array();
         }

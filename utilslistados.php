@@ -29,6 +29,38 @@ defined('MOODLE_INTERNAL') || die();
 require_once('utils.php');
 require_once($CFG->libdir .'/completionlib.php');
 
+
+/**
+ * Check with given values if dates are correct
+ * @param string $from
+ * @param string $to
+ * @param int $enabledfrom
+ * @param int $enabledto
+ * @return boolean
+ */
+function local_eudedashboard_filters_are_invalid_dates($from, $to, $enabledfrom, $enabledto) {
+    global $CFG;
+
+    $maxdiff = $CFG->local_eudedashboard_timedifference;
+
+    // Some of dates are empty return false, must not get results.
+    if (empty($from) || empty($to) || $enabledfrom == 0 || $enabledto == 0) {
+        return true;
+    }
+
+    $fromdate = date('Y-m-d', $from);
+    $todate = date('Y-m-d', $to);
+
+    $date1 = new DateTime($fromdate);
+    $date2 = new DateTime($todate);
+    $diff = $date1->diff($date2);
+
+    if ( $diff->format('%m') > $maxdiff ) {
+        return true;
+    }
+    return false;
+}
+
 /**
  * Return matching results from finalization report.
  * @param array $filteredprogram
@@ -42,6 +74,7 @@ require_once($CFG->libdir .'/completionlib.php');
 function local_eudedashboard_get_finalization_data ($filteredprogram = array(), $cohort = '', $from = '',
         $to = '', $enabledfrom = 0, $enabledto = 0) {
     $return = array();
+
     $records = local_euddedashboard_student_get_results();
     $filteredprogram = reset($filteredprogram);
     foreach ($records as $record) {
@@ -220,6 +253,7 @@ function local_eudedashboard_report_teacher_checkvalidations($formdata, $record)
 function local_eudedashboard_get_studentlists_data ($name = '', $cohort = '', $email = '', $programandmodule = array(),
         $state = '', $from = '', $to = '', $enabledfrom = 0, $enabledto = 0) {
     $return = array();
+
     $records = local_euddedashboard_student_get_results();
     foreach ($records as $record) {
         $record = (object) $record;
